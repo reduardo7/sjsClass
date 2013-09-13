@@ -1,0 +1,4 @@
+sjsClass
+========
+
+Simple JavaScript Class
