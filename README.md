@@ -51,6 +51,11 @@ Features
             ...
         }
     });
+
+    var p1 = new Person(22, 13, 16);
+    var p2 = Person.newInstance(22, 13, 16);
+    
+    // p1 == p2
 </pre>
 5. Call parent methods.
 <pre>
