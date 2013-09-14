@@ -132,6 +132,23 @@ Features
         ...
     });
 </pre>
+10. Hash Code.
+<pre>
+    var p1 = new Person(false);
+    console.log(p1.hashCode()); // -> Get Hash Code
+</pre>
+11. Equals.
+<pre>
+    var p1 = new Person(false);
+    var p2 = Person.newInstance(false);
+    
+    console.log(p1.equals(p2)); // -> true
+</pre>
+12. toString
+<pre>
+    var p1 = new Person(false);
+    console.log(p1.toString()); // -> String representation
+</pre>
 
 Example Code
 ------------
