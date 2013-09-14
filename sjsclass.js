@@ -9,7 +9,7 @@
     var initializing = false,
         fnTest = /xyz/.test(function(){xyz;}) ? /\b__super\b/ : /.*/,
         extendClassCount = 0,
-        invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', 'extend'];
+        invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', 'extend', '__parent'];
 
     function hasVar(x) {
         return typeof this[x] !== 'undefined';
@@ -22,10 +22,31 @@
     function Class() {};
 
     Class.prototype = {
-        getClassName: function() { return this.constructor.name; },
         hasVar: hasVar,
         hasMethod: hasMethod,
-        constructor: Class
+        constructor: Class,
+        getClassName: function() {
+            return this.constructor.name;
+        },
+        hashCode: function() {
+            var h = {};
+            for (var n in this) {
+                if (invalidStatic.indexOf(n) == -1) {
+                    if (typeof this[n] != 'function') {
+                        h[n] = this[n];
+                    }
+                }
+            }
+            return JSON.stringify(h);
+        },
+        equals: function(o) {
+            return (o instanceof Class) &&
+                (this.getClassName() == o.getClassName()) &&
+                (this.hashCode() == o.hashCode());
+        },
+        toString: function() {
+            return this.getClassName() + ':' + this.hashCode();
+        }
     }
 
     Class.hasVar = hasVar;
