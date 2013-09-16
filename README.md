@@ -6,7 +6,18 @@ Simple JavaScript Class
 Features
 --------
 
-1. Static methods and variables.
+1. Extend class.
+<pre>
+    Person.extend('newClassName', {
+        ...
+    });
+</pre>
+<pre>
+    var newClassName = Person.extend({
+        ...
+    });
+</pre>
+2. Static methods and variables.
 <pre>
     Class.extend('Person', {
         __static: {
@@ -19,21 +30,29 @@ Features
         },
         ...
     });
-</pre>
 
-2. Declare into context.
+    alert(Person.testStatic());
+    alert(Person.staticVar);
+    alert(Person.count);
+</pre>
+3. Declare into context.
 <pre>
+    // Web Page
     (function(context) {
         ...
     })(window);
+
+    Class.extend(...
 </pre>
 <pre>
     var contextName = {};
     (function(context) {
         ...
     })(contextName);
+    
+    contextName.Class.extend(...
 </pre>
-3. Access static methods and variables from instance.
+4. Access static methods and variables from instance.
 <pre>
     Class.extend('Person', {
         __static: {
@@ -44,7 +63,7 @@ Features
         }
     });
 </pre>
-4. Constructor.
+5. Constructor.
 <pre>
     Class.extend('Person', {
         __construct: function(var1, var2, varN) {
@@ -57,9 +76,14 @@ Features
     
     // p1 == p2
 </pre>
-5. Call parent methods.
+6. Call parent methods.
 <pre>
     Person.extend('Ninja', {
+        __static: {
+            testStatic: function() {
+                this.super(); // Call parent 'testStatic'
+            }
+        },
         __constructor: function() {
             this.__super(true); // Call parent constructor
             ...
@@ -70,16 +94,21 @@ Features
         }
     });
 </pre>
-6. Call parent static.
+7. Call parent static.
 <pre>
     Person.extend('Ninja', {
+        __static: {
+            testStatic: function() {
+                this.super(); // Call parent 'testStatic'
+            }
+        },
         dance: function() {
             this.__parent.testStatic();
             ...
         }
     });
 </pre>
-7. Check if has value or method.
+8. Check if has value or method.
 <pre>
     Person.extend('Ninja', {
         methodName: function() {
@@ -87,17 +116,20 @@ Features
         },
         varName: 123
     });
+
     var p = new Person();
     if (p.hasMethod('methodName')) alert('Yes');
     if (p.hasVar('varName')) alert('Yes');
 </pre>
-8. Get Class name.
+9. Get Class name.
 <pre>
     Person.extend('Ninja', {
         ...
     });
+
     var p = new Person();
     alert(p.getClassName()); // -> Alert 'Person'
+    
     var n = new Ninja();
     alert(n.getClassName()); // -> Alert 'Ninja'
 </pre>
@@ -105,12 +137,14 @@ Features
     var Other = Person.extend({
         ...
     });
+    
     var o = new Other();
     alert(o.getClassName()); // -> Alert 'Person_extended_0'
 
     var Foo = Person.extend({
         ...
     });
+    
     var f = new Foo();
     alert(f.getClassName()); // -> Alert 'Person_extended_1'
 </pre>
@@ -118,33 +152,23 @@ Features
     var Bar = Ninja.extend('Fighter', {
         ...
     });
+    
     var b = new Bar();
     alert(b.getClassName()); // -> Alert 'Fighter'
-</pre>
-9. Extend class.
-<pre>
-    Person.extend('newClassName', {
-        ...
-    });
-</pre>
-<pre>
-    var newClassName = Person.extend({
-        ...
-    });
 </pre>
 10. Hash Code.
 <pre>
     var p1 = new Person(false);
-    console.log(p1.hashCode()); // -> Get Hash Code
+    console.log(p1.hashCode()); // -> Get instence Hash Code
 </pre>
-11. Equals.
+11. Equals (check's instances Hash Codes and Class Names).
 <pre>
     var p1 = new Person(false);
     var p2 = Person.newInstance(false);
     
     console.log(p1.equals(p2)); // -> true
 </pre>
-12. toString
+12. To string.
 <pre>
     var p1 = new Person(false);
     console.log(p1.toString()); // -> String representation
