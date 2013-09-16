@@ -3,9 +3,14 @@
  *
  * By: Edueado Daniel Cuomo.
  *
- * Thanks for: http://ejohn.org/blog/simple-javascript-inheritance/
+ * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
  */
+ 
+'use strict';
+ 
 (function(context) {
+    'use strict';
+    
     var initializing = false,
         fnTest = /xyz/.test(function(){xyz;}) ? /\b__super\b/ : /.*/,
         extendClassCount = 0,
@@ -53,7 +58,7 @@
     Class.hasMethod = hasMethod;
 
     Class.newInstance = function() {
-        var s = 'var r=new this(';
+        var r, s = 'r=new this(';
         for (var i in arguments) {
             if (i > 0) s += ',';
             s += 'arguments[' + i + ']';
@@ -67,7 +72,8 @@
             __construct      = __super.constructor,
             className        = false,
             register         = false,
-            __constructProps = Object.getOwnPropertyNames(__construct);
+            __constructProps = Object.getOwnPropertyNames(__construct),
+            newClass;
 
         if (src) {
             className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '') || className;
@@ -113,7 +119,7 @@
         }
 
         // The dummy class constructor
-        eval('var newClass=function ' + className + '(){if(!initializing&&this.__constructor){this.__constructor.apply(this,arguments);}};');
+        eval('newClass=function ' + className + '(){if(!initializing&&this.__constructor){this.__constructor.apply(this,arguments);}};');
 
         // Static
         for (var i in __constructProps) {
@@ -162,7 +168,7 @@
         newClass.prototype.constructor = newClass;
 
         // And make this class extendable
-        newClass.extend = arguments.callee;
+        newClass.extend = Class.extend;
 
         // Register in context
         if (register) {
