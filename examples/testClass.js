@@ -17,7 +17,7 @@ Class.extend('Class', {
     __static: {
 
         create: function(classNameToTest, src) {
-            this.extend(classNameToTest, (typeof src === 'function') ? { test: src } : src);
+            this.tests[this.tests.length] = this.extend(classNameToTest, (typeof src === 'function') ? { test: src } : src);
             return this;
         },
 
@@ -44,11 +44,11 @@ Class.extend('Class', {
             return errors;
         }
     },
-    __onExtend: function() { TestClass.tests[TestClass.tests.length] = this; },
     __constructor: function() { this.className = this.getClassName().substr(4); this.class = Class.getClass(this.className); },
-    _errors: [],
     __prefix: 'Test',
-    __test: function(espected, test, type, msg) { var t = test === espected; if (!t) this.addError(msg, type, espected, test); return t; },
+    _test: function(test, espected, type, msg) { var t = test === espected; if (!t) this.addError(msg, type, espected, test); return t; },
+    _testN: function(test, espected, type, msg) { var t = test !== espected; if (!t) this.addError(msg, type, espected, test); return t; },
+    _errors: [],
 
     className: null,
     class: null,
@@ -57,28 +57,28 @@ Class.extend('Class', {
     addError:                        function(msg, type, espected, result) { this._errors[this._errors.length] = { type: type || 'GENERAL', message: msg || 'Invalid', espected: espected, result: result }; },
     getErrors:                       function() { return this._errors; },
     hasError:                        function() { return this._errors.length > 0; },
-    assertTrue:                      function(test, msg) { return this.__test(test, true, 'assertTrue', msg); },
-    assertFalse:                     function(test, msg) { return this.__test(test, false, 'assertFalse', msg); },
+    assertTrue:                      function(test, msg) { return this._test(test, true, 'assertTrue', msg); },
+    assertFalse:                     function(test, msg) { return this._test(test, false, 'assertFalse', msg); },
     assertIfTrue:                    function(test, msg) { var t = !!test; if (!t) this.addError(msg, 'assertIfTrue', 'if (value == true)', test); return t; },
     assertIfFalse:                   function(test, msg) { var t = !test; if (!t) this.addError(msg, 'assertIfFalse', 'if (value == false)', test); return t; },
-    assertNull:                      function(test, msg) { return this.__test(test, null, 'assertNull', msg); },
-    assertEmptyString:               function(test, msg) { return this.__test(test, '', 'assertEmptyString', msg); },
-    assertIs:                        function(test, typeName, msg) { var t = typeof test === typeName; if (!t) this.addError(msg, 'assertIs', typeName, typeof test); return t; },
-    assertIsNot:                     function(test, typeName, msg) { var t = typeof test !== typeName; if (!t) this.addError(msg, 'assertIsNot', typeName, typeof test); return t; },
-    assertInstanceIs:                function(typeName, msg) { var t = typeof this.instance === typeName; if (!t) this.addError(msg, 'assertInstanceIs', typeName, typeof this.instance); return t; },
-    assertInstanceIsNot:             function(typeName, msg) { var t = typeof this.instance !== typeName; if (!t) this.addError(msg, 'assertInstanceIsNot', typeName, typeof this.instance); return t; },
-    assertIsA:                       function(test, object, msg) { var t = typeof test === typeof object; if (!t) this.addError(msg, 'assertIsA', typeof object, typeof test); return t; },
-    assertIsNotA:                    function(test, object, msg) { var t = typeof test !== typeof object; if (!t) this.addError(msg, 'assertIsNotA', typeof object, typeof test); return t; },
-    assertInstanceIsA:               function(object, msg) { var t = typeof this.instance === typeof object; if (!t) this.addError(msg, 'assertIsA', typeof object, typeof this.instance); return t; },
-    assertInstanceIsNotA:            function(object, msg) { var t = typeof this.instance !== typeof object; if (!t) this.addError(msg, 'assertIsNotA', typeof object, typeof this.instance); return t; },
+    assertNull:                      function(test, msg) { return this._test(test, null, 'assertNull', msg); },
+    assertEmptyString:               function(test, msg) { return this._test(test, '', 'assertEmptyString', msg); },
+    assertIs:                        function(test, typeName, msg) { return this._test(typeof test, typeName, 'assertIs', msg); },
+    assertIsNot:                     function(test, typeName, msg) { return this._testN(typeof test, typeName, 'assertIsNot', msg); },
+    assertInstanceIs:                function(typeName, msg) { return this._test(typeof this.instance, typeName, 'assertInstanceIs', msg); },
+    assertInstanceIsNot:             function(typeName, msg) { return this._testN(typeof this.instance, typeName, 'assertInstanceIsNot', msg); },
+    assertIsA:                       function(test, object, msg) { return this._test(typeof test, typeof object, 'assertIsA', msg); },
+    assertIsNotA:                    function(test, object, msg) { return this._testN(typeof test, typeof object, 'assertIsNotA', msg); },
+    assertInstanceIsA:               function(object, msg) { return this._test(typeof this.instance, typeof object, 'assertInstanceIsA', msg); },
+    assertInstanceIsNotA:            function(object, msg) { return this._testN(typeof this.instance, typeof object, 'assertInstanceIsNotA', msg); },
     assertInstanceOf:                function(test, Class, msg) { var t = test instanceof Class; if (!t) this.addError(msg, 'assertInstanceOf', Class, test); return t; },
     assertNotInstanceOf:             function(test, Class, msg) { var t = !(test instanceof Class); if (!t) this.addError(msg, 'assertNotInstanceOf', Class, test); return t; },
-    assertInstanceIsInstanceOf:      function(Class, msg) { var t = this.instance instanceof Class; if (!t) this.addError(msg, 'assertInstanceOf', Class, this.instance); return t; },
-    assertInstanceIsNotInstanceOf:   function(Class, msg) { var t = !(this.instance instanceof Class); if (!t) this.addError(msg, 'assertNotInstanceOf', Class, this.instance); return t; },
-    assertDefined:                   function(test, msg) { var t = typeof test !== 'undefined'; if (!t) this.addError(msg, 'assertDefined', 'not undefined', typeof test); return t; },
-    assertUndefined:                 function(test, msg) { var t = typeof test === 'undefined'; if (!t) this.addError(msg, 'assertUndefined', 'undefined', typeof test); return t; },
+    assertInstanceIsInstanceOf:      function(Class, msg) { var t = this.instance instanceof Class; if (!t) this.addError(msg, 'assertInstanceIsInstanceOf', Class, this.instance); return t; },
+    assertInstanceIsNotInstanceOf:   function(Class, msg) { var t = !(this.instance instanceof Class); if (!t) this.addError(msg, 'assertInstanceIsNotInstanceOf', Class, this.instance); return t; },
+    assertDefined:                   function(test, msg) { return this._testN(typeof test, 'undefined', 'assertDefined', msg); },
+    assertUndefined:                 function(test, msg) { return this._test(typeof test, 'undefined', 'assertUndefined', msg); },
     assertIsNumber:                  function(test, msg) { var t = !isNaN(test); if (!t) this.addError(msg, 'assertIsNumber', 'Number', test); return t; },
-    assertEquals:                    function(obj2, obj1, msg) { var t = obj1 === obj2; if (!t) this.addError(msg, 'assertEquals', obj1, obj2); return t; },
+    assertEquals:                    function(obj2, obj1, msg) { return this._test(obj2, obj1, 'assertEquals', msg); },
     assertEqualsClass:               function(class2, class1, msg) { var t = (class1 instanceof Class) && (class2 instanceof Class) && class1.equals(class2); if (!t) this.addError(msg, 'assertEqualsClass', class1.getClassName(), class2.getClassName()); return t; },
     assertInstanceEqualsClass:       function(class1, msg) { var t = (class1 instanceof Class) && (this.instance instanceof Class) && class1.equals(this.instance); if (!t) this.addError(msg, 'assertEqualsClass', class1.getClassName(), this.instance.getClassName()); return t; }
 });
@@ -134,5 +134,6 @@ TestClass
         this.assertInstanceIsInstanceOf(Person);
     });
 
+// Run tests
 
 TestClass.run();

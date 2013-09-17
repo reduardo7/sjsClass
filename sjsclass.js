@@ -11,15 +11,22 @@
 (function(context) {
     'use strict';
 
+    if (context.Class !== undefined) { return; }
+
+    // Utils
+
+    function defined(x) { return typeof x !== 'undefined'; }
+    function hasVar(x) { return typeof this[x] !== 'undefined'; }
+    function hasMethod(m) { return this.hasVar(m) && (typeof this[m] === 'function'); }
+
+    // Class
+
     var initializing = false,
         fnTest = /xyz/.test(function(){xyz;}) ? /\b__super\b/ : /.*/,
         extendClassCount = 0,
         invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
         invalidProto = ['__static'];
 
-    function defined(x) { return typeof x !== 'undefined'; }
-    function hasVar(x) { return typeof this[x] !== 'undefined'; }
-    function hasMethod(m) { return this.hasVar(m) && (typeof this[m] === 'function'); }
 
     function Class() {};
 
@@ -39,21 +46,14 @@
             }
             return JSON.stringify(h);
         },
-        equals: function(o) {
-            return (o instanceof Class) &&
-                (this.getClassName() == o.getClassName()) &&
-                (this.hashCode() == o.hashCode());
-        },
-        toString: function() {
-            return this.getClassName() + ':' + this.hashCode();
-        }
+        equals: function(o) { return (o instanceof Class) && (this.getClassName() == o.getClassName()) && (this.hashCode() == o.hashCode()); },
+        toString: function() { return this.getClassName() + ':' + this.hashCode(); }
     }
 
     Class.hasVar = hasVar;
     Class.hasMethod = hasMethod;
     Class.getClassName = function() { return this.name; };
     Class.__prefix = null;
-
     Class.__onExtend = function() { };
     Class.classExists = function(className) { return eval('typeof ' + className + ' === "function";'); };
 
@@ -104,8 +104,9 @@
         } else {
             src = src_name;
         }
+
+        // Generate new dynamic Class Name
         if (!className) {
-            // Generate new dynamic Class Name
             do {
                 className = __construct.name + '_extended_' + extendClassCount++;
             } while (context[className]);
@@ -199,7 +200,7 @@
 
         // References
         prototype.__parent = __super;
-        newClass.__parent = __construct;
+        newClass.__parent = this;
         prototype.__static = newClass;
 
         // Populate our constructed prototype object
@@ -209,7 +210,7 @@
         newClass.prototype.constructor = newClass;
 
         // Execute Callback
-        newClass.__onExtend();
+        this.__onExtend();
 
         // Register in context
         if (register) {
@@ -222,4 +223,4 @@
 
     // Register in context
     context.Class = Class;
-})(window);
+})(window || this);
