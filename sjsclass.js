@@ -5,25 +5,21 @@
  *
  * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
  */
- 
+
 'use strict';
- 
+
 (function(context) {
     'use strict';
-    
+
     var initializing = false,
         fnTest = /xyz/.test(function(){xyz;}) ? /\b__super\b/ : /.*/,
         extendClassCount = 0,
         invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
         invalidProto = ['__static'];
 
-    function hasVar(x) {
-        return typeof this[x] !== 'undefined';
-    }
-
-    function hasMethod(m) {
-        return this.hasVar(m) && (typeof this[m] === 'function');
-    }
+    function defined(x) { return typeof x !== 'undefined'; }
+    function hasVar(x) { return typeof this[x] !== 'undefined'; }
+    function hasMethod(m) { return this.hasVar(m) && (typeof this[m] === 'function'); }
 
     function Class() {};
 
@@ -31,9 +27,7 @@
         hasVar: hasVar,
         hasMethod: hasMethod,
         constructor: Class,
-        getClassName: function() {
-            return this.constructor.name;
-        },
+        getClassName: function() { return this.constructor.name; },
         hashCode: function() {
             var h = {};
             for (var n in this) {
@@ -57,37 +51,39 @@
 
     Class.hasVar = hasVar;
     Class.hasMethod = hasMethod;
+    Class.getClassName = function() { return this.name; };
     Class.__prefix = null;
-    
+
     Class.__onExtend = function() { };
-    
-    Class.classExists = function(className) {
-        var r, s = 'r=' + className + ' instanceof Class;';
-        eval(s);
-        return r;
-    };
+    Class.classExists = function(className) { return eval('typeof ' + className + ' === "function";'); };
 
     Class.newInstance = function() {
-        var r, s = 'r=new this(';
+        var s = 'new this(';
         for (var i in arguments) {
             if (i > 0) s += ',';
             s += 'arguments[' + i + ']';
         }
-        eval(s + ');');
-        return r;
+        return eval(s + ')');
     };
 
     Class.newInstanceOf = function(className) {
         if (this.classExists(className)) {
-            var r, s = 'r=new ' + className + '(';
+            var s = 'new ' + className + '(';
             for (var i in arguments) {
                 if (i > 0) {
                     if (i > 1) s += ',';
                     s += 'arguments[' + i + ']';
                 }
             }
-            eval(s + ');');
-            return r;
+            return eval(s + ')');
+        } else {
+            throw 'Error! Class "' + className + '" not declared!';
+        }
+    };
+
+    Class.getClass = function(className) {
+        if (this.classExists(className)) {
+            return eval(className);
         } else {
             throw 'Error! Class "' + className + '" not declared!';
         }
@@ -100,20 +96,38 @@
             register         = false,
             __constructProps = Object.getOwnPropertyNames(__construct),
             newClass;
-        
-        if (!src['__static']) {
+
+        // Class Name
+        if (src) {
+            className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '').trim();
+            register  = true;
+        } else {
+            src = src_name;
+        }
+        if (!className) {
+            // Generate new dynamic Class Name
+            do {
+                className = __construct.name + '_extended_' + extendClassCount++;
+            } while (context[className]);
+        }
+
+        if (!defined(src['__static'])) {
             src['__static'] = {};
         }
-        
-        if (src['__onExtend']) {
+
+        if (defined(src['__onExtend'])) {
             src.__static.__onExtend = src['__onExtend'];
             delete src['__onExtend'];
         }
-        
-        if (src['__prefix']) {
-            src.__static.__prefix = src['__prefix'];
+
+        // Prefix
+        if (defined(src['__prefix'])) {
+            src.__static.__prefix = src['__prefix'] ? src['__prefix'].trim() : '';
             delete src['__prefix'];
+        } else {
+            src.__static.__prefix = this.__prefix ? this.__prefix.trim() : '';
         }
+        className = src.__static.__prefix + className;
 
         // Instantiate a base class (but only create the instance,
         // don't run the __constructor constructor)
@@ -144,22 +158,6 @@
                     })(name, src[name]) : src[name];
             }
         }
-
-        if (src) {
-            className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '') || className;
-            register  = true;
-        } else {
-            src = src_name;
-        }
-
-        if (!className) {
-            do {
-                className = __construct.name + '_extended_' + extendClassCount++;
-            } while (context[className]);
-        }
-        
-        // Prefix
-        className = src.__static.__prefix || this.__prefix;
 
         // The dummy class constructor
         eval('newClass=function ' + className + '(){if(!initializing&&this.__constructor){this.__constructor.apply(this,arguments);}};');
@@ -209,7 +207,7 @@
 
         // Enforce the constructor to be what we expect
         newClass.prototype.constructor = newClass;
-        
+
         // Execute Callback
         newClass.__onExtend();
 

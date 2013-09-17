@@ -9,7 +9,9 @@ Features
 1. Extend class.
 <pre>
     Person.extend('newClassName', {
-        ...
+        __constructor: function() {
+            this.var = 1; // -> Public only for this class.
+        }
     });
 </pre>
 <pre>
@@ -49,7 +51,7 @@ Features
     (function(context) {
         ...
     })(contextName);
-    
+
     contextName.Class.extend(...
 </pre>
 4. Access static methods and variables from instance.
@@ -73,8 +75,9 @@ Features
 
     var p1 = new Person(22, 13, 16);
     var p2 = Person.newInstance(22, 13, 16);
-    
-    // p1 == p2
+    var p3 = Class.newInstanceOf('Person', 22, 13, 16);
+
+    // p1 == p2 == p3
 </pre>
 6. Call parent methods.
 <pre>
@@ -129,7 +132,7 @@ Features
 
     var p = new Person();
     alert(p.getClassName()); // -> Alert 'Person'
-    
+
     var n = new Ninja();
     alert(n.getClassName()); // -> Alert 'Ninja'
 </pre>
@@ -137,14 +140,14 @@ Features
     var Other = Person.extend({
         ...
     });
-    
+
     var o = new Other();
     alert(o.getClassName()); // -> Alert 'Person_extended_0'
 
     var Foo = Person.extend({
         ...
     });
-    
+
     var f = new Foo();
     alert(f.getClassName()); // -> Alert 'Person_extended_1'
 </pre>
@@ -152,7 +155,7 @@ Features
     var Bar = Ninja.extend('Fighter', {
         ...
     });
-    
+
     var b = new Bar();
     alert(b.getClassName()); // -> Alert 'Fighter'
 </pre>
@@ -165,13 +168,67 @@ Features
 <pre>
     var p1 = new Person(false);
     var p2 = Person.newInstance(false);
-    
+
     console.log(p1.equals(p2)); // -> true
 </pre>
 12. To string.
 <pre>
     var p1 = new Person(false);
     console.log(p1.toString()); // -> String representation
+</pre>
+13. Callbacks.
+<pre>
+    Class.extend('Ninja', {
+        __onExtend: function() {
+            alert('Extending Ninja class!');
+        }
+    });
+    Ninja.extend('Fighter', {
+        ...
+    });
+
+    var f = new Fighter(); // -> Alert 'Extending Ninja class!'
+</pre>
+14. Check if Class exists.
+<pre>
+    Class.extend('Ninja', {
+        ...
+    });
+
+    Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
+</pre>
+15. Prefix extended class.
+<pre>
+    // Creates a 'FightFighter' class, not a 'Fighter' class.
+    Class.extend('Fighter', {
+        __prefix: 'Fight',
+        ...
+    });
+
+    // Creates a 'FightSamuray' class, not a 'Samuray' class.
+    FightFighter.extend('Samuray' {
+        ...
+    });
+
+    // Creates a 'Ninja' class, not a 'FightNinja' class.
+    FightFighter.extend('Ninja' {
+        __prefix: null,
+        ...
+    });
+
+    // Override 'FightSamuray' class.
+    Class.extend('FightSamuray' {
+        ...
+    });
+</pre>
+16. Get Class from Class Name.
+<pre>
+    Class.extend('Person', {
+    });
+
+    var p = Class.getClass('Person');
+
+    // p === Person
 </pre>
 
 Example Code
@@ -199,7 +256,7 @@ Example Code
             console.log('dance', this.getClassName(), this.dancing);
         }
     });
-    
+
     var Grew = Person.extend(/*Dynamic Class Name*/{
         __static: {
             // Static methods
@@ -212,7 +269,7 @@ Example Code
             // or this.dancing = false;
         }
     });
-    
+
     Grew.extend('Ninja', {
         dance: function() {
             // Call the inherited version of dance()
@@ -230,9 +287,9 @@ Example Code
 <pre>
     var p = Person.newInstance(false);
     p.dance(); // => true
-    
+
     var g = new Grew();
-    
+
     var n = new Ninja();
     n.dance(); // => false
     n.swingSword(); // => true

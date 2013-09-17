@@ -5,7 +5,7 @@
  *
  * By: Edueado Daniel Cuomo.
  */
- 
+
 'use strict';
 
 Class.extend('Person', {
@@ -32,7 +32,7 @@ Class.extend('Person', {
     }
 });
 
-var Grew = Person.extend(/*Dynamic Class Name*/{
+var Tom = Person.extend(/*Dynamic Class Name*/{
     __static: {
         // Static methods
         testStatic: function() {
@@ -45,7 +45,7 @@ var Grew = Person.extend(/*Dynamic Class Name*/{
     }
 });
 
-Grew.extend('Ninja', {
+Person.extend('Ninja', {
     dance: function() {
         // Call the inherited version of dance()
         this.__super(); // => dance Ninja false
@@ -59,14 +59,14 @@ Grew.extend('Ninja', {
 var p = Person.newInstance(false);
 p.dance(); // => true
 
-var g = new Grew();
+var g = new Tom();
 
 var n = new Ninja();
 n.dance(); // => false
 n.swingSword(); // => true
 
 // Should all be true
-Person.testStatic() && Grew.testStatic() && Ninja.testStatic() &&
-p instanceof Person && p instanceof Class && !(p instanceof Grew) &&
-g instanceof Grew && g instanceof Person && g instanceof Class &&
+Person.testStatic() && Tom.testStatic() && Ninja.testStatic() &&
+p instanceof Person && p instanceof Class && !(p instanceof Tom) &&
+g instanceof Tom && g instanceof Person && g instanceof Class &&
 n instanceof Ninja && n instanceof Person && n instanceof Class
