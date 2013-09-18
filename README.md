@@ -7,6 +7,11 @@ Features
 --------
 
 1. Extend class.
+ - *Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
+ - *Class.extend(<code>string ClassName</code>);*
+ - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
+ - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>);*
+ - *<code>var ClassName</code> = Class.extend(<code>object definition</code>);*
 <pre>
     Person.extend('newClassName', {
         __constructor: function() {
@@ -19,6 +24,7 @@ Features
         ...
     });
 </pre>
+
 2. Static methods and variables.
 <pre>
     Class.extend('Person', {
@@ -37,6 +43,7 @@ Features
     alert(Person.staticVar);
     alert(Person.count);
 </pre>
+
 3. Declare into context.
 <pre>
     // Web Page
@@ -54,6 +61,7 @@ Features
 
     contextName.Class.extend(...
 </pre>
+
 4. Access static methods and variables from instance.
 <pre>
     Class.extend('Person', {
@@ -65,7 +73,10 @@ Features
         }
     });
 </pre>
+
 5. Constructor.
+ - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*
+ - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*
 <pre>
     Class.extend('Person', {
         __construct: function(var1, var2, varN) {
@@ -79,6 +90,7 @@ Features
 
     // p1 == p2 == p3
 </pre>
+
 6. Call parent methods.
 <pre>
     Person.extend('Ninja', {
@@ -97,6 +109,7 @@ Features
         }
     });
 </pre>
+
 7. Call parent static.
 <pre>
     Person.extend('Ninja', {
@@ -111,7 +124,10 @@ Features
         }
     });
 </pre>
+
 8. Check if has value or method.
+ - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
+ - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
 <pre>
     Person.extend('Ninja', {
         methodName: function() {
@@ -124,7 +140,10 @@ Features
     if (p.hasMethod('methodName')) alert('Yes');
     if (p.hasVar('varName')) alert('Yes');
 </pre>
+
 9. Get Class name.
+ - *<code>string</code> classInstance.<code>getClassName</code>()*
+ - *<code>string</code> Class.<code>getClassName</code>()*
 <pre>
     Person.extend('Ninja', {
         ...
@@ -159,23 +178,30 @@ Features
     var b = new Bar();
     alert(b.getClassName()); // -> Alert 'Fighter'
 </pre>
+
 10. Hash Code.
+ - *<code>string</code> classInstance.<code>hashCode</code>()*
 <pre>
     var p1 = new Person(false);
     console.log(p1.hashCode()); // -> Get instence Hash Code
 </pre>
+
 11. Equals (check's instances Hash Codes and Class Names).
+ - *<code>boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
 <pre>
     var p1 = new Person(false);
     var p2 = Person.newInstance(false);
 
     console.log(p1.equals(p2)); // -> true
 </pre>
+
 12. To string.
+ - *<code>string</code> classInstance.<code>toString</code>()*
 <pre>
     var p1 = new Person(false);
     console.log(p1.toString()); // -> String representation
 </pre>
+
 13. Callbacks.
 <pre>
     Class.extend('Ninja', {
@@ -189,7 +215,9 @@ Features
 
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
 </pre>
+
 14. Check if Class exists.
+ - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
 <pre>
     Class.extend('Ninja', {
         ...
@@ -197,6 +225,7 @@ Features
 
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
 </pre>
+
 15. Prefix extended class.
 <pre>
     // Creates a 'FightFighter' class, not a 'Fighter' class.
@@ -221,7 +250,9 @@ Features
         ...
     });
 </pre>
+
 16. Get Class from Class Name.
+ - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
 <pre>
     Class.extend('Person', {
     });

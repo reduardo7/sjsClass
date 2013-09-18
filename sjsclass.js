@@ -6,14 +6,15 @@
  * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
  */
 
-'use strict';
+;'use strict';
 
 (function(context) {
     'use strict';
 
+    // Check if loaded
     if (context.Class !== undefined) { return; }
 
-    // Utils
+    // Internal Utils
 
     function defined(x) { return typeof x !== 'undefined'; }
     function hasVar(x) { return typeof this[x] !== 'undefined'; }
@@ -38,8 +39,8 @@
         hashCode: function() {
             var h = {};
             for (var n in this) {
-                if (invalidStatic.indexOf(n) == -1) {
-                    if (typeof this[n] != 'function') {
+                if (invalidStatic.indexOf(n) === -1) {
+                    if (typeof this[n] !== 'function') {
                         h[n] = this[n];
                     }
                 }
@@ -50,12 +51,12 @@
         toString: function() { return this.getClassName() + ':' + this.hashCode(); }
     }
 
-    Class.hasVar = hasVar;
-    Class.hasMethod = hasMethod;
+    Class.hasVar       = hasVar;
+    Class.hasMethod    = hasMethod;
     Class.getClassName = function() { return this.name; };
-    Class.__prefix = null;
-    Class.__onExtend = function() { };
-    Class.classExists = function(className) { return eval('typeof ' + className + ' === "function";'); };
+    Class.__prefix     = null;
+    Class.__onExtend   = function() { };
+    Class.classExists  = function(className) { return eval('typeof ' + className + ' === "function";'); };
 
     Class.newInstance = function() {
         var s = 'new this(';
@@ -97,12 +98,21 @@
             __constructProps = Object.getOwnPropertyNames(__construct),
             newClass;
 
-        // Class Name
-        if (src) {
+        function setName(n) {
             className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '').trim();
             register  = true;
+        }
+
+        // Class Name
+        if (src) {
+            setName(src_name);
         } else {
-            src = src_name;
+            if (typeof src_name === 'string') {
+                src = {};
+                setName(src_name);
+            } else {
+                src = src_name;
+            }
         }
 
         // Generate new dynamic Class Name
@@ -140,7 +150,7 @@
         for (var name in src) {
             if (invalidProto.indexOf(name) === -1) {
                 // Check if we're overwriting an existing function
-                prototype[name] = (typeof src[name] == "function") && (typeof __super[name] == "function") && fnTest.test(src[name]) ? (
+                prototype[name] = (typeof src[name] === "function") && (typeof __super[name] === "function") && fnTest.test(src[name]) ? (
                     function(name, fn) {
                         return function() {
                             var tmp = this.__super;
@@ -166,7 +176,7 @@
         // Static
         for (var i in __constructProps) {
             var name = __constructProps[i];
-            if (invalidStatic.indexOf(name) == -1) {
+            if (invalidStatic.indexOf(name) === -1) {
                 // Check if we're overwriting an existing function
                 newClass[name] = __construct[name];
             }
@@ -175,9 +185,9 @@
         // New Static
         if (src['__static']) {
             for (var name in src['__static']) {
-                if (invalidStatic.indexOf(name) == -1) {
+                if (invalidStatic.indexOf(name) === -1) {
                     // Check if we're overwriting an existing function
-                    newClass[name] = (typeof src['__static'][name] == "function") && (typeof __construct[name] == "function") && fnTest.test(src['__static'][name]) ? (
+                    newClass[name] = (typeof src['__static'][name] === "function") && (typeof __construct[name] === "function") && fnTest.test(src['__static'][name]) ? (
                         function(name, fn) {
                             return function() {
                                 var tmp = this.__super;
@@ -200,7 +210,7 @@
 
         // References
         prototype.__parent = __super;
-        newClass.__parent = this;
+        newClass.__parent  = this;
         prototype.__static = newClass;
 
         // Populate our constructed prototype object
@@ -212,15 +222,13 @@
         // Execute Callback
         this.__onExtend();
 
-        // Register in context
-        if (register) {
-            context[className] = newClass;
-        }
+        // Append in context
+        if (register) { context[className] = newClass; }
 
         // Return
         return newClass;
     };
 
-    // Register in context
+    // Append in context
     context.Class = Class;
 })(window || this);
