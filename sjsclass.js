@@ -36,6 +36,15 @@
         hasMethod: hasMethod,
         constructor: Class,
         getClassName: function() { return this.constructor.name; },
+        clone: function() {
+            var c = new this.__static;
+            for (var i in this) {
+                if (this.hasOwnProperty(i)) {
+                    c[i] = this[i];
+                }
+            }
+            return c;
+        },
         hashCode: function() {
             var h = {};
             for (var n in this) {
