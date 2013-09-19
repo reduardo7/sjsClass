@@ -83,11 +83,9 @@ Features
             ...
         }
     });
-
     var p1 = new Person(22, 13, 16);
     var p2 = Person.newInstance(22, 13, 16);
     var p3 = Class.newInstanceOf('Person', 22, 13, 16);
-
     // p1 == p2 == p3
 </pre>
 
@@ -255,10 +253,9 @@ Features
  - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
 <pre>
     Class.extend('Person', {
+        ...
     });
-
     var p = Class.getClass('Person');
-
     // p === Person
 </pre>
 
