@@ -16,12 +16,19 @@ Class.extend('Class', {
 
     __static: {
 
-        create: function(classNameToTest, src) {
+        Class: function(classNameToTest, src) {
             this.tests[this.tests.length] = this.extend(classNameToTest, (typeof src === 'function') ? { test: src } : src);
             return this;
         },
 
+        Func: function(src) {
+            var tmpClass = Class.extend('TestFunc' + this._testFuncCount++);
+            this.tests[this.tests.length] = this.extend(tmpClass.getClassName(), (typeof src === 'function') ? { test: src } : src);
+            return this;
+        },
+
         tests: [],
+        _testFuncCount: 0,
         _test: function() { var t = new this(); t.test(); return t; },
         run: function() {
             var errors = {};
@@ -80,7 +87,9 @@ Class.extend('Class', {
     assertIsNumber:                  function(test, msg) { var t = !isNaN(test); if (!t) this.addError(msg, 'assertIsNumber', 'Number', test); return t; },
     assertEquals:                    function(obj2, obj1, msg) { return this._test(obj2, obj1, 'assertEquals', msg); },
     assertEqualsClass:               function(class2, class1, msg) { var t = (class1 instanceof Class) && (class2 instanceof Class) && class1.equals(class2); if (!t) this.addError(msg, 'assertEqualsClass', class1.getClassName(), class2.getClassName()); return t; },
-    assertInstanceEqualsClass:       function(class1, msg) { var t = (class1 instanceof Class) && (this.instance instanceof Class) && class1.equals(this.instance); if (!t) this.addError(msg, 'assertEqualsClass', class1.getClassName(), this.instance.getClassName()); return t; }
+    assertNotEqualsClass:            function(class2, class1, msg) { var t = (class1 instanceof Class) && (class2 instanceof Class) && !class1.equals(class2); if (!t) this.addError(msg, 'assertNotEqualsClass', class1.getClassName(), class2.getClassName()); return t; },
+    assertInstanceEqualsClass:       function(class1, msg) { var t = (class1 instanceof Class) && (this.instance instanceof Class) && class1.equals(this.instance); if (!t) this.addError(msg, 'assertInstanceEqualsClass', class1.getClassName(), this.instance.getClassName()); return t; },
+    assertNotInstanceEqualsClass:    function(class1, msg) { var t = (class1 instanceof Class) && (this.instance instanceof Class) && !class1.equals(this.instance); if (!t) this.addError(msg, 'assertNotInstanceEqualsClass', class1.getClassName(), this.instance.getClassName()); return t; }
 });
 
 
@@ -121,17 +130,26 @@ Person.extend('Ninja', {
 // Tests
 
 TestClass
-    .create('Person', {
+    .Class('Person', {
         test: function() {
             this.newInstance(true);
             this.assertTrue(this.instance.dancing);
             this.assertUndefined(this.instance.dance());
         }
     })
-    .create('Ninja', function() {
+    .Class('Ninja', function() {
         this.newInstance();
         this.assertUndefined(this.instance.dancing);
         this.assertInstanceIsInstanceOf(Person);
+    })
+    .Func(function() {
+        var pa = new Person(true)
+            pb = pa.clone();
+        this.assertEqualsClass(pa, pb);
+        pb.dancing = 'bad';
+        this.assertNotEqualsClass(pa, pb);
+        this.assertTrue(pa.dancing);
+        this.assertEquals(pb.dancing, 'bad');
     });
 
 // Run tests

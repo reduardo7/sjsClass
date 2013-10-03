@@ -38,7 +38,6 @@ Features
         },
         ...
     });
-
     alert(Person.testStatic());
     alert(Person.staticVar);
     alert(Person.count);
@@ -50,16 +49,16 @@ Features
     (function(context) {
         ...
     })(window);
-
-    Class.extend(...
+    Class.extend('Person', ...
+    var p = new Person(...
 </pre>
 <pre>
     var contextName = {};
     (function(context) {
         ...
     })(contextName);
-
-    contextName.Class.extend(...
+    contextName.Class.extend('Person', ...
+    var p = new contextName.Person(...
 </pre>
 
 4. Access static methods and variables from instance.
@@ -133,7 +132,6 @@ Features
         },
         varName: 123
     });
-
     var p = new Person();
     if (p.hasMethod('methodName')) alert('Yes');
     if (p.hasVar('varName')) alert('Yes');
@@ -146,10 +144,8 @@ Features
     Person.extend('Ninja', {
         ...
     });
-
     var p = new Person();
     alert(p.getClassName()); // -> Alert 'Person'
-
     var n = new Ninja();
     alert(n.getClassName()); // -> Alert 'Ninja'
 </pre>
@@ -157,14 +153,11 @@ Features
     var Other = Person.extend({
         ...
     });
-
     var o = new Other();
     alert(o.getClassName()); // -> Alert 'Person_extended_0'
-
     var Foo = Person.extend({
         ...
     });
-
     var f = new Foo();
     alert(f.getClassName()); // -> Alert 'Person_extended_1'
 </pre>
@@ -172,7 +165,6 @@ Features
     var Bar = Ninja.extend('Fighter', {
         ...
     });
-
     var b = new Bar();
     alert(b.getClassName()); // -> Alert 'Fighter'
 </pre>
@@ -189,7 +181,6 @@ Features
 <pre>
     var p1 = new Person(false);
     var p2 = Person.newInstance(false);
-
     console.log(p1.equals(p2)); // -> true
 </pre>
 
@@ -210,7 +201,6 @@ Features
     Ninja.extend('Fighter', {
         ...
     });
-
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
 </pre>
 
@@ -220,7 +210,6 @@ Features
     Class.extend('Ninja', {
         ...
     });
-
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
 </pre>
 
@@ -231,18 +220,15 @@ Features
         __prefix: 'Fight',
         ...
     });
-
     // Creates a 'FightSamuray' class, not a 'Samuray' class.
     FightFighter.extend('Samuray' {
         ...
     });
-
     // Creates a 'Ninja' class, not a 'FightNinja' class.
     FightFighter.extend('Ninja' {
         __prefix: null,
         ...
     });
-
     // Override 'FightSamuray' class.
     Class.extend('FightSamuray' {
         ...
@@ -284,7 +270,6 @@ Example Code
             console.log('dance', this.getClassName(), this.dancing);
         }
     });
-
     var Grew = Person.extend(/*Dynamic Class Name*/{
         __static: {
             // Static methods
@@ -297,7 +282,6 @@ Example Code
             // or this.dancing = false;
         }
     });
-
     Grew.extend('Ninja', {
         dance: function() {
             // Call the inherited version of dance()
@@ -315,9 +299,7 @@ Example Code
 <pre>
     var p = Person.newInstance(false);
     p.dance(); // => true
-
     var g = new Grew();
-
     var n = new Ninja();
     n.dance(); // => false
     n.swingSword(); // => true

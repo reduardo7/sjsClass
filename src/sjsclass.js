@@ -1,7 +1,11 @@
 /**
  * sjsClass: Simple JavaScript Class.
+ * Copyright (c) 2013 sjsClass | Eduardo Daniel Cuomo | eduardo.cuomo.ar@gmail.com
  *
  * By: Edueado Daniel Cuomo.
+ *
+ * Project: https://github.com/reduardo7/sjsClass
+ * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  *
  * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
  */
@@ -37,11 +41,11 @@
         constructor: Class,
         getClassName: function() { return this.constructor.name; },
         clone: function() {
-            var c = new this.__static;
+            initializing  = true;
+            var c = new this.__static();
+            initializing  = false;
             for (var i in this) {
-                if (this.hasOwnProperty(i)) {
-                    c[i] = this[i];
-                }
+                c[i] = this[i];
             }
             return c;
         },
