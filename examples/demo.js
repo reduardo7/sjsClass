@@ -33,11 +33,9 @@ Class.extend('Person', {
 });
 
 var Tom = Person.extend(/*Dynamic Class Name*/{
-    __static: {
-        // Static methods
-        testStatic: function() {
-            return this.__super() && this.__parent.testStatic();
-        }
+    // Static method
+    'static testStatic': function() {
+        return this.__super() && this.__parent.testStatic();
     },
     __constructor: function() {
         this.__super(this.__static.staticVar);
