@@ -18,21 +18,20 @@
     // Check if loaded
     if (context.Class !== undefined) { return; }
 
-    // Internal Utils
-
-    function defined(x) { return typeof x !== 'undefined'; }
-    function hasVar(x) { return typeof this[x] !== 'undefined'; }
-    function hasMethod(m) { return this.hasVar(m) && (typeof this[m] === 'function'); }
-
-    // Class
-
     var initializing = false,
         fnTest = /xyz/.test(function(){xyz;}) ? /\b__super\b/ : /.*/,
         extendClassCount = 0,
         invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
         invalidProto = ['__static'];
 
+    // Internal Utils
 
+    function defined(x) { return typeof x !== 'undefined'; }
+    function hasVar(x) { return typeof this[x] !== 'undefined'; }
+    function hasMethod(m) { return this.hasVar(m) && (typeof this[m] === 'function'); }
+    function getMethodName(n) { var x; for (var i in n) { if ([].indexOf(n[i]) === -1) { x = n[i]; break; } } if (!x) throw '[' + n + '] not have a name!'; return x; }
+
+    // Class
     function Class() {};
 
     Class.prototype = {
@@ -128,13 +127,6 @@
             }
         }
 
-        // Generate new dynamic Class Name
-        if (!className) {
-            do {
-                className = __construct.name + '_extended_' + extendClassCount++;
-            } while (context[className]);
-        }
-
         if (!defined(src['__static'])) {
             src['__static'] = {};
         }
@@ -142,6 +134,28 @@
         if (defined(src['__onExtend'])) {
             src.__static.__onExtend = src['__onExtend'];
             delete src['__onExtend'];
+        }
+
+        // Alternative declaration
+        for (var name in src) {
+            var np = (name + '').toLowerCase().split(/\s+/);
+            if (np.length > 1) {
+                var a = false;
+                if (np.indexOf('static') > -1) {
+                    src['__static'][getMethodName(np)] = src[name];
+                    a = true;
+                // } else if (np.indexOf('private') > -1) {
+                //     a = true;
+                }
+                if (a) delete src[name];
+            }
+        }
+
+        // Generate new dynamic Class Name
+        if (!className) {
+            do {
+                className = __construct.name + '_extended_' + extendClassCount++;
+            } while (context[className]);
         }
 
         // Prefix
