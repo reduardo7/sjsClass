@@ -36,11 +36,19 @@ Features
             staticVar: true,
             count: 100
         },
+        'static getCount': function() {
+            return this.count;
+        },
+        'static getVar': function() {
+            return this.staticVar;
+        }
         ...
     });
     alert(Person.testStatic());
     alert(Person.staticVar);
     alert(Person.count);
+    alert(Person.getCount());
+    alert(Person.getVar());
 </pre>
 
 3. Declare into context.
