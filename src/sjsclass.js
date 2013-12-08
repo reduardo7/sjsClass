@@ -122,6 +122,7 @@
 	Class.extend = function(src_name, src) {
 		var __super          = this.prototype,
 			__construct      = __super.constructor,
+			fluent           = !!this.__fluent,
 			className        = false,
 			register         = false,
 			__constructProps = Object.getOwnPropertyNames(__construct),
@@ -146,6 +147,11 @@
 			} else {
 				src = src_name;
 			}
+		}
+
+		// Fluent interface
+		if (defined(src['__fluent'])) {
+			fluent = !!src['__fluent'];
 		}
 
 		// Static
@@ -234,9 +240,9 @@
 				// Check if we're overwriting an existing function
 				prototype[name] = (typeof src[name] === "function") ? (
 					function(name, fn) {
-						var hs = (typeof __super[name] === "function") && fnTest.test(src[name]);
 						return function() {
-							var tmp = this.__super;
+							var hs = (typeof __super[name] === "function") && fnTest.test(src[name]),
+								tmp = this.__super;
 
 							// Add Privates
 							for (var i in privatesVals) this[i] = privatesVals[i];
@@ -259,7 +265,7 @@
 							}
 
 							// Return result
-							return ret;
+							return (!defined(ret) && fluent) ? this : ret;
 						};
 					})(name, src[name]) : src[name];
 			}
@@ -297,21 +303,24 @@
 			for (var name in src['__static']) {
 				if (invalidStatic.indexOf(name) === -1) {
 					// Check if we're overwriting an existing function
-					newClass[name] = (typeof src['__static'][name] === "function") && (typeof __construct[name] === "function") && fnTest.test(src['__static'][name]) ? (
+					newClass[name] = (typeof src['__static'][name] === "function") ? (
 						function(name, fn) {
 							return function() {
-								var tmp = this.__super;
+								var hs = (typeof __construct[name] === "function") && fnTest.test(src['__static'][name]),
+									tmp = this.__super;
 
 								// Add a new .__super() method that is the same method
 								// but on the super-class
-								this.__super = __construct[name];
+								if (hs) this.__super = __construct[name];
 
 								// The method only need to be bound temporarily, so we
 								// remove it when we're done executing
 								var ret = fn.apply(this, arguments);
-								this.__super = tmp;
 
-								return ret;
+								// Restore __super
+								if (hs) this.__super = tmp;
+
+								return (!defined(ret) && fluent) ? this : ret;
 							};
 						})(name, src['__static'][name]) : src['__static'][name];
 				}

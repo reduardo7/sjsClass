@@ -317,6 +317,28 @@ Features
     f.bar; // -> 63
 </pre>
 
+20. Fluent Interface
+If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
+<pre>
+    Class.extend('Foo', {
+        __fluent : true, // Enable Fluent Interface
+        __static : {
+            x : '',
+            add : function (x) { this.x += x; }, // Fluent Interface
+            bar : function () { return this.x; }
+        },
+        'private x' : '',
+        add : function (x) { this.x += x; }, // Fluent Interface
+        bar : function () { return this.x; }
+    });
+    var f = new Foo;
+    f.add(10).add(13).add('LM');
+    Foo.add(88).add(86).add('VE');
+    console.log(
+        f.bar(), // -> 1013LM
+        Foo.bar() // ->8886VE
+    );
+</pre>
 
 Example Code
 ------------
