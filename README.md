@@ -253,6 +253,71 @@ Features
     // p === Person
 </pre>
 
+17. Constants
+<pre>
+    Class.extend('Person', {
+        __const : {
+            BROTHER : 'Mateo',
+            FLIA : 'Cuomo'
+        },
+        'const SISTER' : 'Luciana'
+    });
+    var f = new Person;
+    f.BROTHER = 'Eduardo';
+    f.SISTER = 'Vanesa';
+    f.BROTHER; // ->  'Mateo'
+    f.SISTER; // -> 'Luciana'
+</pre>
+
+18. Private methods and variables
+<pre>
+    Class.extend('Foo', {
+        __private : {
+            privV : 123,
+            privF : function () {
+                return this.privV + this.priv3;
+            }
+        },
+        'private priv3' : 'Private Value',
+        setX : function (x) {
+            this.privV = x;
+        },
+        test : function () { return this.privF(); }
+    });
+    var f = new Foo;
+    f.setX(456);
+    f.test(); // -> 'Private Value456'
+    f.privF(); // -> Error
+    f.privV; // -> undefined
+    f.priv3; // -> undefined
+</pre>
+
+19. Properties
+<pre>
+    Class.extend('Fighter', {
+        __property : {
+            Val : {
+                get : function () { return this.val; },
+                set : function (value) { this.val = value; }
+            }
+        },
+        'prop foo' : {
+            get : function () { return this.val * 3; }
+        },
+        'property bar' : {
+            get : function () { return this.Val; }
+        },
+        'private val' : null
+    });
+    var f = new Fighter;
+    f.Val = 21;
+    f.Val; // -> 21
+    f.foo = 123;
+    f.foo; // -> 63
+    f.bar; // -> 63
+</pre>
+
+
 Example Code
 ------------
 
