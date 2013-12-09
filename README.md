@@ -318,6 +318,7 @@ Features
 </pre>
 
 20. Fluent Interface
+
 If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
 <pre>
     Class.extend('Foo', {
