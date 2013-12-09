@@ -12,14 +12,14 @@
 
 ;'use strict';
 
-(function(context) {
+(function (context) {
 	'use strict';
 
 	// Check if loaded
 	// if (context.Class !== undefined) { return; }
 
 	var initializing = false,
-		fnTest = /xyz/.test(function(){xyz;}) ? /\b__super\b/ : /.*/,
+		fnTest = /xyz/.test(function (){xyz;}) ? /\b__super\b/ : /.*/,
 		extendClassCount = 0,
 		invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
 		invalidProto = ['__static'];
@@ -49,11 +49,11 @@
 		hasVar : hasVar,
 		hasMethod : hasMethod,
 		constructor : Class,
-		getClassName : function() { return this.constructor.name; },
+		getClassName : function () { return this.constructor.name; },
 		hasGetter : function (n) { return defined(this.__lookupGetter__(n)); },
 		hasSetter : function (n) { return defined(this.__lookupSetter__(n)); },
 		hasProperty : function (n) { return defined(this.__lookupGetter__(n)) || defined(this.__lookupSetter__(n)); },
-		clone : function() {
+		clone : function () {
 			initializing  = true;
 			var c = new this.__static();
 			initializing  = false;
@@ -62,8 +62,10 @@
 			}
 			return c;
 		},
-		hashCode : function() {
-			var h = {};
+		hashCode : function () {
+			var h = {
+				CLASS_NAME : this.constructor.name
+			};
 			for (var n in this) {
 				if (invalidStatic.indexOf(n) === -1) {
 					if (typeof this[n] !== 'function') {
@@ -73,21 +75,21 @@
 			}
 			return JSON.stringify(h);
 		},
-		equals : function(o) { return (o instanceof Class) && (this.getClassName() == o.getClassName()) && (this.hashCode() == o.hashCode()); },
-		toString : function() { return this.getClassName() + ':' + this.hashCode(); }
+		equals : function (o) { return (o instanceof Class) && (this.getClassName() == o.getClassName()) && (this.hashCode() == o.hashCode()); },
+		toString : function () { return this.getClassName() + ':' + this.hashCode(); }
 	}
 
 	Class.hasVar        = hasVar;
 	Class.hasMethod     = hasMethod;
-	Class.getClassName  = function() { return this.name; };
+	Class.getClassName  = function () { return this.name; };
 	Class.__prefix      = null;
-	Class.__onExtend    = function() { };
-	Class.classExists   = function(className) { return eval('typeof ' + className + ' === "function";'); };
+	Class.__onExtend    = function () { };
+	Class.classExists   = function (className) { return typeof context[className] === 'function'; };
 	Class.getConstants  = function () { return {}; };
 	Class.getProperties = function () { return {}; };
 	Class.getPrivates   = function () { return {}; };
 
-	Class.newInstance = function() {
+	Class.newInstance = function () {
 		var s = 'new this(';
 		for (var i in arguments) {
 			if (i > 0) s += ',';
@@ -96,9 +98,9 @@
 		return eval(s + ')');
 	};
 
-	Class.newInstanceOf = function(className) {
+	Class.newInstanceOf = function (className) {
 		if (this.classExists(className)) {
-			var s = 'new ' + className + '(';
+			var s = 'new context.' + className + '(';
 			for (var i in arguments) {
 				if (i > 0) {
 					if (i > 1) s += ',';
@@ -107,19 +109,19 @@
 			}
 			return eval(s + ')');
 		} else {
-			throw 'Error! Class "' + className + '" not declared!';
+			throw 'Error! Class "context.' + className + '" not declared!';
 		}
 	};
 
-	Class.getClass = function(className) {
+	Class.getClass = function (className) {
 		if (this.classExists(className)) {
 			return eval(className);
 		} else {
-			throw 'Error! Class "' + className + '" not declared!';
+			throw 'Error! Class "context.' + className + '" not declared!';
 		}
 	};
 
-	Class.extend = function(src_name, src) {
+	Class.extend = function (src_name, src) {
 		var __super          = this.prototype,
 			__construct      = __super.constructor,
 			fluent           = !!this.__fluent,
@@ -239,8 +241,8 @@
 			if (invalidProto.indexOf(name) === -1) {
 				// Check if we're overwriting an existing function
 				prototype[name] = (typeof src[name] === "function") ? (
-					function(name, fn) {
-						return function() {
+					function (name, fn) {
+						return function () {
 							var hs = (typeof __super[name] === "function") && fnTest.test(src[name]),
 								tmp = this.__super;
 
@@ -304,8 +306,8 @@
 				if (invalidStatic.indexOf(name) === -1) {
 					// Check if we're overwriting an existing function
 					newClass[name] = (typeof src['__static'][name] === "function") ? (
-						function(name, fn) {
-							return function() {
+						function (name, fn) {
+							return function () {
 								var hs = (typeof __construct[name] === "function") && fnTest.test(src['__static'][name]),
 									tmp = this.__super;
 
@@ -338,11 +340,11 @@
 		// Enforce the constructor to be what we expect
 		newClass.prototype.constructor = newClass;
 
-		// Execute Callback
-		this.__onExtend();
-
 		// Append in context
 		if (register) { context[className] = newClass; }
+
+		// Execute Callback
+		this.__onExtend();
 
 		// Return
 		return newClass;
