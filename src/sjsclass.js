@@ -90,24 +90,12 @@
 	Class.getPrivates   = function () { return {}; };
 
 	Class.newInstance = function () {
-		var s = 'new this(';
-		for (var i in arguments) {
-			if (i > 0) s += ',';
-			s += 'arguments[' + i + ']';
-		}
-		return eval(s + ')');
+		return new (Function.bind.apply(this, arguments));
 	};
 
 	Class.newInstanceOf = function (className) {
 		if (this.classExists(className)) {
-			var s = 'new context.' + className + '(';
-			for (var i in arguments) {
-				if (i > 0) {
-					if (i > 1) s += ',';
-					s += 'arguments[' + i + ']';
-				}
-			}
-			return eval(s + ')');
+			return new (Function.bind.apply(context[className], arguments));
 		} else {
 			throw 'Error! Class "context.' + className + '" not declared!';
 		}
@@ -115,7 +103,7 @@
 
 	Class.getClass = function (className) {
 		if (this.classExists(className)) {
-			return eval(className);
+			return context[className];
 		} else {
 			throw 'Error! Class "context.' + className + '" not declared!';
 		}
