@@ -264,10 +264,11 @@
 		function constructorInit () {
 			// Properties
 			for (var i in properties) {
-				if (typeof properties[i].get === 'function')
-					this.__defineGetter__(i, properties[i].get);
-				if (typeof properties[i].set === 'function')
-					this.__defineSetter__(i, properties[i].set);
+				Object.defineProperty(this, i, properties[i]);
+				//if (typeof properties[i].get === 'function')
+				//	this.__defineGetter__(i, properties[i].get);
+				//if (typeof properties[i].set === 'function')
+				//	this.__defineSetter__(i, properties[i].set);
 			}
 		}
 
