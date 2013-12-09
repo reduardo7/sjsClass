@@ -272,7 +272,8 @@
 		}
 
 		// The dummy class constructors
-		eval('newClass=function ' + className + '(){if(!initializing&&this.__constructor){constructorInit.apply(this);this.__constructor.apply(this,arguments);}};');
+		//eval('newClass=function ' + className + '(){if(!initializing&&this.__constructor){constructorInit.apply(this);this.__constructor.apply(this,arguments);}};');
+		newClass = new Function("return function " + className + "(){if(!initializing&&this.__constructor){constructorInit.apply(this);this.__constructor.apply(this,arguments);}};")();
 
 		// Static
 		for (var i in __constructProps) {
