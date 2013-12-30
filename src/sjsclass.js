@@ -18,6 +18,7 @@
 
 	var BaseClassName    = 'Class',
 		initializing     = false,
+		instanceLock     = true,
 		fnTest           = /xyz/.test(function () { xyz; }) ? /\b__super\b/ : /.*/,
 		extendClassCount = 0,
 		invalidStatic    = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
@@ -27,7 +28,8 @@
 		constants      = { },
 		properties     = { },
 		protecteds     = { },
-		protectedsVals = { };
+		protectedsVals = { },
+		instancesCount = { };
 
 	// Internal Utils
 
@@ -41,6 +43,17 @@
 		for (var k in o)
 			t[k] = clone(o[k]);
 		return t;
+	}
+	
+	function setInstanceCount(o, value) {
+		Object.defineProperty(o, '__instanceCount', {
+			enumerable : true,
+			get : function () { return instancesCount[this.prototype.constructor.name]; },
+			set : function (value) { if (!instanceLock) instancesCount[this.prototype.constructor.name] = value; }
+		});
+		instanceLock = false;
+		o.__instanceCount = value || 0;
+		instanceLock = true;
 	}
 
 	function getMethodName (n, v) {
@@ -68,25 +81,23 @@
 		hasSetter : function (n) { return defined(this.__lookupSetter__(n)); },
 		hasProperty : function (n) { return defined(this.__lookupGetter__(n)) || defined(this.__lookupSetter__(n)); },
 		clone : function () {
-			initializing  = true;
-			var c = new this.__static();
-			initializing  = false;
-			for (var i in this)
-				c[i] = this[i];
+			initializing = true;
+			var c = new this.__static(), o = clone(this);
+			initializing = false;
+			for (var i in o) c[i] = o[i];
 			return c;
 		},
 		hashCode : function () {
-			var h = {
-				CLASS_NAME : this.constructor.name
-			};
+			var h = { };
 			for (var n in this)
 				if ((invalidStatic.indexOf(n) === -1) && (typeof this[n] !== 'function'))
 					h[n] = this[n];
+			h.__CLASS_NAME = this.constructor.name;
 			return JSON.stringify(h);
 		},
 		equals : function (o) { return (o instanceof Class) && (this.getClassName() === o.getClassName()) && (this.hashCode() === o.hashCode()); },
-		toString : function () { return this.getClassName() + '::' + this.hashCode(); },
-        __instanceId : null
+		toString : function () { return this.getClassName() + ':' + this.hashCode(); },
+		__instanceId : BaseClassName + ':0'
 	};
 
 	constants[BaseClassName]  = { };
@@ -102,7 +113,9 @@
 	Class.__getConstants  = function () { return clone(constants[this.prototype.constructor.name]); };
 	Class.__getProperties = function () { return clone(properties[this.prototype.constructor.name]); };
 	Class.__getProtecteds = function () { return clone(protecteds[this.prototype.constructor.name]); };
-    Class.__instanceCount = 0;
+    
+    // Instances Count
+	setInstanceCount(Class, 1);
 
 	Class.newInstance = function () {
 		var s = 'new this(';
@@ -144,7 +157,7 @@
 			register           = false,
 			__constructProps   = Object.getOwnPropertyNames(__construct),
 			protectedCallStack = 0,
-			newClass;
+			newClass, ppt;
 
 		function setName (n) {
 			className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '').trim();
@@ -283,14 +296,10 @@
 				if (a) delete src[name];
 			}
 		}
-        
-        // Instance count to 0
-        src.__static.__instanceCount = 0;
 
 		// Instantiate a base class (but only create the instance,
 		// don't run the __constructor constructor)
 		initializing = true;
-        var ppt;
 		try {
 			ppt = new this();
 		} finally {
@@ -361,12 +370,18 @@
 			}
             
             // Instance ID
-            this.__instanceId = this.constructor.name + ':' + this.constructor.__instanceCount++;
+			instanceLock = false;
+			Object.defineProperty(t, '__instanceId', {
+				value : t.constructor.name + ':' + t.constructor.__instanceCount++,
+				configurable : false,
+				enumerable : true,
+				writable : false
+			});
+			instanceLock = true;
 
 			// Constructor
 			if (src.__constructor)
 				protectedCall(t, src.__constructor, arguments);
-
 		}
 
 		// The dummy class constructors
@@ -420,6 +435,9 @@
 				}
 			}
 		}
+		
+        // Instance count to 0
+		setInstanceCount(newClass);
 
 		// References
 		ppt.__parent = __super;
