@@ -6,7 +6,8 @@ Simple JavaScript Class
 Features
 --------
 
-1. Extend class.
+<h3>Extend class</h3>
+
  - *Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
  - *Class.extend(<code>string ClassName</code>);*
  - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
@@ -25,7 +26,8 @@ Features
     });
 </pre>
 
-2. Static methods and variables.
+<h3>Static methods and variables</h3>
+
 <pre>
     Class.extend('Person', {
         __static: {
@@ -51,7 +53,8 @@ Features
     alert(Person.getVar());
 </pre>
 
-3. Declare into context.
+<h3>Declare into context</h3>
+
 <pre>
     // Web Page
     (function(context) {
@@ -69,7 +72,8 @@ Features
     var p = new contextName.Person(...
 </pre>
 
-4. Access static methods and variables from instance.
+<h3>Access static methods and variables from instance</h3>
+
 <pre>
     Class.extend('Person', {
         __static: {
@@ -81,7 +85,8 @@ Features
     });
 </pre>
 
-5. Constructor.
+<h3>Constructor</h3>
+
  - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*
  - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*
 <pre>
@@ -96,7 +101,8 @@ Features
     // p1 == p2 == p3
 </pre>
 
-6. Call parent methods.
+<h3>Call parent methods</h3>
+
 <pre>
     Person.extend('Ninja', {
         __static: {
@@ -115,7 +121,8 @@ Features
     });
 </pre>
 
-7. Call parent static.
+<h3>Call parent static</h3>
+
 <pre>
     Person.extend('Ninja', {
         __static: {
@@ -130,7 +137,8 @@ Features
     });
 </pre>
 
-8. Check if has value or method.
+<h3>Check if has value or method</h3>
+
  - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
  - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
 <pre>
@@ -145,7 +153,8 @@ Features
     if (p.hasVar('varName')) alert('Yes');
 </pre>
 
-9. Get Class name.
+<h3>Get Class name</h3>
+
  - *<code>string</code> classInstance.<code>getClassName</code>()*
  - *<code>string</code> Class.<code>getClassName</code>()*
 <pre>
@@ -177,29 +186,35 @@ Features
     alert(b.getClassName()); // -> Alert 'Fighter'
 </pre>
 
-10. Hash Code.
+<h3>Hash Code</h3>
+
  - *<code>string</code> classInstance.<code>hashCode</code>()*
 <pre>
     var p1 = new Person(false);
     console.log(p1.hashCode()); // -> Get instence Hash Code
 </pre>
 
-11. Equals (check's instances Hash Codes and Class Names).
+<h3>Equals</h3>
+
  - *<code>boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
+
+Check's instances Hash Codes and Class Names.
 <pre>
     var p1 = new Person(false);
     var p2 = Person.newInstance(false);
     console.log(p1.equals(p2)); // -> true
 </pre>
 
-12. To string.
+<h3>To string</h3>
+
  - *<code>string</code> classInstance.<code>toString</code>()*
 <pre>
     var p1 = new Person(false);
     console.log(p1.toString()); // -> String representation
 </pre>
 
-13. Callbacks.
+<h3>Callbacks</h3>
+
 <pre>
     Class.extend('Ninja', {
         __onExtend: function() {
@@ -212,7 +227,8 @@ Features
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
 </pre>
 
-14. Check if Class exists.
+<h3>Check if Class exists</h3>
+
  - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
 <pre>
     Class.extend('Ninja', {
@@ -221,7 +237,8 @@ Features
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
 </pre>
 
-15. Prefix extended class.
+<h3>Prefix extended class</h3>
+
 <pre>
     // Creates a 'FightFighter' class, not a 'Fighter' class.
     Class.extend('Fighter', {
@@ -243,7 +260,8 @@ Features
     });
 </pre>
 
-16. Get Class from Class Name.
+<h3>Get Class from Class Name</h3>
+
  - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
 <pre>
     Class.extend('Person', {
@@ -253,7 +271,8 @@ Features
     // p === Person
 </pre>
 
-17. Constants
+<h3>Constants</h3>
+
 <pre>
     Class.extend('Person', {
         __const : {
@@ -269,7 +288,8 @@ Features
     f.SISTER; // -> 'Luciana'
 </pre>
 
-18. Protected methods and variables
+<h3>Protected methods and variables</h3>
+
 <pre>
     Class.extend('Foo', {
         __protected : {
@@ -292,7 +312,11 @@ Features
     f.priv3; // -> undefined
 </pre>
 
-19. Properties
+<h3>Properties</h3>
+
+ - *<code>object</code> <code>__properties</code>*
+ - *<code>object</code> <code>property</code>*
+ - *<code>object</code> <code>prop</code>*
 
 Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
 <pre>
@@ -313,6 +337,7 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
         },
         'protected val' : null
     });
+    
     var f = new Fighter();
     f.Val = 21;
     f.Val; // -> 21
@@ -321,7 +346,9 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
     f.bar; // -> 63
 </pre>
 
-20. Fluent Interface
+<h3>Fluent Interface</h3>
+
+ - *<code>boolean</code> <code>__fluent</code>*
 
 If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
 <pre>
@@ -345,7 +372,8 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
     );
 </pre>
 
-21. Instance ID
+<h3>Instance ID</h3>
+
  - *<code>string</code> classInstance.<code>__instanceId</code>()*
 
 Get Instance ID.
@@ -363,7 +391,8 @@ Get Instance ID.
     );
 </pre>
 
-22. Instances Count
+<h3>Instances Count</h3>
+
  - *<code>string</code> ClassName.<code>__instanceCount</code>()*
 
 Get Instance ID.
