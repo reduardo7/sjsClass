@@ -269,16 +269,16 @@ Features
     f.SISTER; // -> 'Luciana'
 </pre>
 
-18. Private methods and variables
+18. Protected methods and variables
 <pre>
     Class.extend('Foo', {
-        __private : {
+        __protected : {
             privV : 123,
             privF : function () {
                 return this.privV + this.priv3;
             }
         },
-        'private priv3' : 'Private Value',
+        'protected priv3' : 'Protected Value',
         setX : function (x) {
             this.privV = x;
         },
@@ -286,13 +286,15 @@ Features
     });
     var f = new Foo;
     f.setX(456);
-    f.test(); // -> 'Private Value456'
+    f.test(); // -> 'Protected Value456'
     f.privF(); // -> Error
     f.privV; // -> undefined
     f.priv3; // -> undefined
 </pre>
 
 19. Properties
+
+Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
 <pre>
     Class.extend('Fighter', {
         __property : {
@@ -305,11 +307,13 @@ Features
             get : function () { return this.val * 3; }
         },
         'property bar' : {
-            get : function () { return this.Val; }
+            value : 123,
+            enumerable : false,
+            writable : true
         },
-        'private val' : null
+        'protected val' : null
     });
-    var f = new Fighter;
+    var f = new Fighter();
     f.Val = 21;
     f.Val; // -> 21
     f.foo = 123;
@@ -328,11 +332,11 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
             add : function (x) { this.x += x; }, // Fluent Interface
             bar : function () { return this.x; }
         },
-        'private x' : '',
+        'protected x' : '',
         add : function (x) { this.x += x; }, // Fluent Interface
         bar : function () { return this.x; }
     });
-    var f = new Foo;
+    var f = new Foo();
     f.add(10).add(13).add('LM');
     Foo.add(88).add(86).add('VE');
     console.log(
@@ -341,71 +345,38 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
     );
 </pre>
 
-Example Code
-------------
+21. Instance ID
+ - *<code>string</code> classInstance.<code>__instanceId</code>()*
 
-### Declare
-
+Get Instance ID.
 <pre>
-    Class.extend('Person', {
-        __static: {
-            // Static methods
-            testStatic: function() {
-                return true;
-            },
-            staticVar: true,
-            count: 100
-        },
-        __constructor: function(isDancing) {
-            this.dancing = isDancing;
-            console.log(this.getClassName(), 'has "dance" method?', this.hasMethod('dance'));
-            console.log(this.getClassName(), 'has "dancing" value?', this.hasVar('dancing'));
-            console.log('Person number', ++Person.count);
-        },
-        dance: function() {
-            console.log('dance', this.getClassName(), this.dancing);
-        }
+    Class.extend('Foo', {
+        ...
     });
-    var Grew = Person.extend(/*Dynamic Class Name*/{
-        __static: {
-            // Static methods
-            testStatic: function() {
-                return this.__super() && this.__parent.testStatic();
-            }
-        },
-        __constructor: function() {
-            this.__super(this.__static.staticVar);
-            // or this.dancing = false;
-        }
-    });
-    Grew.extend('Ninja', {
-        dance: function() {
-            // Call the inherited version of dance()
-            this.__super(); // => dance Ninja false
-            this.__parent.dance(); // => dance Person undefined
-        },
-        swingSword: function() {
-            console.log('swingSword');
-        }
-    });
+    
+    var f1 = new Foo();
+    var f2 = new Foo();
+    
+    console.log(
+        f1.__instanceId, // -> Foo:0
+        f2.__instanceId  // -> Foo:1
+    );
 </pre>
 
-### Instance
+22. Instances Count
+ - *<code>string</code> ClassName.<code>__instanceCount</code>()*
 
+Get Instance ID.
 <pre>
-    var p = Person.newInstance(false);
-    p.dance(); // => true
-    var g = new Grew();
-    var n = new Ninja();
-    n.dance(); // => false
-    n.swingSword(); // => true
-</pre>
-
-### Should all be true
-
-<pre>
-    Person.testStatic() && Grew.testStatic() && Ninja.testStatic() &&
-    p instanceof Person && p instanceof Class && !(p instanceof Grew) &&
-    g instanceof Grew && g instanceof Person && g instanceof Class &&
-    n instanceof Ninja && n instanceof Person && n instanceof Class
+    Class.extend('Foo', {
+        ...
+    });
+    
+    console.log(Foo.__instanceCount); // -> 0
+    Foo.__instanceCount = 111;
+    console.log(Foo.__instanceCount); // -> 0
+    
+    var f1 = new Foo();
+    var f2 = new Foo();
+    console.log(Foo.__instanceCount); // -> 2
 </pre>
