@@ -10,30 +10,43 @@
  * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
  */
 
-;'use strict';
-
 (function (context) {
-	'use strict';
+    'use strict';
 
 	// Check if loaded
-	// if (context.Class !== undefined) { return; }
+	// if (context[BaseClassName] !== undefined) { return; }
 
-	var initializing = false,
-		fnTest = /xyz/.test(function (){xyz;}) ? /\b__super\b/ : /.*/,
+	var BaseClassName    = 'Class',
+		initializing     = false,
+		fnTest           = /xyz/.test(function () { xyz; }) ? /\b__super\b/ : /.*/,
 		extendClassCount = 0,
-		invalidStatic = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
-		invalidProto = ['__static'];
+		invalidStatic    = ['prototype', 'length', 'name', 'arguments', 'caller', '__parent'],
+		invalidProto     = ['__static', '__constructor'],
+		// Internal
+		protectedCache = { },
+		constants      = { },
+		properties     = { },
+		protecteds     = { },
+		protectedsVals = { };
 
 	// Internal Utils
 
 	function defined (x) { return typeof x !== 'undefined'; }
 	function hasVar (x) { return this.hasOwnProperty(x); }
 	function hasMethod (m) { return defined(this[m]) && (typeof this[m] === 'function'); }
+	function clone (o) {
+		if ((o === null) || (typeof o !== 'object'))
+			return o;
+		var t = o.constructor();
+		for (var k in o)
+			t[k] = clone(o[k]);
+		return t;
+	}
 
 	function getMethodName (n, v) {
 		var x;
 		for (var i in n) {
-			if (['const', 'constant', 'prop', 'property', 'private'].indexOf(n[i]) === -1) {
+			if (['const', 'constant', 'prop', 'property', 'protected', 'static'].indexOf(n[i]) === -1) {
 				x = v[i];
 				break;
 			}
@@ -43,7 +56,8 @@
 	}
 
 	// Class
-	function Class() {};
+	eval('context.' + BaseClassName + '=function ' + BaseClassName + '(){ };');
+	var Class = context[BaseClassName];
 
 	Class.prototype = {
 		hasVar : hasVar,
@@ -57,47 +71,60 @@
 			initializing  = true;
 			var c = new this.__static();
 			initializing  = false;
-			for (var i in this) {
+			for (var i in this)
 				c[i] = this[i];
-			}
 			return c;
 		},
 		hashCode : function () {
 			var h = {
 				CLASS_NAME : this.constructor.name
 			};
-			for (var n in this) {
-				if (invalidStatic.indexOf(n) === -1) {
-					if (typeof this[n] !== 'function') {
-						h[n] = this[n];
-					}
-				}
-			}
+			for (var n in this)
+				if ((invalidStatic.indexOf(n) === -1) && (typeof this[n] !== 'function'))
+					h[n] = this[n];
 			return JSON.stringify(h);
 		},
-		equals : function (o) { return (o instanceof Class) && (this.getClassName() == o.getClassName()) && (this.hashCode() == o.hashCode()); },
-		toString : function () { return this.getClassName() + ':' + this.hashCode(); }
-	}
+		equals : function (o) { return (o instanceof Class) && (this.getClassName() === o.getClassName()) && (this.hashCode() === o.hashCode()); },
+		toString : function () { return this.getClassName() + '::' + this.hashCode(); },
+        __instanceId : null
+	};
 
-	Class.hasVar        = hasVar;
-	Class.hasMethod     = hasMethod;
-	Class.getClassName  = function () { return this.name; };
-	Class.__prefix      = null;
-	Class.__onExtend    = function () { };
-	Class.classExists   = function (className) { return typeof context[className] === 'function'; };
-	Class.getConstants  = function () { return {}; };
-	Class.getProperties = function () { return {}; };
-	Class.getPrivates   = function () { return {}; };
+	constants[BaseClassName]  = { };
+	properties[BaseClassName] = { };
+	protecteds[BaseClassName] = { };
+
+	Class.hasVar          = hasVar;
+	Class.hasMethod       = hasMethod;
+	Class.getClassName    = function () { return this.name; };
+	Class.__prefix        = null;
+	Class.__onExtend      = function () { };
+	Class.classExists     = function (className) { return typeof context[className] === 'function'; };
+	Class.__getConstants  = function () { return clone(constants[this.prototype.constructor.name]); };
+	Class.__getProperties = function () { return clone(properties[this.prototype.constructor.name]); };
+	Class.__getProtecteds = function () { return clone(protecteds[this.prototype.constructor.name]); };
+    Class.__instanceCount = 0;
 
 	Class.newInstance = function () {
-		return new (Function.bind.apply(this, arguments));
+		var s = 'new this(';
+		for (var i in arguments) {
+			if (i > 0) s += ',';
+			s += 'arguments[' + i + ']';
+		}
+		return eval(s + ')');
 	};
 
 	Class.newInstanceOf = function (className) {
 		if (this.classExists(className)) {
-			return new (Function.bind.apply(context[className], arguments));
+			var s = 'new ' + className + '(';
+			for (var i in arguments) {
+				if (i > 0) {
+					if (i > 1) s += ',';
+					s += 'arguments[' + i + ']';
+				}
+			}
+			return eval(s + ')');
 		} else {
-			throw 'Error! Class "context.' + className + '" not declared!';
+			throw 'Error! Class "' + className + '" not declared!';
 		}
 	};
 
@@ -105,24 +132,21 @@
 		if (this.classExists(className)) {
 			return context[className];
 		} else {
-			throw 'Error! Class "context.' + className + '" not declared!';
+			throw 'Error! Class "' + context.constructor.name + '.' + className + '" not declared!';
 		}
 	};
 
 	Class.extend = function (src_name, src) {
-		var __super          = this.prototype,
-			__construct      = __super.constructor,
-			fluent           = !!this.__fluent,
-			className        = false,
-			register         = false,
-			__constructProps = Object.getOwnPropertyNames(__construct),
-			constants        = this.getConstants(),
-			properties       = this.getProperties(),
-			privates         = this.getPrivates(),
-			privatesVals     = this.getPrivates(),
+		var __super            = this.prototype,
+			__construct        = __super.constructor,
+			fluent             = !!this.__fluent,
+			className          = false,
+			register           = false,
+			__constructProps   = Object.getOwnPropertyNames(__construct),
+			protectedCallStack = 0,
 			newClass;
 
-		function setName(n) {
+		function setName (n) {
 			className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '').trim();
 			register  = true;
 		}
@@ -132,73 +156,10 @@
 			setName(src_name);
 		} else {
 			if (typeof src_name === 'string') {
-				src = {};
+				src = { };
 				setName(src_name);
 			} else {
 				src = src_name;
-			}
-		}
-
-		// Fluent interface
-		if (defined(src['__fluent'])) {
-			fluent = !!src['__fluent'];
-		}
-
-		// Static
-		if (!defined(src['__static'])) {
-			src['__static'] = {};
-		}
-
-		// On Extend Event
-		if (defined(src['__onExtend'])) {
-			src.__static.__onExtend = src['__onExtend'];
-			delete src['__onExtend'];
-		}
-
-		// Constants
-		if (defined(src['__const'])) {
-			for (var i in src['__const'])
-				constants[i] = src['__const'][i];
-			delete src['__const'];
-		}
-
-		// Privates
-		if (defined(src['__private'])) {
-			for (var i in src['__private'])
-				privates[i]     = src['__private'][i];
-				privatesVals[i] = src['__private'][i];
-			delete src['__private'];
-		}
-
-		// Properties
-		if (defined(src['__property'])) {
-			for (var i in src['__property'])
-				properties[i] = src['__property'][i];
-			delete src['__property'];
-		}
-
-		// Alternative declaration
-		for (var name in src) {
-			var n = (name + '')
-				, np = n.toLowerCase().split(/\s+/)
-				, nv = n.split(/\s+/);
-			if (np.length > 1) {
-				var a = false;
-				if (np.indexOf('static') > -1) {
-					src['__static'][getMethodName(np, nv)] = src[name];
-					a = true;
-				} else if (np.indexOf('private') > -1) {
-					privates[getMethodName(np, nv)] = src[name];
-					privatesVals[getMethodName(np, nv)] = src[name];
-					a = true;
-				} else if (np.indexOf('const') > -1) {
-					constants[getMethodName(np, nv)] = src[name];
-					a = true;
-				} else if ((np.indexOf('property') > -1) || (np.indexOf('prop') > -1)) {
-					properties[getMethodName(np, nv)] = src[name];
-					a = true;
-				}
-				if (a) delete src[name];
 			}
 		}
 
@@ -209,72 +170,207 @@
 			} while (context[className]);
 		}
 
+		// Static
+		if (!defined(src.__static)) {
+			src.__static = { };
+		}
+
 		// Prefix
-		if (defined(src['__prefix'])) {
-			src.__static.__prefix = src['__prefix'] ? src['__prefix'].trim() : '';
-			delete src['__prefix'];
+		if (defined(src.__prefix)) {
+			src.__static.__prefix = src.__prefix ? src.__prefix.trim() : '';
+			delete src.__prefix;
 		} else {
 			src.__static.__prefix = this.__prefix ? this.__prefix.trim() : '';
 		}
 		className = src.__static.__prefix + className;
 
+		// Internal vars
+		constants[className]  = this.__getConstants(),
+		properties[className] = this.__getProperties(),
+		protecteds[className] = this.__getProtecteds();
+		var pvs               = this.__getProtecteds();
+
+		function protectedCall (t, fn, args) {
+            var r, i, id = t.__instanceId;
+			if (!protectedsVals[id])
+				protectedsVals[id] = clone(pvs);
+			if (!protectedCache[id])
+				protectedCache[id] = { };
+
+			// Add Protecteds
+			if (!(protectedCallStack++))
+				for (i in protectedsVals[id]) {
+					if (defined(t[i]))
+						protectedCache[id][i] = t[i];
+					t[i] = protectedsVals[id][i];
+				}
+
+			// Execute
+			try {
+				r = fn.apply(t, args);
+			} finally {
+				// Save and Remove Protecteds
+				if (!--protectedCallStack)
+					for (i in protectedsVals[id]) {
+						protectedsVals[id][i] = t[i];
+						if (defined(protectedCache[id][i])) {
+							t[i] = protectedCache[id][i];
+						} else {
+							delete t[i];
+						}
+					}
+					protectedCache[id] = { };
+			}
+
+			// Return
+			return r;
+		}
+
+		// Fluent interface
+		if (defined(src.__fluent)) {
+			fluent = !!src.__fluent;
+		}
+
+		// On Extend Event
+		if (defined(src.__onExtend)) {
+			src.__static.__onExtend = src.__onExtend;
+			delete src.__onExtend;
+		}
+
+		// Constants
+		if (defined(src.__const)) {
+			for (var i in src.__const)
+				constants[className][i] = src.__const[i];
+			delete src.__const;
+		}
+
+		// Protected
+		if (defined(src.__protected)) {
+			for (var i in src.__protected) {
+				pvs[i] = protecteds[className][i] = src.__protected[i];
+			}
+			delete src.__protected;
+		}
+
+		// Properties
+		if (defined(src.__property)) {
+			for (var i in src.__property)
+				properties[className][i] = src.__property[i];
+			delete src.__property;
+		}
+
+		// Alternative declaration
+		for (var name in src) {
+			var n = (name + '')
+				, np = n.toLowerCase().split(/\s+/)
+				, nv = n.split(/\s+/);
+			if (np.length > 1) {
+				var a = false;
+				if (np.indexOf('static') > -1) {
+					src.__static[getMethodName(np, nv)] = src[name];
+					a = true;
+				} else if (np.indexOf('protected') > -1) {
+					var mn = getMethodName(np, nv);
+					pvs[mn] = protecteds[className][mn] = src[name];
+					a = true;
+				} else if (np.indexOf('const') > -1) {
+					constants[className][getMethodName(np, nv)] = src[name];
+					a = true;
+				} else if ((np.indexOf('property') > -1) || (np.indexOf('prop') > -1)) {
+					properties[className][getMethodName(np, nv)] = src[name];
+					a = true;
+				}
+				if (a) delete src[name];
+			}
+		}
+        
+        // Instance count to 0
+        src.__static.__instanceCount = 0;
+
 		// Instantiate a base class (but only create the instance,
 		// don't run the __constructor constructor)
-		initializing  = true;
-		var prototype = new this();
-		initializing  = false;
+		initializing = true;
+        var ppt;
+		try {
+			ppt = new this();
+		} finally {
+			initializing = false;
+		}
 
 		// Copy the properties over onto the new prototype
 		for (var name in src) {
 			if (invalidProto.indexOf(name) === -1) {
 				// Check if we're overwriting an existing function
-				prototype[name] = (typeof src[name] === "function") ? (
+				ppt[name] = (typeof src[name] === "function") ? (
 					function (name, fn) {
 						return function () {
-							var hs = (typeof __super[name] === "function") && fnTest.test(src[name]),
-								tmp = this.__super;
-
-							// Add Privates
-							for (var i in privatesVals) this[i] = privatesVals[i];
+							var t = this,
+                                hs = (typeof __super[name] === "function") && fnTest.test(src[name]),
+								tmp = t.__super;
 
 							// Add a new .__super() method that is the same method
 							// but on the super-class
-							if (hs) this.__super = __super[name];
+							if (hs) t.__super = function () {
+                                return __super[name].apply(t, arguments);
+							};
 
 							// The method only need to be bound temporarily, so we
 							// remove it when we're done executing
-							var ret = fn.apply(this, arguments);
+							var ret = protectedCall(t, fn, arguments);
 
 							// Restore __super
-							if (hs) this.__super = tmp;
-
-							// Save and Remove Privates
-							for (var i in privatesVals) {
-								privatesVals[i] = this[i];
-								delete this[i];
-							}
+							if (hs) t.__super = tmp;
 
 							// Return result
-							return (!defined(ret) && fluent) ? this : ret;
+							return (!defined(ret) && fluent) ? t : ret;
 						};
 					})(name, src[name]) : src[name];
 			}
 		}
 
 		function constructorInit () {
+			if (initializing)
+				return;
+
+			var t = this;
+
 			// Properties
-			for (var i in properties) {
-				Object.defineProperty(this, i, properties[i]);
-				//if (typeof properties[i].get === 'function')
-				//	this.__defineGetter__(i, properties[i].get);
-				//if (typeof properties[i].set === 'function')
-				//	this.__defineSetter__(i, properties[i].set);
+			for (var i in properties[className]) {
+				if (
+					(typeof properties[className][i].get === 'function')
+					|| (typeof properties[className][i].set === 'function')
+				) {
+					// Getter and Setter
+					Object.defineProperty(t, i, {
+						get : (typeof properties[className][i].get === 'function') ? function () { return protectedCall(t, properties[className][i].get, arguments); } : undefined,
+						set : (typeof properties[className][i].set === 'function') ? function () { protectedCall(t, properties[className][i].set, arguments); } : undefined
+					});
+				} else {
+					// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+					Object.defineProperty(t, i, {
+						configurable : properties[className][i].configurable || false,
+						enumerable : properties[className][i].enumerable || false,
+						// Value
+						value : properties[className][i].value || undefined,
+						writable : properties[className][i].writable || false,
+						// Getter and Setter
+						get : (typeof properties[className][i].get === 'function') ? function () { return protectedCall(t, properties[className][i].get, arguments); } : undefined,
+						set : (typeof properties[className][i].set === 'function') ? function (v) { protectedCall(t, properties[className][i].set, [ v ]); } : undefined
+					});
+				}
 			}
+            
+            // Instance ID
+            this.__instanceId = this.constructor.name + ':' + this.constructor.__instanceCount++;
+
+			// Constructor
+			if (src.__constructor)
+				protectedCall(t, src.__constructor, arguments);
+
 		}
 
 		// The dummy class constructors
-		//eval('newClass=function ' + className + '(){if(!initializing&&this.__constructor){constructorInit.apply(this);this.__constructor.apply(this,arguments);}};');
-		newClass = new Function("return function " + className + "(){if(!initializing&&this.__constructor){constructorInit.apply(this);this.__constructor.apply(this,arguments);}};")();
+		eval('newClass=function ' + className + '(){constructorInit.apply(this,arguments);};');
 
 		// Static
 		for (var i in __constructProps) {
@@ -285,53 +381,60 @@
 			}
 		}
 		// Constants
-		for (var i in constants) newClass.__defineGetter__(i, function () { return constants[i]; } );
-		newClass.getConstants  = function () { return constants; };
-		newClass.getProperties = function () { return properties; };
-		newClass.getPrivates   = function () { return privates; };
+		for (var i in constants[className]) {
+			Object.defineProperty(newClass, i, { value: constants[className][i] });
+			Object.defineProperty(ppt, i, { value: constants[className][i] });
+		}
 
 		// New Static
-		if (src['__static']) {
-			for (var name in src['__static']) {
+		if (src.__static) {
+			for (var name in src.__static) {
 				if (invalidStatic.indexOf(name) === -1) {
 					// Check if we're overwriting an existing function
-					newClass[name] = (typeof src['__static'][name] === "function") ? (
+					newClass[name] = (typeof src.__static[name] === "function") ? (
 						function (name, fn) {
 							return function () {
-								var hs = (typeof __construct[name] === "function") && fnTest.test(src['__static'][name]),
-									tmp = this.__super;
+								var ret,
+                                    t = this,
+                                    hs = (typeof __construct[name] === "function") && fnTest.test(src.__static[name]),
+									tmp = t.__super;
 
 								// Add a new .__super() method that is the same method
 								// but on the super-class
-								if (hs) this.__super = __construct[name];
+                                if (hs) t.__super = function () {
+                                    return __construct[name].apply(t, arguments);
+                                };
 
 								// The method only need to be bound temporarily, so we
 								// remove it when we're done executing
-								var ret = fn.apply(this, arguments);
+								try {
+									ret = fn.apply(t, arguments);
+								} finally {
+									// Restore __super
+									if (hs) t.__super = tmp;
+								}
 
-								// Restore __super
-								if (hs) this.__super = tmp;
-
-								return (!defined(ret) && fluent) ? this : ret;
+								return (!defined(ret) && fluent) ? t : ret;
 							};
-						})(name, src['__static'][name]) : src['__static'][name];
+						})(name, src.__static[name]) : src.__static[name];
 				}
 			}
 		}
 
 		// References
-		prototype.__parent = __super;
+		ppt.__parent = __super;
 		newClass.__parent  = this;
-		prototype.__static = newClass;
+		ppt.__static = newClass;
 
 		// Populate our constructed prototype object
-		newClass.prototype = prototype;
+		newClass.prototype = ppt;
 
 		// Enforce the constructor to be what we expect
 		newClass.prototype.constructor = newClass;
 
 		// Append in context
-		if (register) { context[className] = newClass; }
+		if (register)
+			context[className] = newClass;
 
 		// Execute Callback
 		this.__onExtend();
