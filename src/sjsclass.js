@@ -45,7 +45,7 @@
 		return t;
 	}
 
-	function setInstanceCount(o, value) {
+	function setInstanceCount (o, value) {
 		Object.defineProperty(o, '__instanceCount', {
 			enumerable : true,
 			get : function () { return instancesCount[this.prototype.constructor.name]; },
@@ -55,6 +55,17 @@
 		o.__instanceCount = value || 0;
 		instanceLock = true;
 	}
+    
+    function setInstanceId (o) {
+        instanceLock = false;
+        Object.defineProperty(o, '__instanceId', {
+            value : o.constructor.name + ':' + o.constructor.__instanceCount++,
+            configurable : false,
+            enumerable : true,
+            writable : false
+        });
+        instanceLock = true;
+    }
 
 	function getMethodName (n, v) {
 		var x;
@@ -67,9 +78,25 @@
 		if (!x) throw '[' + n + '] not have a name!';
 		return x;
 	}
-
+    
 	// Class
-	eval('context.' + BaseClassName + '=function ' + BaseClassName + '(){ };');
+    
+    function ClassInit () {
+        if (this instanceof context[BaseClassName]) {
+            // New instance
+            if (initializing)
+                return;
+            
+            // Instance ID
+            setInstanceId(this);
+            
+            return this;
+        } else {
+            return this.extend.apply(this, arguments);
+        }
+    }
+
+	eval('context.' + BaseClassName + '=function ' + BaseClassName + '(){return ClassInit.apply(this,arguments);};');
 	var Class = context[BaseClassName];
 
 	Class.prototype = {
@@ -96,8 +123,7 @@
 			return JSON.stringify(h);
 		},
 		equals : function (o) { return (o instanceof Class) && (this.getClassName() === o.getClassName()) && (this.hashCode() === o.hashCode()); },
-		toString : function () { return this.getClassName() + ':' + this.hashCode(); },
-		__instanceId : BaseClassName + ':0'
+		toString : function () { return this.getClassName() + ':' + this.hashCode(); }
 	};
 
 	constants[BaseClassName]  = { };
@@ -115,7 +141,7 @@
 	Class.__getProtecteds = function () { return clone(protecteds[this.prototype.constructor.name]); };
 
 	// Instances Count
-	setInstanceCount(Class, 1);
+	setInstanceCount(Class);
 
 	Class.newInstance = function () {
 		var s = 'new this(';
@@ -338,54 +364,56 @@
 		}
 
 		function constructorInit () {
-			if (initializing)
-				return;
-
-			var t = this;
-
-			// Properties
-			for (var i in properties[className]) {
-				if (
-					(typeof properties[className][i].get === 'function')
-					|| (typeof properties[className][i].set === 'function')
-				) {
-					// Getter and Setter
-					Object.defineProperty(t, i, {
-						get : (typeof properties[className][i].get === 'function') ? function () { return protectedCall(t, properties[className][i].get, arguments); } : undefined,
-						set : (typeof properties[className][i].set === 'function') ? function () { protectedCall(t, properties[className][i].set, arguments); } : undefined
-					});
-				} else {
-					// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
-					Object.defineProperty(t, i, {
-						configurable : properties[className][i].configurable || false,
-						enumerable : properties[className][i].enumerable || false,
-						// Value
-						value : properties[className][i].value || undefined,
-						writable : properties[className][i].writable || false,
-						// Getter and Setter
-						get : (typeof properties[className][i].get === 'function') ? function () { return protectedCall(t, properties[className][i].get, arguments); } : undefined,
-						set : (typeof properties[className][i].set === 'function') ? function (v) { protectedCall(t, properties[className][i].set, [ v ]); } : undefined
-					});
-				}
-			}
-
-			// Instance ID
-			instanceLock = false;
-			Object.defineProperty(t, '__instanceId', {
-				value : t.constructor.name + ':' + t.constructor.__instanceCount++,
-				configurable : false,
-				enumerable : true,
-				writable : false
-			});
-			instanceLock = true;
-
-			// Constructor
-			if (src.__constructor)
-				protectedCall(t, src.__constructor, arguments);
+            if (this instanceof context[className]) {
+                // New Instance
+                if (initializing)
+                    return;
+    
+                var t = this;
+    
+                // Properties
+                for (var i in properties[className]) {
+                    if (
+                        (typeof properties[className][i].get === 'function')
+                        || (typeof properties[className][i].set === 'function')
+                    ) {
+                        // Getter and Setter
+                        Object.defineProperty(t, i, {
+                            get : (typeof properties[className][i].get === 'function') ? function () { return protectedCall(t, properties[className][i].get, arguments); } : undefined,
+                            set : (typeof properties[className][i].set === 'function') ? function () { protectedCall(t, properties[className][i].set, arguments); } : undefined
+                        });
+                    } else {
+                        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+                        Object.defineProperty(t, i, {
+                            configurable : properties[className][i].configurable || false,
+                            enumerable : properties[className][i].enumerable || false,
+                            // Value
+                            value : properties[className][i].value || undefined,
+                            writable : properties[className][i].writable || false,
+                            // Getter and Setter
+                            get : (typeof properties[className][i].get === 'function') ? function () { return protectedCall(t, properties[className][i].get, arguments); } : undefined,
+                            set : (typeof properties[className][i].set === 'function') ? function (v) { protectedCall(t, properties[className][i].set, [ v ]); } : undefined
+                        });
+                    }
+                }
+    
+                // Instance ID
+                setInstanceId(t);
+    
+                // Constructor
+                if (src.__constructor)
+                    protectedCall(t, src.__constructor, arguments);
+                
+                return this;
+            } else {
+                // Static call
+                // @TODO: STATIC CALL
+                return this.extend.apply(this, arguments);
+            }
 		}
 
 		// The dummy class constructors
-		eval('newClass=function ' + className + '(){constructorInit.apply(this,arguments);};');
+		eval('newClass=function ' + className + '(){return constructorInit.apply(this,arguments);};');
 
 		// Static
 		for (var i in __constructProps) {
