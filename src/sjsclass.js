@@ -11,7 +11,7 @@
  */
 
 (function (context) {
-    'use strict';
+	'use strict';
 
 	// Check if loaded
 	// if (context[BaseClassName] !== undefined) { return; }
@@ -44,7 +44,7 @@
 			t[k] = clone(o[k]);
 		return t;
 	}
-	
+
 	function setInstanceCount(o, value) {
 		Object.defineProperty(o, '__instanceCount', {
 			enumerable : true,
@@ -113,8 +113,8 @@
 	Class.__getConstants  = function () { return clone(constants[this.prototype.constructor.name]); };
 	Class.__getProperties = function () { return clone(properties[this.prototype.constructor.name]); };
 	Class.__getProtecteds = function () { return clone(protecteds[this.prototype.constructor.name]); };
-    
-    // Instances Count
+
+	// Instances Count
 	setInstanceCount(Class, 1);
 
 	Class.newInstance = function () {
@@ -204,7 +204,7 @@
 		var pvs               = this.__getProtecteds();
 
 		function protectedCall (t, fn, args) {
-            var r, i, id = t.__instanceId;
+			var r, i, id = t.__instanceId;
 			if (!protectedsVals[id])
 				protectedsVals[id] = clone(pvs);
 			if (!protectedCache[id])
@@ -314,13 +314,13 @@
 					function (name, fn) {
 						return function () {
 							var t = this,
-                                hs = (typeof __super[name] === "function") && fnTest.test(src[name]),
+								hs = (typeof __super[name] === "function") && fnTest.test(src[name]),
 								tmp = t.__super;
 
 							// Add a new .__super() method that is the same method
 							// but on the super-class
 							if (hs) t.__super = function () {
-                                return __super[name].apply(t, arguments);
+								return __super[name].apply(t, arguments);
 							};
 
 							// The method only need to be bound temporarily, so we
@@ -368,8 +368,8 @@
 					});
 				}
 			}
-            
-            // Instance ID
+
+			// Instance ID
 			instanceLock = false;
 			Object.defineProperty(t, '__instanceId', {
 				value : t.constructor.name + ':' + t.constructor.__instanceCount++,
@@ -410,15 +410,15 @@
 						function (name, fn) {
 							return function () {
 								var ret,
-                                    t = this,
-                                    hs = (typeof __construct[name] === "function") && fnTest.test(src.__static[name]),
+									t = this,
+									hs = (typeof __construct[name] === "function") && fnTest.test(src.__static[name]),
 									tmp = t.__super;
 
 								// Add a new .__super() method that is the same method
 								// but on the super-class
-                                if (hs) t.__super = function () {
-                                    return __construct[name].apply(t, arguments);
-                                };
+								if (hs) t.__super = function () {
+									return __construct[name].apply(t, arguments);
+								};
 
 								// The method only need to be bound temporarily, so we
 								// remove it when we're done executing
@@ -435,8 +435,8 @@
 				}
 			}
 		}
-		
-        // Instance count to 0
+
+		// Instance count to 0
 		setInstanceCount(newClass);
 
 		// References
