@@ -337,7 +337,7 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
         },
         'protected val' : null
     });
-    
+
     var f = new Fighter();
     f.Val = 21;
     f.Val; // -> 21
@@ -372,6 +372,21 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
     );
 </pre>
 
+<h3>Class ID</h3>
+
+ - *<code>string</code> classInstance.<code>__instanceId</code>()*
+
+Get Instance ID.
+<pre>
+    Class.extend('Foo', {
+        ...
+    });
+
+    console.log(
+        Foo.__classId
+    );
+</pre>
+
 <h3>Instance ID</h3>
 
  - *<code>string</code> classInstance.<code>__instanceId</code>()*
@@ -381,13 +396,13 @@ Get Instance ID.
     Class.extend('Foo', {
         ...
     });
-    
+
     var f1 = new Foo();
     var f2 = new Foo();
-    
+
     console.log(
-        f1.__instanceId, // -> Foo:0
-        f2.__instanceId  // -> Foo:1
+        f1.__instanceId,
+        f2.__instanceId
     );
 </pre>
 
@@ -395,17 +410,47 @@ Get Instance ID.
 
  - *<code>string</code> ClassName.<code>__instanceCount</code>()*
 
-Get Instance ID.
+Get created objects count.
 <pre>
     Class.extend('Foo', {
         ...
     });
-    
+
     console.log(Foo.__instanceCount); // -> 0
     Foo.__instanceCount = 111;
     console.log(Foo.__instanceCount); // -> 0
-    
+
     var f1 = new Foo();
     var f2 = new Foo();
     console.log(Foo.__instanceCount); // -> 2
+</pre>
+
+<h3>Package</h3>
+
+ - *<code>object</code> classInstance.<code>__package</code>*
+
+<pre>
+    var foo = { };
+
+    Class.extend('Cls', {
+        __package : foo,
+        ...
+    });
+
+    var c = new foo.Cls();
+</pre>
+
+<pre>
+    var com = {
+        eduardocuomo = {
+            examples = { }
+        }
+    };
+
+    Class.extend('Test', {
+        __package : com.eduardocuomo.examples,
+        ...
+    });
+
+    var t = new com.eduardocuomo.examples.Test();
 </pre>
