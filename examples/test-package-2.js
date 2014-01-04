@@ -1,4 +1,4 @@
-// Context
+// Package
 var com = {
     eduardocuomo : {
         examples : { },

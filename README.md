@@ -454,3 +454,35 @@ Get created objects count.
 
     var t = new com.eduardocuomo.examples.Test();
 </pre>
+
+<h3>Packager</h3>
+
+ - *Class.<code>package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
+
+<pre>
+    // Package
+    var com = {
+        eduardocuomo : {
+            demo : { }
+        }
+    };
+
+    Class.package(com.eduardocuomo.demo, function () {
+
+        Class.extend('Foo');
+
+    });
+
+    com.eduardocuomo.demo.Foo.package(function () {
+
+        Class('Bar');
+
+    });
+
+    Class.package(com.eduardocuomo.demo, function ($) {
+
+        var f = new $.Foo(),
+            b = new this.Bar();
+
+    });
+</pre>

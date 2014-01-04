@@ -92,7 +92,7 @@
     // Class
 
     function ClassInit () {
-        if (this instanceof this.__static.__package[BaseClassName]) {
+        if (this instanceof context[BaseClassName]) {
             // New instance
             if (initializing)
                 return;
@@ -185,6 +185,23 @@
             return this.__static.__package[className];
         } else {
             throw 'Error! Class "' + this.__static.__package.constructor.name + '.' + className + '" not declared!';
+        }
+    };
+
+    Class.package = function (pka, fn) {
+        var o = this.__package;
+        if (!fn) {
+            fn = pka;
+            pka = this.__package;
+        } else {
+            this.__package = pka;
+        }
+        Class.__package = pka;
+        try {
+            fn.apply(pka, [ pka, this ]);
+        } finally {
+            this.__package = o;
+            Class.__package = context;
         }
     };
 
