@@ -1,5 +1,21 @@
-Class.extend('Test', {
-    __const : {
+/**
+ * sjsClass: Simple JavaScript Class.
+ * Copyright (c) 2013 sjsClass | Eduardo Daniel Cuomo | eduardo.cuomo.ar@gmail.com
+ *
+ * By: Edueado Daniel Cuomo.
+ *
+ * Examples: Test Exception.
+ *
+ * Project: https://github.com/reduardo7/sjsClass
+ * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
+ *
+ * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
+ */
+
+'use strict';
+
+Class.Extend('Test', {
+	__const : {
 		c1 : 'Constant 1'
 	},
 	__protected : {
@@ -21,7 +37,7 @@ Class.extend('Test', {
 	}
 });
 
-Test.extend('Other', {
+Test.Extend('Other', {
 	'const c2' : 'Constant 2',
 	'protected pv' : 222,
 	'property prop1' : {
@@ -29,11 +45,11 @@ Test.extend('Other', {
 		set : function (v) { this.pv = v; }
 	},
 	foo : function () {
-        // Execute into this context
+		// Execute into this context
 		this.pv = Other.c2;
 	},
 	bar : function () {
-        // Execute into this context
+		// Execute into this context
 		return this.__super(this);
 	}
 });
@@ -47,7 +63,7 @@ o.foo(456);
 
 // Should all be true
 (t.c1 === Test.c1) && (t.c1 === 'Constant 1') && (t.c2 === undefined) && (Test.c2 === undefined) &&
-    (o.c1 === t.c1) && (Other.c1 === Test.c1) && (o.c2 === Other.c2) && (Other.c2 === 'Constant 2') &&
-    (t.prop1 === 123) &&
-    (t.bar() === 'Constant 1|123') &&
-    (o.prop1 === Other.c2) && (o.bar() === 'Constant 1|Constant 2');
+	(o.c1 === t.c1) && (Other.c1 === Test.c1) && (o.c2 === Other.c2) && (Other.c2 === 'Constant 2') &&
+	(t.prop1 === 123) &&
+	(t.bar() === 'Constant 1|123') &&
+	(o.prop1 === Other.c2) && (o.bar() === 'Constant 1|Constant 2');

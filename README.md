@@ -8,20 +8,20 @@ Features
 
 <h3>Extend class</h3>
 
- - *Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
- - *Class.extend(<code>string ClassName</code>);*
- - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
- - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>);*
- - *<code>var ClassName</code> = Class.extend(<code>object definition</code>);*
+ - *Class.Extend(<code>string ClassName</code>, <code>object definition</code>);*
+ - *Class.Extend(<code>string ClassName</code>);*
+ - *<code>var ClassName2</code> = Class.Extend(<code>string ClassName</code>, <code>object definition</code>);*
+ - *<code>var ClassName2</code> = Class.Extend(<code>string ClassName</code>);*
+ - *<code>var ClassName</code> = Class.Extend(<code>object definition</code>);*
 <pre>
-    Person.extend('newClassName', {
+    Person.Extend('newClassName', {
         __constructor: function() {
             this.var = 1; // -> Public only for this class.
         }
     });
 </pre>
 <pre>
-    var newClassName = Person.extend({
+    var newClassName = Person.Extend({
         ...
     });
 </pre>
@@ -29,7 +29,7 @@ Features
 <h3>Static methods and variables</h3>
 
 <pre>
-    Class.extend('Person', {
+    Class.Extend('Person', {
         __static: {
             // Static methods
             testStatic: function() {
@@ -60,7 +60,7 @@ Features
     (function(context) {
         ...
     })(window);
-    Class.extend('Person', ...
+    Class.Extend('Person', ...
     var p = new Person(...
 </pre>
 <pre>
@@ -68,14 +68,14 @@ Features
     (function(context) {
         ...
     })(contextName);
-    contextName.Class.extend('Person', ...
+    contextName.Class.Extend('Person', ...
     var p = new contextName.Person(...
 </pre>
 
 <h3>Access static methods and variables from instance</h3>
 
 <pre>
-    Class.extend('Person', {
+    Class.Extend('Person', {
         __static: {
             count: 100
         },
@@ -90,7 +90,7 @@ Features
  - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*
  - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*
 <pre>
-    Class.extend('Person', {
+    Class.Extend('Person', {
         __construct: function(var1, var2, varN) {
             ...
         }
@@ -104,7 +104,7 @@ Features
 <h3>Call parent methods</h3>
 
 <pre>
-    Person.extend('Ninja', {
+    Person.Extend('Ninja', {
         __static: {
             testStatic: function() {
                 this.super(); // Call parent 'testStatic'
@@ -124,7 +124,7 @@ Features
 <h3>Call parent static</h3>
 
 <pre>
-    Person.extend('Ninja', {
+    Person.Extend('Ninja', {
         __static: {
             testStatic: function() {
                 this.super(); // Call parent 'testStatic'
@@ -142,7 +142,7 @@ Features
  - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
  - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
 <pre>
-    Person.extend('Ninja', {
+    Person.Extend('Ninja', {
         methodName: function() {
             ...
         },
@@ -158,7 +158,7 @@ Features
  - *<code>string</code> classInstance.<code>getClassName</code>()*
  - *<code>string</code> Class.<code>getClassName</code>()*
 <pre>
-    Person.extend('Ninja', {
+    Person.Extend('Ninja', {
         ...
     });
     var p = new Person();
@@ -167,19 +167,19 @@ Features
     alert(n.getClassName()); // -> Alert 'Ninja'
 </pre>
 <pre>
-    var Other = Person.extend({
+    var Other = Person.Extend({
         ...
     });
     var o = new Other();
     alert(o.getClassName()); // -> Alert 'Person_extended_0'
-    var Foo = Person.extend({
+    var Foo = Person.Extend({
         ...
     });
     var f = new Foo();
     alert(f.getClassName()); // -> Alert 'Person_extended_1'
 </pre>
 <pre>
-    var Bar = Ninja.extend('Fighter', {
+    var Bar = Ninja.Extend('Fighter', {
         ...
     });
     var b = new Bar();
@@ -216,12 +216,12 @@ Check's instances Hash Codes and Class Names.
 <h3>Callbacks</h3>
 
 <pre>
-    Class.extend('Ninja', {
+    Class.Extend('Ninja', {
         __onExtend: function() {
             alert('Extending Ninja class!');
         }
     });
-    Ninja.extend('Fighter', {
+    Ninja.Extend('Fighter', {
         ...
     });
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
@@ -231,7 +231,7 @@ Check's instances Hash Codes and Class Names.
 
  - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
 <pre>
-    Class.extend('Ninja', {
+    Class.Extend('Ninja', {
         ...
     });
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
@@ -241,21 +241,21 @@ Check's instances Hash Codes and Class Names.
 
 <pre>
     // Creates a 'FightFighter' class, not a 'Fighter' class.
-    Class.extend('Fighter', {
+    Class.Extend('Fighter', {
         __prefix: 'Fight',
         ...
     });
     // Creates a 'FightSamuray' class, not a 'Samuray' class.
-    FightFighter.extend('Samuray' {
+    FightFighter.Extend('Samuray' {
         ...
     });
     // Creates a 'Ninja' class, not a 'FightNinja' class.
-    FightFighter.extend('Ninja' {
+    FightFighter.Extend('Ninja' {
         __prefix: null,
         ...
     });
     // Override 'FightSamuray' class.
-    Class.extend('FightSamuray' {
+    Class.Extend('FightSamuray' {
         ...
     });
 </pre>
@@ -264,7 +264,7 @@ Check's instances Hash Codes and Class Names.
 
  - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
 <pre>
-    Class.extend('Person', {
+    Class.Extend('Person', {
         ...
     });
     var p = Class.getClass('Person');
@@ -274,7 +274,7 @@ Check's instances Hash Codes and Class Names.
 <h3>Constants</h3>
 
 <pre>
-    Class.extend('Person', {
+    Class.Extend('Person', {
         __const : {
             BROTHER : 'Mateo',
             FLIA : 'Cuomo'
@@ -291,7 +291,7 @@ Check's instances Hash Codes and Class Names.
 <h3>Protected methods and variables</h3>
 
 <pre>
-    Class.extend('Foo', {
+    Class.Extend('Foo', {
         __protected : {
             privV : 123,
             privF : function () {
@@ -320,7 +320,7 @@ Check's instances Hash Codes and Class Names.
 
 Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
 <pre>
-    Class.extend('Fighter', {
+    Class.Extend('Fighter', {
         __property : {
             Val : {
                 get : function () { return this.val; },
@@ -352,7 +352,7 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
 
 If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
 <pre>
-    Class.extend('Foo', {
+    Class.Extend('Foo', {
         __fluent : true, // Enable Fluent Interface
         __static : {
             x : '',
@@ -378,7 +378,7 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
 
 Get Instance ID.
 <pre>
-    Class.extend('Foo', {
+    Class.Extend('Foo', {
         ...
     });
 
@@ -393,7 +393,7 @@ Get Instance ID.
 
 Get Instance ID.
 <pre>
-    Class.extend('Foo', {
+    Class.Extend('Foo', {
         ...
     });
 
@@ -412,7 +412,7 @@ Get Instance ID.
 
 Get created objects count.
 <pre>
-    Class.extend('Foo', {
+    Class.Extend('Foo', {
         ...
     });
 
@@ -432,7 +432,7 @@ Get created objects count.
 <pre>
     var foo = { };
 
-    Class.extend('Cls', {
+    Class.Extend('Cls', {
         __package : foo,
         ...
     });
@@ -447,7 +447,7 @@ Get created objects count.
         }
     };
 
-    Class.extend('Test', {
+    Class.Extend('Test', {
         __package : com.eduardocuomo.examples,
         ...
     });
@@ -457,7 +457,7 @@ Get created objects count.
 
 <h3>Packager</h3>
 
- - *Class.<code>package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
+ - *Class.<code>Package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
 
 <pre>
     // Package
@@ -467,19 +467,19 @@ Get created objects count.
         }
     };
 
-    Class.package(com.eduardocuomo.demo, function () {
+    Class.Package(com.eduardocuomo.demo, function () {
 
-        Class.extend('Foo');
+        Class.Extend('Foo');
 
     });
 
-    com.eduardocuomo.demo.Foo.package(function () {
+    com.eduardocuomo.demo.Foo.Package(function () {
 
         Class('Bar');
 
     });
 
-    Class.package(com.eduardocuomo.demo, function ($) {
+    Class.Package(com.eduardocuomo.demo, function ($) {
 
         var f = new $.Foo(),
             b = new this.Bar();
