@@ -7,11 +7,13 @@
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  *
- * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
+ * Thanks:
+ *      http://ejohn.org/blog/simple-javascript-inheritance/
+ *      http://marcosc.com/2012/03/dynamic-function-names-in-javascript/
  */
 
 (function (context, BaseClassName) {
-	'use strict';
+    'use strict';
 
 	// Check if loaded
 	// if (context[BaseClassName] !== undefined) { return; }
@@ -108,8 +110,7 @@
 		}
 	}
 
-	eval('Class=function ' + BaseClassName + '(){return ClassInit.apply(this,arguments);};');
-	// Class = new Function('return function ' + BaseClassName + '(){return ClassInit.apply(this,arguments);}');
+	Class = new Function('init', 'return function ' + BaseClassName + '(){return init.apply(this,arguments);}')(ClassInit);
 
 	Class.prototype = {
 		constructor : Class,
@@ -150,25 +151,25 @@
 	// Instances Count
 	initNewClass(Class);
 
-	Class.newInstance = function () {
-		var s = 'new this(';
+	Class.new = Class.newInstance = function () {
+		var s = 'return new t(';
 		for (var i in arguments) {
 			if (i > 0) s += ',';
-			s += 'arguments[' + i + ']';
+			s += 'a[' + i + ']';
 		}
-		return eval(s + ')');
+		return new Function('t', 'a', s + ')')(this, arguments);
 	};
 
 	Class.newInstanceOf = function (className) {
 		if (this.classExists(className)) {
-			var s = 'new ' + className + '(';
+			var s = 'return new c(';
 			for (var i in arguments) {
 				if (i > 0) {
 					if (i > 1) s += ',';
-					s += 'arguments[' + i + ']';
+					s += 'a[' + i + ']';
 				}
 			}
-			return eval(s + ')');
+			return new Function('c', 'a', s + ')')(className, arguments);
 		} else {
 			throwException('Error! Class "' + className + '" not declared!');
 		}
@@ -472,7 +473,7 @@
 		}
 
 		// The dummy class constructors
-		eval('newClass=function ' + className + '(){return constructorInit.apply(this,arguments);};');
+		newClass = new Function('init', 'return function ' + className + '(){return init.apply(this,arguments);};')(constructorInit);
 
 		// Static
 		for (var i in __constructProps) {
@@ -539,7 +540,8 @@
 
 		// Append in context
 		if (register)
-			src.__static.__package[className] = newClass;
+			// src.__static.__package[className] = newClass;
+			Object.defineProperty(src.__static.__package, className, { value : newClass });
 
 		// Execute Callback
 		this.__onExtend();
@@ -564,6 +566,9 @@
 				get : function () { return this._innerException; }
 			}
 		},
+		__function : function (message, innerException) {
+			return new this(message, innerException);
+		},
 		__constructor : function (message, innerException) {
 			this._message = message;
 			this._innerException = innerException;
@@ -577,5 +582,6 @@
 	Class.Exception.__package = context;
 
 	// Append in context
-	context[BaseClassName] = Class;
+	// context[BaseClassName] = Class;
+	Object.defineProperty(context, BaseClassName, { value : Class });
 })(window || this, 'Class');
