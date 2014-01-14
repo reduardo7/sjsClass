@@ -14,7 +14,7 @@
 
 'use strict';
 
-Class.extend('Test', {
+Class('Test', {
 	__const : {
 		c1 : 'Constant 1'
 	},

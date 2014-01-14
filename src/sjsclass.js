@@ -104,7 +104,7 @@
 			return this;
 		} else {
 			// Static call
-			return this.extend.apply(this, arguments);
+			return Class.extend.apply(Class, arguments);
 		}
 	}
 
@@ -119,13 +119,6 @@
 		hasGetter : function (n) { return defined(this.__lookupGetter__(n)); },
 		hasSetter : function (n) { return defined(this.__lookupSetter__(n)); },
 		hasProperty : function (n) { return defined(this.__lookupGetter__(n)) || defined(this.__lookupSetter__(n)); },
-		clone : function () {
-			initializing = true;
-			var c = new this.__static(), o = clone(this);
-			initializing = false;
-			for (var i in o) c[i] = o[i];
-			return c;
-		},
 		hashCode : function () {
 			var h = { };
 			for (var n in this)
@@ -309,6 +302,16 @@
 			delete src.__onExtend;
 		}
 
+		// Call as Function
+		if (defined(src.__function) && (typeof src.__function === 'function')) {
+			src.__static.__function = src.__function;
+			delete src.__function;
+		} else {
+			src.__static.__function = function () {
+				return newClass.extend.apply(newClass, arguments);
+			}
+		}
+
 		// Constants
 		if (defined(src.__const)) {
 			for (var i in src.__const)
@@ -323,7 +326,6 @@
 			}
 			delete src.__protected;
 		}
-
 
 		// Properties
 		if (defined(src.__property)) {
@@ -465,8 +467,7 @@
 				return this;
 			} else {
 				// Static call
-				// @TODO: STATIC CALL
-				return this.extend.apply(this, arguments);
+				return newClass.__function.apply(newClass, arguments);
 			}
 		}
 

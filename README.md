@@ -8,11 +8,21 @@ Features
 
 <h3>Extend class</h3>
 
+Using <code>extend</code> method:
+
  - *Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
  - *Class.extend(<code>string ClassName</code>);*
  - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
  - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>);*
  - *<code>var ClassName</code> = Class.extend(<code>object definition</code>);*
+
+Using <code>Class</code> function:
+
+ - *Class(<code>string ClassName</code>, <code>object definition</code>);*
+ - *Class(<code>string ClassName</code>);*
+ - *<code>var ClassName2</code> = Class(<code>string ClassName</code>, <code>object definition</code>);*
+ - *<code>var ClassName2</code> = Class(<code>string ClassName</code>);*
+ - *<code>var ClassName</code> = Class(<code>object definition</code>);*
 <pre>
     Person.extend('newClassName', {
         __constructor: function() {
