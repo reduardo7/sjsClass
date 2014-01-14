@@ -14,7 +14,7 @@
 
 'use strict';
 
-Class.Extend('Test', {
+Class.extend('Test', {
 	'protected _pv' : 'Initial Value',
 	'property prop1' : {
 		get : function () { return this._pv; }
@@ -24,7 +24,7 @@ Class.Extend('Test', {
 	}
 });
 
-Test.Extend('Foo', {
+Test.extend('Foo', {
 	__constructor : function (a) {
 		this.__super('[' + a + ']');
 	},
@@ -33,7 +33,7 @@ Test.Extend('Foo', {
 	}
 });
 
-Test.Extend('Bar');
+Test.extend('Bar');
 
 var t = new Test(111),
 	f = new Foo(222),

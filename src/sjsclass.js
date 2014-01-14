@@ -35,15 +35,15 @@
 	// Internal Utils
 
 	function defined (x) { return typeof x !== 'undefined'; }
-	function HasVar (x) { return this.hasOwnProperty(x); }
-	function HasMethod (m) { return defined(this[m]) && (typeof this[m] === 'function'); }
+	function hasVar (x) { return this.hasOwnProperty(x); }
+	function hasMethod (m) { return defined(this[m]) && (typeof this[m] === 'function'); }
 	function throwException (message) { throw Class.Exception ? new Class.Exception(message) : message; }
-	function Clone (o) {
+	function clone (o) {
 		if ((o === null) || (typeof o !== 'object'))
 			return o;
 		var t = o.constructor();
 		for (var k in o)
-			t[k] = Clone(o[k]);
+			t[k] = clone(o[k]);
 		return t;
 	}
 
@@ -103,7 +103,7 @@
 			return this;
 		} else {
 			// Static call
-			return this.Extend.apply(this, arguments);
+			return this.extend.apply(this, arguments);
 		}
 	}
 
@@ -112,20 +112,20 @@
 
 	Class.prototype = {
 		constructor : Class,
-		HasVar : HasVar,
-		HasMethod : HasMethod,
-		GetClassName : function () { return this.constructor.name; },
-		HasGetter : function (n) { return defined(this.__lookupGetter__(n)); },
-		HasSetter : function (n) { return defined(this.__lookupSetter__(n)); },
-		HasProperty : function (n) { return defined(this.__lookupGetter__(n)) || defined(this.__lookupSetter__(n)); },
-		Clone : function () {
+		hasVar : hasVar,
+		hasMethod : hasMethod,
+		getClassName : function () { return this.constructor.name; },
+		hasGetter : function (n) { return defined(this.__lookupGetter__(n)); },
+		hasSetter : function (n) { return defined(this.__lookupSetter__(n)); },
+		hasProperty : function (n) { return defined(this.__lookupGetter__(n)) || defined(this.__lookupSetter__(n)); },
+		clone : function () {
 			initializing = true;
-			var c = new this.__static(), o = Clone(this);
+			var c = new this.__static(), o = clone(this);
 			initializing = false;
 			for (var i in o) c[i] = o[i];
 			return c;
 		},
-		HashCode : function () {
+		hashCode : function () {
 			var h = { };
 			for (var n in this)
 				if ((invalidStatic.indexOf(n) === -1) && (typeof this[n] !== 'function'))
@@ -133,8 +133,8 @@
 			h.__CLASS_NAME = this.constructor.name;
 			return JSON.stringify(h);
 		},
-		Equals : function (o) { return (o instanceof Class) && (this.GetClassName() === o.GetClassName()) && (this.HashCode() === o.HashCode()); },
-		toString : function () { return this.GetClassName() + ':' + this.HashCode(); },
+		equals : function (o) { return (o instanceof Class) && (this.getClassName() === o.getClassName()) && (this.hashCode() === o.hashCode()); },
+		toString : function () { return this.getClassName() + ':' + this.hashCode(); },
 		__static : Class
 	};
 
@@ -144,19 +144,19 @@
 
 	Class.__package       = context;
 	Class.__prefix        = null;
-	Class.HasVar          = HasVar;
-	Class.HasMethod       = HasMethod;
-	Class.GetClassName    = function () { return this.name; };
-	Class.ClassExists     = function (className) { return typeof this.__static.__package[className] === 'function'; };
+	Class.hasVar          = hasVar;
+	Class.hasMethod       = hasMethod;
+	Class.getClassName    = function () { return this.name; };
+	Class.classExists     = function (className) { return typeof this.__static.__package[className] === 'function'; };
 	Class.__onExtend      = function () { };
-	Class.__getConstants  = function () { return Clone(constants[this.prototype.constructor.name]); };
-	Class.__getProperties = function () { return Clone(properties[this.prototype.constructor.name]); };
-	Class.__getProtecteds = function () { return Clone(protecteds[this.prototype.constructor.name]); };
+	Class.__getConstants  = function () { return clone(constants[this.prototype.constructor.name]); };
+	Class.__getProperties = function () { return clone(properties[this.prototype.constructor.name]); };
+	Class.__getProtecteds = function () { return clone(protecteds[this.prototype.constructor.name]); };
 
 	// Instances Count
 	initNewClass(Class);
 
-	Class.NewInstance = function () {
+	Class.newInstance = function () {
 		var s = 'new this(';
 		for (var i in arguments) {
 			if (i > 0) s += ',';
@@ -165,8 +165,8 @@
 		return eval(s + ')');
 	};
 
-	Class.NewInstanceOf = function (className) {
-		if (this.ClassExists(className)) {
+	Class.newInstanceOf = function (className) {
+		if (this.classExists(className)) {
 			var s = 'new ' + className + '(';
 			for (var i in arguments) {
 				if (i > 0) {
@@ -180,15 +180,15 @@
 		}
 	};
 
-	Class.GetClass = function (className) {
-		if (this.ClassExists(className)) {
+	Class.getClass = function (className) {
+		if (this.classExists(className)) {
 			return this.__static.__package[className];
 		} else {
 			throwException('Error! Class "' + this.__static.__package.constructor.name + '.' + className + '" not declared!');
 		}
 	};
 
-	Class.Package = function (pka, fn) {
+	Class.package = function (pka, fn) {
 		var o = this.__package;
 		if (!fn) {
 			fn = pka;
@@ -205,7 +205,7 @@
 		}
 	};
 
-	Class.Extend = function (src_name, src) {
+	Class.extend = function (src_name, src) {
 		var __super            = this.prototype,
 			__construct        = __super.constructor,
 			fluent             = !!this.__fluent,
@@ -271,7 +271,7 @@
 		function protectedCall (t, fn, args) {
 			var r, i, id = t.__instanceId;
 			if (!protectedsVals[id])
-				protectedsVals[id] = Clone(protecteds[t.GetClassName()]);
+				protectedsVals[id] = clone(protecteds[t.getClassName()]);
 
 			// Add Protecteds
 			if (!protectedCallStack++)
@@ -283,9 +283,12 @@
 				r = fn.apply(t, args);
 			} finally {
 				// Save and Remove Protecteds
-				if (!--protectedCallStack)
-					for (i in protectedsVals[id])
+				if (!--protectedCallStack) {
+					for (i in protectedsVals[id]) {
 						protectedsVals[id][i] = t[i];
+						delete t[i];
+					}
+				}
 			}
 
 			// Return
@@ -389,7 +392,7 @@
 		for (var name in src) {
 			if (invalidProto.indexOf(name) === -1) {
 				// Check if we're overwriting an existing function
-				if (ppt.HasProperty(name)) {
+				if (ppt.hasProperty(name)) {
 					// Define Property
 					_defineProperty(ppt, name);
 				} else {
@@ -459,7 +462,7 @@
 			} else {
 				// Static call
 				// @TODO: STATIC CALL
-				return this.Extend.apply(this, arguments);
+				return this.extend.apply(this, arguments);
 			}
 		}
 
@@ -542,7 +545,7 @@
 
 	// Exception
 
-	Class.Extend('Exception', {
+	Class.extend('Exception', {
 		__package : Class,
 		__protected : {
 			_message : undefined,
@@ -565,7 +568,7 @@
 		}
 	});
 
-	// Change Package for derived Classes
+	// Change package for derived Classes
 	Class.Exception.__package = context;
 
 	// Append in context

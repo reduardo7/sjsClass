@@ -14,13 +14,13 @@
 
 'use strict';
 
-Class.Extend('Test', {
+Class.extend('Test', {
 	__prefix: 'Tst'
 });
 
-TstTest.Extend('T2');
+TstTest.extend('T2');
 
-TstT2.Extend('T3', {
+TstT2.extend('T3', {
 	__prefix: null
 });
 

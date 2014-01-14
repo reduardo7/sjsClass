@@ -4,7 +4,7 @@
  *
  * By: Edueado Daniel Cuomo.
  *
- * Examples: Test Package (2).
+ * Examples: Test package (2).
  *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
@@ -14,7 +14,7 @@
 
 'use strict';
 
-// Package
+// package
 var com = {
 	eduardocuomo : {
 		examples : { },
@@ -26,7 +26,7 @@ var com = {
 // Class 1
 (function () {
 
-	Class.Extend('T1', {
+	Class.extend('T1', {
 		__package : this
 	});
 
@@ -35,14 +35,14 @@ var com = {
 // Class 2
 (function () {
 
-	this.T1.Extend('T2');
+	this.T1.extend('T2');
 
 }).apply(com.eduardocuomo.examples);
 
 // Class 3
 (function () {
 
-	Class.Extend('T3', {
+	Class.extend('T3', {
 		__package : this
 	});
 

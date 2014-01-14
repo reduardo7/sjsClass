@@ -15,13 +15,13 @@
 'use strict';
 
 // New Exception
-Class.Exception.Extend('FooException');
+Class.Exception.extend('FooException');
 
 // Anonymous Exception
-var BarException = FooException.Extend();
+var BarException = FooException.extend();
 
 // New Exception
-Class.Exception.Extend('TestException', {
+Class.Exception.extend('TestException', {
 	'protected _data' : undefined,
 	'property data' : { get : function () { return this._data; } },
 	__constructor : function (message, data, innerException) {
@@ -52,16 +52,16 @@ try {
 	// Should all be true
 	result = result && (e2 instanceof Class.Exception) && (e2 instanceof FooException) && (e2 instanceof BarException) &&
 		!!e2.innerException && (e2.innerException instanceof FooException) && !(e2.innerException instanceof BarException) &&
-		(e2.message === 'Bar Message') && !e2.HasVar('data');
+		(e2.message === 'Bar Message') && !e2.hasVar('data');
 }
 
-// try {
-// 	throw new TestException('Test Message', { v1 : true, v2 : 'Test' });
-// } catch (e3) {
-// 	// Should all be true
-// 	result = result && (e3 instanceof Class.Exception) && !(e3 instanceof FooException) && !(e3 instanceof BarException) &&
-// 		e3.data && (e3.message === 'Test Message') && (e3.data.v1 === true) && (e3.data.v2 === 'Test');
-// }
+try {
+	throw new TestException('Test Message', { v1 : true, v2 : 'Test' });
+} catch (e3) {
+	// Should all be true
+	result = result && (e3 instanceof Class.Exception) && !(e3 instanceof FooException) && !(e3 instanceof BarException) &&
+		e3.data && (e3.message === 'Test Message') && (e3.data.v1 === true) && (e3.data.v2 === 'Test');
+}
 
 // Should all be true
 result

@@ -14,7 +14,7 @@
 
 'use strict';
 
-Class.Extend('Test', {
+Class.extend('Test', {
 	__const : {
 		c1 : 'Constant 1'
 	},
@@ -37,7 +37,7 @@ Class.Extend('Test', {
 	}
 });
 
-Test.Extend('Other', {
+Test.extend('Other', {
 	'const c2' : 'Constant 2',
 	'protected pv' : 222,
 	'property prop1' : {

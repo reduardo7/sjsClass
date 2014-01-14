@@ -16,13 +16,13 @@
 
 var testVar = 1;
 
-Class.Extend('Test', {
+Class.extend('Test', {
 	__onExtend: function() {
 		testVar++;
 	}
 });
 
-Test.Extend('TestExtend');
+Test.extend('TestExtend');
 
 // Should all be true
 testVar === 2;

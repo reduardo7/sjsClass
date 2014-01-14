@@ -14,7 +14,7 @@
 
 'use strict';
 
-Class.Extend('Foo', {
+Class.extend('Foo', {
 	__fluent : true, // Enable Fluent Interface
 	__static : {
 		x : '',

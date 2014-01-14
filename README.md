@@ -8,20 +8,20 @@ Features
 
 <h3>Extend class</h3>
 
- - *Class.Extend(<code>string ClassName</code>, <code>object definition</code>);*
- - *Class.Extend(<code>string ClassName</code>);*
- - *<code>var ClassName2</code> = Class.Extend(<code>string ClassName</code>, <code>object definition</code>);*
- - *<code>var ClassName2</code> = Class.Extend(<code>string ClassName</code>);*
- - *<code>var ClassName</code> = Class.Extend(<code>object definition</code>);*
+ - *Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
+ - *Class.extend(<code>string ClassName</code>);*
+ - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>, <code>object definition</code>);*
+ - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>);*
+ - *<code>var ClassName</code> = Class.extend(<code>object definition</code>);*
 <pre>
-    Person.Extend('newClassName', {
+    Person.extend('newClassName', {
         __constructor: function() {
             this.var = 1; // -> Public only for this class.
         }
     });
 </pre>
 <pre>
-    var newClassName = Person.Extend({
+    var newClassName = Person.extend({
         ...
     });
 </pre>
@@ -29,7 +29,7 @@ Features
 <h3>Static methods and variables</h3>
 
 <pre>
-    Class.Extend('Person', {
+    Class.extend('Person', {
         __static: {
             // Static methods
             testStatic: function() {
@@ -60,7 +60,7 @@ Features
     (function(context) {
         ...
     })(window);
-    Class.Extend('Person', ...
+    Class.extend('Person', ...
     var p = new Person(...
 </pre>
 <pre>
@@ -68,14 +68,14 @@ Features
     (function(context) {
         ...
     })(contextName);
-    contextName.Class.Extend('Person', ...
+    contextName.Class.extend('Person', ...
     var p = new contextName.Person(...
 </pre>
 
 <h3>Access static methods and variables from instance</h3>
 
 <pre>
-    Class.Extend('Person', {
+    Class.extend('Person', {
         __static: {
             count: 100
         },
@@ -90,7 +90,7 @@ Features
  - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*
  - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*
 <pre>
-    Class.Extend('Person', {
+    Class.extend('Person', {
         __construct: function(var1, var2, varN) {
             ...
         }
@@ -104,7 +104,7 @@ Features
 <h3>Call parent methods</h3>
 
 <pre>
-    Person.Extend('Ninja', {
+    Person.extend('Ninja', {
         __static: {
             testStatic: function() {
                 this.super(); // Call parent 'testStatic'
@@ -124,7 +124,7 @@ Features
 <h3>Call parent static</h3>
 
 <pre>
-    Person.Extend('Ninja', {
+    Person.extend('Ninja', {
         __static: {
             testStatic: function() {
                 this.super(); // Call parent 'testStatic'
@@ -142,7 +142,7 @@ Features
  - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
  - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
 <pre>
-    Person.Extend('Ninja', {
+    Person.extend('Ninja', {
         methodName: function() {
             ...
         },
@@ -158,7 +158,7 @@ Features
  - *<code>string</code> classInstance.<code>getClassName</code>()*
  - *<code>string</code> Class.<code>getClassName</code>()*
 <pre>
-    Person.Extend('Ninja', {
+    Person.extend('Ninja', {
         ...
     });
     var p = new Person();
@@ -167,19 +167,19 @@ Features
     alert(n.getClassName()); // -> Alert 'Ninja'
 </pre>
 <pre>
-    var Other = Person.Extend({
+    var Other = Person.extend({
         ...
     });
     var o = new Other();
     alert(o.getClassName()); // -> Alert 'Person_extended_0'
-    var Foo = Person.Extend({
+    var Foo = Person.extend({
         ...
     });
     var f = new Foo();
     alert(f.getClassName()); // -> Alert 'Person_extended_1'
 </pre>
 <pre>
-    var Bar = Ninja.Extend('Fighter', {
+    var Bar = Ninja.extend('Fighter', {
         ...
     });
     var b = new Bar();
@@ -194,7 +194,7 @@ Features
     console.log(p1.hashCode()); // -> Get instence Hash Code
 </pre>
 
-<h3>Equals</h3>
+<h3>equals</h3>
 
  - *<code>boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
 
@@ -216,12 +216,12 @@ Check's instances Hash Codes and Class Names.
 <h3>Callbacks</h3>
 
 <pre>
-    Class.Extend('Ninja', {
+    Class.extend('Ninja', {
         __onExtend: function() {
             alert('Extending Ninja class!');
         }
     });
-    Ninja.Extend('Fighter', {
+    Ninja.extend('Fighter', {
         ...
     });
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
@@ -231,7 +231,7 @@ Check's instances Hash Codes and Class Names.
 
  - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
 <pre>
-    Class.Extend('Ninja', {
+    Class.extend('Ninja', {
         ...
     });
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
@@ -241,21 +241,21 @@ Check's instances Hash Codes and Class Names.
 
 <pre>
     // Creates a 'FightFighter' class, not a 'Fighter' class.
-    Class.Extend('Fighter', {
+    Class.extend('Fighter', {
         __prefix: 'Fight',
         ...
     });
     // Creates a 'FightSamuray' class, not a 'Samuray' class.
-    FightFighter.Extend('Samuray' {
+    FightFighter.extend('Samuray' {
         ...
     });
     // Creates a 'Ninja' class, not a 'FightNinja' class.
-    FightFighter.Extend('Ninja' {
+    FightFighter.extend('Ninja' {
         __prefix: null,
         ...
     });
     // Override 'FightSamuray' class.
-    Class.Extend('FightSamuray' {
+    Class.extend('FightSamuray' {
         ...
     });
 </pre>
@@ -264,7 +264,7 @@ Check's instances Hash Codes and Class Names.
 
  - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
 <pre>
-    Class.Extend('Person', {
+    Class.extend('Person', {
         ...
     });
     var p = Class.getClass('Person');
@@ -274,7 +274,7 @@ Check's instances Hash Codes and Class Names.
 <h3>Constants</h3>
 
 <pre>
-    Class.Extend('Person', {
+    Class.extend('Person', {
         __const : {
             BROTHER : 'Mateo',
             FLIA : 'Cuomo'
@@ -291,7 +291,7 @@ Check's instances Hash Codes and Class Names.
 <h3>Protected methods and variables</h3>
 
 <pre>
-    Class.Extend('Foo', {
+    Class.extend('Foo', {
         __protected : {
             privV : 123,
             privF : function () {
@@ -320,7 +320,7 @@ Check's instances Hash Codes and Class Names.
 
 Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
 <pre>
-    Class.Extend('Fighter', {
+    Class.extend('Fighter', {
         __property : {
             Val : {
                 get : function () { return this.val; },
@@ -352,7 +352,7 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
 
 If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
 <pre>
-    Class.Extend('Foo', {
+    Class.extend('Foo', {
         __fluent : true, // Enable Fluent Interface
         __static : {
             x : '',
@@ -378,7 +378,7 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
 
 Get Instance ID.
 <pre>
-    Class.Extend('Foo', {
+    Class.extend('Foo', {
         ...
     });
 
@@ -393,7 +393,7 @@ Get Instance ID.
 
 Get Instance ID.
 <pre>
-    Class.Extend('Foo', {
+    Class.extend('Foo', {
         ...
     });
 
@@ -412,7 +412,7 @@ Get Instance ID.
 
 Get created objects count.
 <pre>
-    Class.Extend('Foo', {
+    Class.extend('Foo', {
         ...
     });
 
@@ -425,14 +425,14 @@ Get created objects count.
     console.log(Foo.__instanceCount); // -> 2
 </pre>
 
-<h3>Package</h3>
+<h3>package</h3>
 
  - *<code>object</code> classInstance.<code>__package</code>*
 
 <pre>
     var foo = { };
 
-    Class.Extend('Cls', {
+    Class.extend('Cls', {
         __package : foo,
         ...
     });
@@ -447,7 +447,7 @@ Get created objects count.
         }
     };
 
-    Class.Extend('Test', {
+    Class.extend('Test', {
         __package : com.eduardocuomo.examples,
         ...
     });
@@ -457,32 +457,89 @@ Get created objects count.
 
 <h3>Packager</h3>
 
- - *Class.<code>Package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
+ - *Class.<code>package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
 
 <pre>
-    // Package
+    // package
     var com = {
         eduardocuomo : {
             demo : { }
         }
     };
 
-    Class.Package(com.eduardocuomo.demo, function () {
+    Class.package(com.eduardocuomo.demo, function () {
 
-        Class.Extend('Foo');
+        Class.extend('Foo');
 
     });
 
-    com.eduardocuomo.demo.Foo.Package(function () {
+    com.eduardocuomo.demo.Foo.package(function () {
 
         Class('Bar');
 
     });
 
-    Class.Package(com.eduardocuomo.demo, function ($) {
+    Class.package(com.eduardocuomo.demo, function ($) {
 
         var f = new $.Foo(),
             b = new this.Bar();
 
     });
+</pre>
+
+<h3>Exception</h3>
+
+- *Class.<code>Exception</code>(<code>message</code>, <code>innerException</code>)*
+
+<pre>
+    Class.Exception.extend('FooException');
+
+    // Anonymous Exception
+    var BarException = FooException.extend();
+
+    // New Exception
+    Class.Exception.extend('TestException', {
+        'protected _data' : undefined,
+        'property data' : { get : function () { return this._data; } },
+        __constructor : function (message, data, innerException) {
+            this.__super(message, innerException);
+            this._data = data;
+        }
+    });
+
+    // Result
+    var result = true;
+
+    // Test
+
+    try {
+        try {
+            throw new FooException();
+        } catch (e1) {
+            e1.data = 'NO SET';
+            e1.message = 'NO SET';
+
+            // Should all be true
+            result = result && (e1 instanceof Class.Exception) && (e1 instanceof FooException) &&
+                (e1.message === undefined);
+
+            throw new BarException('Bar Message', e1);
+        }
+    } catch (e2) {
+        // Should all be true
+        result = result && (e2 instanceof Class.Exception) && (e2 instanceof FooException) && (e2 instanceof BarException) &&
+            !!e2.innerException && (e2.innerException instanceof FooException) && !(e2.innerException instanceof BarException) &&
+            (e2.message === 'Bar Message') && !e2.hasVar('data');
+    }
+
+    try {
+        throw new TestException('Test Message', { v1 : true, v2 : 'Test' });
+    } catch (e3) {
+        // Should all be true
+        result = result && (e3 instanceof Class.Exception) && !(e3 instanceof FooException) && !(e3 instanceof BarException) &&
+            e3.data && (e3.message === 'Test Message') && (e3.data.v1 === true) && (e3.data.v2 === 'Test');
+    }
+
+    // Should all be true
+    result
 </pre>

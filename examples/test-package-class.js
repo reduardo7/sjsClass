@@ -4,7 +4,7 @@
  *
  * By: Edueado Daniel Cuomo.
  *
- * Examples: Test Package Class.
+ * Examples: Test package Class.
  *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
@@ -14,7 +14,7 @@
 
 'use strict';
 
-// Package
+// package
 var com = {
 	eduardocuomo : {
 		examples : { },
@@ -24,30 +24,30 @@ var com = {
 
 
 // Class 1
-Class.Package(com.eduardocuomo.examples, function () {
+Class.package(com.eduardocuomo.examples, function () {
 
-	Class.Extend('T1');
+	Class.extend('T1');
 
 });
 
 // Class 2
-Class.Package(com.eduardocuomo.examples, function () {
+Class.package(com.eduardocuomo.examples, function () {
 
-	this.T1.Extend('T2');
+	this.T1.extend('T2');
 
 });
 
 // Class 3
-Class.Package(com.eduardocuomo.demo, function () {
+Class.package(com.eduardocuomo.demo, function () {
 
-	Class.Extend('T3');
+	Class.extend('T3');
 
 });
 
 // Class 4
-com.eduardocuomo.demo.T3.Package(function () {
+com.eduardocuomo.demo.T3.package(function () {
 
-	Class.Extend('T4');
+	Class.extend('T4');
 
 });
 
@@ -56,7 +56,7 @@ com.eduardocuomo.demo.T3.Package(function () {
 
 var check = true;
 
-Class.Package(com.eduardocuomo.examples, function () {
+Class.package(com.eduardocuomo.examples, function () {
 
 	var t = new this.T1(),
 		t2 = new this.T2();
@@ -65,7 +65,7 @@ Class.Package(com.eduardocuomo.examples, function () {
 
 });
 
-// Equals to
+// equals to
 
 (function () {
 
@@ -78,7 +78,7 @@ Class.Package(com.eduardocuomo.examples, function () {
 
 // ---
 
-Class.Package(com.eduardocuomo.demo, function ($) {
+Class.package(com.eduardocuomo.demo, function ($) {
 
 	var t3 = new $.T3(),
 		t4 = new this.T4();
@@ -87,7 +87,7 @@ Class.Package(com.eduardocuomo.demo, function ($) {
 
 });
 
-// Equals to
+// equals to
 
 (function () {
 

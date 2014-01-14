@@ -14,7 +14,7 @@
 
 'use strict';
 
-Class.Extend('Test', {
+Class.extend('Test', {
 	__const : {
 		cx : 111
 	},
