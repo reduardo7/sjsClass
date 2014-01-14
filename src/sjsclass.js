@@ -45,8 +45,13 @@
 		if ((o === null) || (typeof o !== 'object'))
 			return o;
 		var t = o.constructor();
-		for (var k in o)
-			t[k] = clone(o[k]);
+		for (var k in o) {
+			try {
+				t[k] = clone(o[k]);
+			} catch (e) {
+				// Properties
+			}
+		}
 		return t;
 	}
 
@@ -99,10 +104,8 @@
 			// New instance
 			if (initializing)
 				return;
-
 			// Instance ID
 			setInstanceId(this);
-
 			return this;
 		} else {
 			// Static call
@@ -201,12 +204,12 @@
 	};
 
 	Class.extend = function (src_name, src) {
-		var __super            = this.prototype,
-			__construct        = __super.constructor,
-			fluent             = !!this.__fluent,
-			className          = false,
-			register           = false,
-			__constructProps   = Object.getOwnPropertyNames(__construct),
+		var __super          = this.prototype,
+			__construct      = __super.constructor,
+			fluent           = !!this.__fluent,
+			className        = false,
+			register         = false,
+			__constructProps = Object.getOwnPropertyNames(__construct),
 			newClass, ppt;
 
 		function setName (n) {
@@ -227,9 +230,8 @@
 		}
 
 		// Static
-		if (!defined(src.__static)) {
+		if (!defined(src.__static))
 			src.__static = { };
-		}
 
 		// Context
 		if (defined(src.__package)) {
@@ -270,11 +272,9 @@
 				protectedCallStack[id] = 0;
 
 			// Add Protecteds
-			if (!protectedCallStack[id]++) {
-				for (i in protectedsVals[id]) {
+			if (!protectedCallStack[id]++)
+				for (i in protectedsVals[id])
 					t[i] = protectedsVals[id][i];
-				}
-			}
 
 			// Execute
 			try {
@@ -310,7 +310,7 @@
 		} else {
 			src.__static.__function = function () {
 				return newClass.extend.apply(newClass, arguments);
-			}
+			};
 		}
 
 		// Constants
@@ -322,9 +322,8 @@
 
 		// Protected
 		if (defined(src.__protected)) {
-			for (var i in src.__protected) {
+			for (var i in src.__protected)
 				protecteds[className][i] = src.__protected[i];
-			}
 			delete src.__protected;
 		}
 
@@ -346,8 +345,7 @@
 					src.__static[getMethodName(np, nv)] = src[name];
 					a = true;
 				} else if (np.indexOf('protected') > -1) {
-					var mn = getMethodName(np, nv);
-					protecteds[className][mn] = src[name];
+					protecteds[className][getMethodName(np, nv)] = src[name];
 					a = true;
 				} else if (np.indexOf('const') > -1) {
 					constants[className][getMethodName(np, nv)] = src[name];
@@ -356,6 +354,7 @@
 					properties[className][getMethodName(np, nv)] = src[name];
 					a = true;
 				}
+
 				if (a) delete src[name];
 			}
 		}
@@ -440,23 +439,21 @@
 		}
 
 		function constructorInit () {
+			var t = this;
 			if (src.__static.__package[className]
 				// Normal
-				? (this instanceof src.__static.__package[className])
+				? (t instanceof src.__static.__package[className])
 				// Anonymous Class
-				: ((this.constructor.name === className) && (this.__static.__package === src.__static.__package))
+				: ((t.constructor.name === className) && (t.__static.__package === src.__static.__package))
 			) {
 				// New Instance
 				if (initializing)
 					return;
 
-				var t = this;
-
 				if (instancing) {
 					// Properties
 					for (var i in properties[className])
 						_defineProperty(t, i);
-
 					// Instance ID
 					setInstanceId(t);
 				}
@@ -465,7 +462,7 @@
 				if (t.__constructor)
 					t.__constructor.apply(t, arguments);
 
-				return this;
+				return t;
 			} else {
 				// Static call
 				return newClass.__function.apply(newClass, arguments);
@@ -478,14 +475,16 @@
 		// Static
 		for (var i in __constructProps) {
 			var name = __constructProps[i];
-			if (invalidStatic.indexOf(name) === -1) {
-				// Check if we're overwriting an existing function
+			// Check if we're overwriting an existing function
+			if (invalidStatic.indexOf(name) === -1)
 				newClass[name] = __construct[name];
-			}
 		}
+
 		// Constants
 		for (var i in constants[className]) {
+			// Static
 			Object.defineProperty(newClass, i, { value: constants[className][i] });
+			// Instance
 			Object.defineProperty(ppt, i, { value: constants[className][i] });
 		}
 
