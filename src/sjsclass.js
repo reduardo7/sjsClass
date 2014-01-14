@@ -28,6 +28,7 @@
 		properties           = { },
 		protecteds           = { },
 		protectedsVals       = { },
+		protectedCallStack   = { },
 		instancesCount       = { },
 		baseCount            = 0,
 		Class;
@@ -212,7 +213,6 @@
 			className          = false,
 			register           = false,
 			__constructProps   = Object.getOwnPropertyNames(__construct),
-			protectedCallStack = 0,
 			newClass, ppt;
 
 		function setName (n) {
@@ -264,26 +264,30 @@
 		className = src.__static.__prefix + className;
 
 		// Internal vars
-		constants[className]  = this.__getConstants(),
-		properties[className] = this.__getProperties(),
+		constants[className]  = this.__getConstants();
+		properties[className] = this.__getProperties();
 		protecteds[className] = this.__getProtecteds();
 
 		function protectedCall (t, fn, args) {
 			var r, i, id = t.__instanceId;
 			if (!protectedsVals[id])
 				protectedsVals[id] = clone(protecteds[t.getClassName()]);
+			if (protectedCallStack[id] === undefined)
+				protectedCallStack[id] = 0;
 
 			// Add Protecteds
-			if (!protectedCallStack++)
-				for (i in protectedsVals[id])
+			if (!protectedCallStack[id]++) {
+				for (i in protectedsVals[id]) {
 					t[i] = protectedsVals[id][i];
+				}
+			}
 
 			// Execute
 			try {
 				r = fn.apply(t, args);
 			} finally {
 				// Save and Remove Protecteds
-				if (!--protectedCallStack) {
+				if (!--protectedCallStack[id]) {
 					for (i in protectedsVals[id]) {
 						protectedsVals[id][i] = t[i];
 						delete t[i];
