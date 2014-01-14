@@ -13,10 +13,10 @@
  */
 
 (function (context, BaseClassName) {
-    'use strict';
+	'use strict';
 
 	// Check if loaded
-	// if (context[BaseClassName] !== undefined) { return; }
+	if (typeof context[BaseClassName] === 'function') return;
 
 	var initializing         = false,
 		instancing           = true,
@@ -540,7 +540,6 @@
 
 		// Append in context
 		if (register)
-			// src.__static.__package[className] = newClass;
 			Object.defineProperty(src.__static.__package, className, { value : newClass });
 
 		// Execute Callback
@@ -582,6 +581,5 @@
 	Class.Exception.__package = context;
 
 	// Append in context
-	// context[BaseClassName] = Class;
 	Object.defineProperty(context, BaseClassName, { value : Class });
 })(window || this, 'Class');
