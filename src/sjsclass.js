@@ -85,16 +85,11 @@
 		instanceLock = true;
 	}
 
-	function getMethodName (n, v) {
-		var x;
-		for (var i in n) {
-			if (['const', 'constant', 'prop', 'property', 'protected', 'static'].indexOf(n[i]) === -1) {
-				x = v[i];
-				break;
-			}
-		}
-		if (!x) throwException('[' + n + '] not have a name!');
-		return x;
+	function getMethodName (v) {
+		for (var i in v)
+			if (['const', 'constant', 'prop', 'property', 'protected', 'static'].indexOf(v[i]) === -1)
+				return v[i];
+		throwException('[' + v + '] not have a name!');
 	}
 
 	// Class
@@ -145,11 +140,11 @@
 	Class.hasVar          = hasVar;
 	Class.hasMethod       = hasMethod;
 	Class.getClassName    = function () { return this.name; };
-	Class.classExists     = function (className) { return typeof this.__static.__package[className] === 'function'; };
+	Class.classExists     = function (className) { var c = this.__static.__package[className]; return (typeof c === 'function') && (c.prototype instanceof Class); };
 	Class.__onExtend      = function () { };
-	Class.__getConstants  = function () { return clone(constants[this.prototype.constructor.name]); };
-	Class.__getProperties = function () { return clone(properties[this.prototype.constructor.name]); };
-	Class.__getProtecteds = function () { return clone(protecteds[this.prototype.constructor.name]); };
+	Class.__getConstants  = function () { return clone(constants[this.name]); };
+	Class.__getProperties = function () { return clone(properties[this.name]); };
+	Class.__getProtecteds = function () { return clone(protecteds[this.name]); };
 
 	// Instances Count
 	initNewClass(Class);
@@ -172,7 +167,7 @@
 					s += 'a[' + i + ']';
 				}
 			}
-			return new Function('c', 'a', s + ')')(className, arguments);
+			return new Function('c', 'a', s + ')')(this.getClass(className), arguments);
 		} else {
 			throwException('Error! Class "' + className + '" not declared!');
 		}
@@ -213,7 +208,7 @@
 			newClass, ppt;
 
 		function setName (n) {
-			className = src_name.replace(/^[^a-zA-Zºª_\$]+/i, '').replace(/[^a-zA-Zºª0-9_\$]/gi, '').trim();
+			className = src_name;
 			register  = true;
 		}
 
@@ -305,11 +300,18 @@
 
 		// Call as Function
 		if (defined(src.__function) && (typeof src.__function === 'function')) {
-			src.__static.__function = src.__function;
+			var _f = src.__function;
 			delete src.__function;
+			src.__static.__function = function () {
+				var tmp = this.__super;
+				this.__super = __construct.__function;
+				var r = _f.apply(this, arguments);
+				this.__super = tmp;
+				return r;
+			}
 		} else {
 			src.__static.__function = function () {
-				return newClass.extend.apply(newClass, arguments);
+				return __construct.__function ? __construct.__function.apply(this, arguments) : undefined;
 			};
 		}
 
@@ -336,26 +338,22 @@
 
 		// Alternative declaration
 		for (var name in src) {
-			var n = (name + '')
-				, np = n.toLowerCase().split(/\s+/)
-				, nv = n.split(/\s+/);
-			if (np.length > 1) {
-				var a = false;
-				if (np.indexOf('static') > -1) {
-					src.__static[getMethodName(np, nv)] = src[name];
-					a = true;
-				} else if (np.indexOf('protected') > -1) {
-					protecteds[className][getMethodName(np, nv)] = src[name];
-					a = true;
-				} else if (np.indexOf('const') > -1) {
-					constants[className][getMethodName(np, nv)] = src[name];
-					a = true;
-				} else if ((np.indexOf('property') > -1) || (np.indexOf('prop') > -1)) {
-					properties[className][getMethodName(np, nv)] = src[name];
-					a = true;
+			var v = (name + '').trim().split(/\s+/);
+			if (v.length > 1) {
+				if (v.indexOf('static') > -1) {
+					src.__static[getMethodName(v)] = src[name];
+				} else if (v.indexOf('protected') > -1) {
+					protecteds[className][getMethodName(v)] = src[name];
+				} else if (v.indexOf('const') > -1) {
+					constants[className][getMethodName(v)] = src[name];
+				} else if ((v.indexOf('property') > -1) || (v.indexOf('prop') > -1)) {
+					properties[className][getMethodName(v)] = src[name];
+				} else {
+					// Invalid declaration
+					throwException('Invalid declaration: "' + name + '"');
 				}
 
-				if (a) delete src[name];
+				delete src[name];
 			}
 		}
 

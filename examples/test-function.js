@@ -14,11 +14,17 @@
 
 'use strict';
 
-Class('Test', {
+Class('TestFunction', {
 	__function : function (v) {
 		return '[[' + v + '|' + v + ']]';
 	}
 });
 
+TestFunction.extend('TestFunctionB', {
+	__function : function (j) {
+		return '***' + this.__super(j) + '***';
+	}
+})
+
 // Should all be true
-Test(123) === '[[123|123]]'
+(TestFunction(123) === '[[123|123]]') && (TestFunctionB(456) === '***[[456|456]]***')
