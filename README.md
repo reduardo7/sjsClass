@@ -553,3 +553,18 @@ Get created objects count.
     // Should all be true
     result
 </pre>
+
+<h3>Use Class as Function</h3>
+
+ - *<code>object</code> classInstance.<code>__function</code>*
+
+<pre>
+    Class('Test', {
+        __function : function (v) {
+            return '[[' + v + '|' + v + ']]';
+        }
+    });
+
+    // Should all be true
+    Test(123) === '[[123|123]]'
+</pre>
