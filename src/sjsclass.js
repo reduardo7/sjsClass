@@ -579,4 +579,5 @@
 
 	// Append in context
 	Object.defineProperty(context, BaseClassName, { value : Class });
-})(window || this, 'Class');
+})(window || this, 'Class'); // Web
+//})(global || this, 'Class'); // Node.js
