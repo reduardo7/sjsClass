@@ -1,24 +1,28 @@
 {
 	"name": "sjsclass",
 	"description": "Simple JavaScript Class",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"homepage": "https://github.com/reduardo7/sjsClass",
 	"author": {
 		"name": "Eduardo Daniel Cuomo",
 		"url": "http://www.eduardocuomo.com.ar/"
 	},
-	"binary": {
-		"module_name": "sjsclass",
-		"module_path": "./lib/"
-	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/reduardo7/sjsClass.git"
 	},
-	"licenses": [
-		{
-			"type": "MIT"
-		}
+	"license": "MIT",
+	"keywords": [
+		"class",
+		"framework",
+		"sjsclass",
+		"web",
+		"extend",
+		"protected",
+		"simple",
+		"instance",
+		"app",
+		"api"
 	],
 	"main": "./lib/sjsclass"
 }
