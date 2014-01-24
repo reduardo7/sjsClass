@@ -1,7 +1,7 @@
 sjsClass
 ========
 
-Simple JavaScript Class
+Simple JavaScript Class. Create your advance JavaScript Class!
 
 Node.js Implementation
 ----------------------
@@ -23,6 +23,9 @@ require('sjsclass').registerGlobal();
 <h4>Node.js Examples</h4>
 
 <pre>examples/nodejs-test-*.js</pre>
+
+ - https://github.com/reduardo7/sjsClass/blob/master/examples/nodejs-test-global.js
+ - https://github.com/reduardo7/sjsClass/blob/master/examples/nodejs-test-normal.js
 
 Features
 --------
