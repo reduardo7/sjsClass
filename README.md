@@ -3,6 +3,27 @@ sjsClass
 
 Simple JavaScript Class
 
+Node.js Implementation
+----------------------
+
+<h3>Include</h3>
+
+<h4>Normal include</h4>
+
+```js
+var Class = require('sjsclass');
+```
+
+<h4>Global include</h4>
+
+```js
+require('sjsclass').registerGlobal();
+```
+
+<h4>Node.js Examples</h4>
+
+<pre>examples/nodejs-test-*.js</pre>
+
 Features
 --------
 
@@ -23,22 +44,22 @@ Using <code>Class</code> function:
  - *<code>var ClassName2</code> = Class(<code>string ClassName</code>, <code>object definition</code>);*
  - *<code>var ClassName2</code> = Class(<code>string ClassName</code>);*
  - *<code>var ClassName</code> = Class(<code>object definition</code>);*
-<pre>
+```js
     Person.extend('newClassName', {
         __constructor: function() {
             this.var = 1; // -> Public only for this class.
         }
     });
-</pre>
-<pre>
+```
+```js
     var newClassName = Person.extend({
         ...
     });
-</pre>
+```
 
 <h3>Static methods and variables</h3>
 
-<pre>
+```js
     Class.extend('Person', {
         __static: {
             // Static methods
@@ -61,30 +82,30 @@ Using <code>Class</code> function:
     alert(Person.count);
     alert(Person.getCount());
     alert(Person.getVar());
-</pre>
+```
 
 <h3>Declare into context</h3>
 
-<pre>
+```js
     // Web Page
     (function(context) {
         ...
     })(window);
     Class.extend('Person', ...
     var p = new Person(...
-</pre>
-<pre>
+```
+```js
     var contextName = {};
     (function(context) {
         ...
     })(contextName);
     contextName.Class.extend('Person', ...
     var p = new contextName.Person(...
-</pre>
+```
 
 <h3>Access static methods and variables from instance</h3>
 
-<pre>
+```js
     Class.extend('Person', {
         __static: {
             count: 100
@@ -93,13 +114,13 @@ Using <code>Class</code> function:
             this.__static.count++;
         }
     });
-</pre>
+```
 
 <h3>Constructor</h3>
 
  - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*
  - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*
-<pre>
+```js
     Class.extend('Person', {
         __construct: function(var1, var2, varN) {
             ...
@@ -109,11 +130,11 @@ Using <code>Class</code> function:
     var p2 = Person.newInstance(22, 13, 16);
     var p3 = Class.newInstanceOf('Person', 22, 13, 16);
     // p1 == p2 == p3
-</pre>
+```
 
 <h3>Call parent methods</h3>
 
-<pre>
+```js
     Person.extend('Ninja', {
         __static: {
             testStatic: function() {
@@ -129,11 +150,11 @@ Using <code>Class</code> function:
             ...
         }
     });
-</pre>
+```
 
 <h3>Call parent static</h3>
 
-<pre>
+```js
     Person.extend('Ninja', {
         __static: {
             testStatic: function() {
@@ -145,13 +166,13 @@ Using <code>Class</code> function:
             ...
         }
     });
-</pre>
+```
 
 <h3>Check if has value or method</h3>
 
  - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
  - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
-<pre>
+```js
     Person.extend('Ninja', {
         methodName: function() {
             ...
@@ -161,13 +182,13 @@ Using <code>Class</code> function:
     var p = new Person();
     if (p.hasMethod('methodName')) alert('Yes');
     if (p.hasVar('varName')) alert('Yes');
-</pre>
+```
 
 <h3>Get Class name</h3>
 
  - *<code>string</code> classInstance.<code>getClassName</code>()*
  - *<code>string</code> Class.<code>getClassName</code>()*
-<pre>
+```js
     Person.extend('Ninja', {
         ...
     });
@@ -175,8 +196,8 @@ Using <code>Class</code> function:
     alert(p.getClassName()); // -> Alert 'Person'
     var n = new Ninja();
     alert(n.getClassName()); // -> Alert 'Ninja'
-</pre>
-<pre>
+```
+```js
     var Other = Person.extend({
         ...
     });
@@ -187,45 +208,45 @@ Using <code>Class</code> function:
     });
     var f = new Foo();
     alert(f.getClassName()); // -> Alert 'Person_extended_1'
-</pre>
-<pre>
+```
+```js
     var Bar = Ninja.extend('Fighter', {
         ...
     });
     var b = new Bar();
     alert(b.getClassName()); // -> Alert 'Fighter'
-</pre>
+```
 
 <h3>Hash Code</h3>
 
  - *<code>string</code> classInstance.<code>hashCode</code>()*
-<pre>
+```js
     var p1 = new Person(false);
     console.log(p1.hashCode()); // -> Get instence Hash Code
-</pre>
+```
 
 <h3>equals</h3>
 
  - *<code>boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
 
 Check's instances Hash Codes and Class Names.
-<pre>
+```js
     var p1 = new Person(false);
     var p2 = Person.newInstance(false);
     console.log(p1.equals(p2)); // -> true
-</pre>
+```
 
 <h3>To string</h3>
 
  - *<code>string</code> classInstance.<code>toString</code>()*
-<pre>
+```js
     var p1 = new Person(false);
     console.log(p1.toString()); // -> String representation
-</pre>
+```
 
 <h3>Callbacks</h3>
 
-<pre>
+```js
     Class.extend('Ninja', {
         __onExtend: function() {
             alert('Extending Ninja class!');
@@ -235,21 +256,21 @@ Check's instances Hash Codes and Class Names.
         ...
     });
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
-</pre>
+```
 
 <h3>Check if Class exists</h3>
 
  - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
-<pre>
+```js
     Class.extend('Ninja', {
         ...
     });
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
-</pre>
+```
 
 <h3>Prefix extended class</h3>
 
-<pre>
+```js
     // Creates a 'FightFighter' class, not a 'Fighter' class.
     Class.extend('Fighter', {
         __prefix: 'Fight',
@@ -268,22 +289,22 @@ Check's instances Hash Codes and Class Names.
     Class.extend('FightSamuray' {
         ...
     });
-</pre>
+```
 
 <h3>Get Class from Class Name</h3>
 
  - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
-<pre>
+```js
     Class.extend('Person', {
         ...
     });
     var p = Class.getClass('Person');
     // p === Person
-</pre>
+```
 
 <h3>Constants</h3>
 
-<pre>
+```js
     Class.extend('Person', {
         __const : {
             BROTHER : 'Mateo',
@@ -296,11 +317,11 @@ Check's instances Hash Codes and Class Names.
     f.SISTER = 'Vanesa';
     f.BROTHER; // ->  'Mateo'
     f.SISTER; // -> 'Luciana'
-</pre>
+```
 
 <h3>Protected methods and variables</h3>
 
-<pre>
+```js
     Class.extend('Foo', {
         __protected : {
             privV : 123,
@@ -320,7 +341,7 @@ Check's instances Hash Codes and Class Names.
     f.privF(); // -> Error
     f.privV; // -> undefined
     f.priv3; // -> undefined
-</pre>
+```
 
 <h3>Properties</h3>
 
@@ -329,7 +350,7 @@ Check's instances Hash Codes and Class Names.
  - *<code>object</code> <code>prop</code>*
 
 Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
-<pre>
+```js
     Class.extend('Fighter', {
         __property : {
             Val : {
@@ -354,14 +375,14 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
     f.foo = 123;
     f.foo; // -> 63
     f.bar; // -> 63
-</pre>
+```
 
 <h3>Fluent Interface</h3>
 
  - *<code>boolean</code> <code>__fluent</code>*
 
 If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
-<pre>
+```js
     Class.extend('Foo', {
         __fluent : true, // Enable Fluent Interface
         __static : {
@@ -380,14 +401,14 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
         f.bar(), // -> 1013LM
         Foo.bar() // ->8886VE
     );
-</pre>
+```
 
 <h3>Class ID</h3>
 
  - *<code>string</code> classInstance.<code>__instanceId</code>()*
 
 Get Instance ID.
-<pre>
+```js
     Class.extend('Foo', {
         ...
     });
@@ -395,14 +416,14 @@ Get Instance ID.
     console.log(
         Foo.__classId
     );
-</pre>
+```
 
 <h3>Instance ID</h3>
 
  - *<code>string</code> classInstance.<code>__instanceId</code>()*
 
 Get Instance ID.
-<pre>
+```js
     Class.extend('Foo', {
         ...
     });
@@ -414,14 +435,14 @@ Get Instance ID.
         f1.__instanceId,
         f2.__instanceId
     );
-</pre>
+```
 
 <h3>Instances Count</h3>
 
  - *<code>string</code> ClassName.<code>__instanceCount</code>()*
 
 Get created objects count.
-<pre>
+```js
     Class.extend('Foo', {
         ...
     });
@@ -433,13 +454,13 @@ Get created objects count.
     var f1 = new Foo();
     var f2 = new Foo();
     console.log(Foo.__instanceCount); // -> 2
-</pre>
+```
 
 <h3>package</h3>
 
  - *<code>object</code> classInstance.<code>__package</code>*
 
-<pre>
+```js
     var foo = { };
 
     Class.extend('Cls', {
@@ -448,9 +469,9 @@ Get created objects count.
     });
 
     var c = new foo.Cls();
-</pre>
+```
 
-<pre>
+```js
     var com = {
         eduardocuomo = {
             examples = { }
@@ -463,13 +484,13 @@ Get created objects count.
     });
 
     var t = new com.eduardocuomo.examples.Test();
-</pre>
+```
 
 <h3>Packager</h3>
 
  - *Class.<code>package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
 
-<pre>
+```js
     // package
     var com = {
         eduardocuomo : {
@@ -495,13 +516,13 @@ Get created objects count.
             b = new this.Bar();
 
     });
-</pre>
+```
 
 <h3>Exception</h3>
 
 - *Class.<code>Exception</code>(<code>message</code>, <code>innerException</code>)*
 
-<pre>
+```js
     Class.Exception.extend('FooException');
 
     // Anonymous Exception
@@ -552,13 +573,13 @@ Get created objects count.
 
     // Should all be true
     result
-</pre>
+```
 
 <h3>Use Class as Function</h3>
 
  - *<code>object</code> classInstance.<code>__function</code>*
 
-<pre>
+```js
     Class('Test', {
         __function : function (v) {
             return '[[' + v + '|' + v + ']]';
@@ -567,4 +588,4 @@ Get created objects count.
 
     // Should all be true
     Test(123) === '[[123|123]]'
-</pre>
+```

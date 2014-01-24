@@ -1,0 +1,198 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'c:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'c:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@1.3.24
+3 info using node@v0.10.25
+4 verbose publish [ '.' ]
+5 verbose cache add [ '.', null ]
+6 verbose cache add name=undefined spec="." args=[".",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: '.',
+7 verbose parsed url   path: '.',
+7 verbose parsed url   href: '.' }
+8 silly lockFile 3a52ce78- .
+9 verbose lock . C:\Users\Eduardo\AppData\Roaming\npm-cache\3a52ce78-.lock
+10 verbose tar pack [ 'C:\\Users\\Eduardo\\AppData\\Local\\Temp\\npm-5472-fa8uz2e5\\1390529378144-0.4428838244639337\\tmp.tgz',
+10 verbose tar pack   '.' ]
+11 verbose tarball C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+12 verbose folder .
+13 info prepublish sjsclass@1.0.0
+14 silly lockFile 1f1177db-tar tar://.
+15 verbose lock tar://. C:\Users\Eduardo\AppData\Roaming\npm-cache\1f1177db-tar.lock
+16 silly lockFile 00cb7a42-78144-0-4428838244639337-tmp-tgz tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+17 verbose lock tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz C:\Users\Eduardo\AppData\Roaming\npm-cache\00cb7a42-78144-0-4428838244639337-tmp-tgz.lock
+18 silly lockFile 1f1177db-tar tar://.
+19 silly lockFile 1f1177db-tar tar://.
+20 silly lockFile 00cb7a42-78144-0-4428838244639337-tmp-tgz tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+21 silly lockFile 00cb7a42-78144-0-4428838244639337-tmp-tgz tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+22 verbose tar unpack C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+23 silly lockFile b5cd308f-78144-0-4428838244639337-package tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+24 verbose lock tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package C:\Users\Eduardo\AppData\Roaming\npm-cache\b5cd308f-78144-0-4428838244639337-package.lock
+25 silly lockFile 00cb7a42-78144-0-4428838244639337-tmp-tgz tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+26 verbose lock tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz C:\Users\Eduardo\AppData\Roaming\npm-cache\00cb7a42-78144-0-4428838244639337-tmp-tgz.lock
+27 silly gunzTarPerm modes [ '755', '644' ]
+28 silly gunzTarPerm extractEntry package.json
+29 silly gunzTarPerm modified mode [ 'package.json', 438, 420 ]
+30 silly gunzTarPerm extractEntry README.md
+31 silly gunzTarPerm modified mode [ 'README.md', 438, 420 ]
+32 silly gunzTarPerm extractEntry examples/nodejs-test-global.js
+33 silly gunzTarPerm modified mode [ 'examples/nodejs-test-global.js', 438, 420 ]
+34 silly gunzTarPerm extractEntry examples/test-extend-constructor.js
+35 silly gunzTarPerm modified mode [ 'examples/test-extend-constructor.js', 438, 420 ]
+36 silly gunzTarPerm extractEntry examples/test-extend.js
+37 silly gunzTarPerm modified mode [ 'examples/test-extend.js', 438, 420 ]
+38 silly gunzTarPerm extractEntry examples/test-fluent.js
+39 silly gunzTarPerm modified mode [ 'examples/test-fluent.js', 438, 420 ]
+40 silly gunzTarPerm extractEntry examples/test-exception.js
+41 silly gunzTarPerm modified mode [ 'examples/test-exception.js', 438, 420 ]
+42 silly gunzTarPerm extractEntry examples/test-on-extend.js
+43 silly gunzTarPerm modified mode [ 'examples/test-on-extend.js', 438, 420 ]
+44 silly gunzTarPerm extractEntry examples/test-package-2.js
+45 silly gunzTarPerm modified mode [ 'examples/test-package-2.js', 438, 420 ]
+46 silly gunzTarPerm extractEntry examples/test-package-class.js
+47 silly gunzTarPerm modified mode [ 'examples/test-package-class.js', 438, 420 ]
+48 silly gunzTarPerm extractEntry examples/test-package.js
+49 silly gunzTarPerm modified mode [ 'examples/test-package.js', 438, 420 ]
+50 silly gunzTarPerm extractEntry examples/test-prefix.js
+51 silly gunzTarPerm modified mode [ 'examples/test-prefix.js', 438, 420 ]
+52 silly gunzTarPerm extractEntry examples/test-constants.js
+53 silly gunzTarPerm modified mode [ 'examples/test-constants.js', 438, 420 ]
+54 silly gunzTarPerm extractEntry examples/test-pretected.js
+55 silly gunzTarPerm modified mode [ 'examples/test-pretected.js', 438, 420 ]
+56 silly gunzTarPerm extractEntry examples/nodejs-test-normal.js
+57 silly gunzTarPerm modified mode [ 'examples/nodejs-test-normal.js', 438, 420 ]
+58 silly gunzTarPerm extractEntry examples/test-function.js
+59 silly gunzTarPerm modified mode [ 'examples/test-function.js', 438, 420 ]
+60 silly gunzTarPerm extractEntry examples/test.html
+61 silly gunzTarPerm modified mode [ 'examples/test.html', 438, 420 ]
+62 silly gunzTarPerm extractEntry lib/sjsclass.js
+63 silly gunzTarPerm modified mode [ 'lib/sjsclass.js', 438, 420 ]
+64 silly gunzTarPerm extractEntry MIT-LICENSE.txt
+65 silly gunzTarPerm modified mode [ 'MIT-LICENSE.txt', 438, 420 ]
+66 silly lockFile b5cd308f-78144-0-4428838244639337-package tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+67 silly lockFile b5cd308f-78144-0-4428838244639337-package tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+68 silly lockFile 00cb7a42-78144-0-4428838244639337-tmp-tgz tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+69 silly lockFile 00cb7a42-78144-0-4428838244639337-tmp-tgz tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\tmp.tgz
+70 verbose tar pack [ 'C:\\Users\\Eduardo\\AppData\\Roaming\\npm-cache\\sjsclass\\1.0.0\\package.tgz',
+70 verbose tar pack   'C:\\Users\\Eduardo\\AppData\\Local\\Temp\\npm-5472-fa8uz2e5\\1390529378144-0.4428838244639337\\package' ]
+71 verbose tarball C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+72 verbose folder C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+73 silly lockFile b5cd308f-78144-0-4428838244639337-package tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+74 verbose lock tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package C:\Users\Eduardo\AppData\Roaming\npm-cache\b5cd308f-78144-0-4428838244639337-package.lock
+75 silly lockFile 43b01941-cache-sjsclass-1-0-0-package-tgz tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+76 verbose lock tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz C:\Users\Eduardo\AppData\Roaming\npm-cache\43b01941-cache-sjsclass-1-0-0-package-tgz.lock
+77 silly lockFile b5cd308f-78144-0-4428838244639337-package tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+78 silly lockFile b5cd308f-78144-0-4428838244639337-package tar://C:\Users\Eduardo\AppData\Local\Temp\npm-5472-fa8uz2e5\1390529378144-0.4428838244639337\package
+79 silly lockFile 43b01941-cache-sjsclass-1-0-0-package-tgz tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+80 silly lockFile 43b01941-cache-sjsclass-1-0-0-package-tgz tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+81 silly lockFile b2e094bd-npm-cache-sjsclass-1-0-0-package C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package
+82 verbose lock C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package C:\Users\Eduardo\AppData\Roaming\npm-cache\b2e094bd-npm-cache-sjsclass-1-0-0-package.lock
+83 silly lockFile b2e094bd-npm-cache-sjsclass-1-0-0-package C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package
+84 silly lockFile b2e094bd-npm-cache-sjsclass-1-0-0-package C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package
+85 verbose tar unpack C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+86 silly lockFile b4023002-npm-cache-sjsclass-1-0-0-package tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package
+87 verbose lock tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package C:\Users\Eduardo\AppData\Roaming\npm-cache\b4023002-npm-cache-sjsclass-1-0-0-package.lock
+88 silly lockFile 43b01941-cache-sjsclass-1-0-0-package-tgz tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+89 verbose lock tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz C:\Users\Eduardo\AppData\Roaming\npm-cache\43b01941-cache-sjsclass-1-0-0-package-tgz.lock
+90 silly gunzTarPerm modes [ '755', '644' ]
+91 silly gunzTarPerm extractEntry package.json
+92 silly gunzTarPerm modified mode [ 'package.json', 438, 420 ]
+93 silly gunzTarPerm extractEntry README.md
+94 silly gunzTarPerm modified mode [ 'README.md', 438, 420 ]
+95 silly gunzTarPerm extractEntry examples/nodejs-test-global.js
+96 silly gunzTarPerm modified mode [ 'examples/nodejs-test-global.js', 438, 420 ]
+97 silly gunzTarPerm extractEntry examples/test-extend-constructor.js
+98 silly gunzTarPerm modified mode [ 'examples/test-extend-constructor.js', 438, 420 ]
+99 silly gunzTarPerm extractEntry examples/test-extend.js
+100 silly gunzTarPerm modified mode [ 'examples/test-extend.js', 438, 420 ]
+101 silly gunzTarPerm extractEntry examples/test-fluent.js
+102 silly gunzTarPerm modified mode [ 'examples/test-fluent.js', 438, 420 ]
+103 silly gunzTarPerm extractEntry examples/test-exception.js
+104 silly gunzTarPerm modified mode [ 'examples/test-exception.js', 438, 420 ]
+105 silly gunzTarPerm extractEntry examples/test-on-extend.js
+106 silly gunzTarPerm modified mode [ 'examples/test-on-extend.js', 438, 420 ]
+107 silly gunzTarPerm extractEntry examples/test-package-2.js
+108 silly gunzTarPerm modified mode [ 'examples/test-package-2.js', 438, 420 ]
+109 silly gunzTarPerm extractEntry examples/test-package-class.js
+110 silly gunzTarPerm modified mode [ 'examples/test-package-class.js', 438, 420 ]
+111 silly gunzTarPerm extractEntry examples/test-package.js
+112 silly gunzTarPerm modified mode [ 'examples/test-package.js', 438, 420 ]
+113 silly gunzTarPerm extractEntry examples/test-prefix.js
+114 silly gunzTarPerm modified mode [ 'examples/test-prefix.js', 438, 420 ]
+115 silly gunzTarPerm extractEntry examples/test-constants.js
+116 silly gunzTarPerm modified mode [ 'examples/test-constants.js', 438, 420 ]
+117 silly gunzTarPerm extractEntry examples/test-pretected.js
+118 silly gunzTarPerm modified mode [ 'examples/test-pretected.js', 438, 420 ]
+119 silly gunzTarPerm extractEntry examples/nodejs-test-normal.js
+120 silly gunzTarPerm modified mode [ 'examples/nodejs-test-normal.js', 438, 420 ]
+121 silly gunzTarPerm extractEntry examples/test-function.js
+122 silly gunzTarPerm modified mode [ 'examples/test-function.js', 438, 420 ]
+123 silly gunzTarPerm extractEntry examples/test.html
+124 silly gunzTarPerm modified mode [ 'examples/test.html', 438, 420 ]
+125 silly gunzTarPerm extractEntry lib/sjsclass.js
+126 silly gunzTarPerm modified mode [ 'lib/sjsclass.js', 438, 420 ]
+127 silly gunzTarPerm extractEntry MIT-LICENSE.txt
+128 silly gunzTarPerm modified mode [ 'MIT-LICENSE.txt', 438, 420 ]
+129 silly lockFile b4023002-npm-cache-sjsclass-1-0-0-package tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package
+130 silly lockFile b4023002-npm-cache-sjsclass-1-0-0-package tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package
+131 silly lockFile 43b01941-cache-sjsclass-1-0-0-package-tgz tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+132 silly lockFile 43b01941-cache-sjsclass-1-0-0-package-tgz tar://C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+133 verbose chmod C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz 644
+134 silly chown skipping for windows C:\Users\Eduardo\AppData\Roaming\npm-cache\sjsclass\1.0.0\package.tgz
+135 silly lockFile 3a52ce78- .
+136 silly lockFile 3a52ce78- .
+137 silly publish { name: 'sjsclass',
+137 silly publish   description: 'Simple JavaScript Class',
+137 silly publish   version: '1.0.0',
+137 silly publish   homepage: 'https://github.com/reduardo7/sjsClass',
+137 silly publish   author:
+137 silly publish    { name: 'Eduardo Daniel Cuomo',
+137 silly publish      url: 'http://www.eduardocuomo.com.ar/' },
+137 silly publish   binary: { module_name: 'sjsclass', module_path: './lib/' },
+137 silly publish   repository:
+137 silly publish    { type: 'git',
+137 silly publish      url: 'https://github.com/reduardo7/sjsClass.git' },
+137 silly publish   licenses: [ { type: 'MIT' } ],
+137 silly publish   main: './lib/sjsclass',
+137 silly publish   readme: 'sjsClass\r\n========\r\n\r\nSimple JavaScript Class\r\n\r\nFeatures\r\n--------\r\n\r\n<h3>Extend class</h3>\r\n\r\nUsing <code>extend</code> method:\r\n\r\n - *Class.extend(<code>string ClassName</code>, <code>object definition</code>);*\r\n - *Class.extend(<code>string ClassName</code>);*\r\n - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>, <code>object definition</code>);*\r\n - *<code>var ClassName2</code> = Class.extend(<code>string ClassName</code>);*\r\n - *<code>var ClassName</code> = Class.extend(<code>object definition</code>);*\r\n\r\nUsing <code>Class</code> function:\r\n\r\n - *Class(<code>string ClassName</code>, <code>object definition</code>);*\r\n - *Class(<code>string ClassName</code>);*\r\n - *<code>var ClassName2</code> = Class(<code>string ClassName</code>, <code>object definition</code>);*\r\n - *<code>var ClassName2</code> = Class(<code>string ClassName</code>);*\r\n - *<code>var ClassName</code> = Class(<code>object definition</code>);*\r\n<pre>\r\n    Person.extend(\'newClassName\', {\r\n        __constructor: function() {\r\n            this.var = 1; // -> Public only for this class.\r\n        }\r\n    });\r\n</pre>\r\n<pre>\r\n    var newClassName = Person.extend({\r\n        ...\r\n    });\r\n</pre>\r\n\r\n<h3>Static methods and variables</h3>\r\n\r\n<pre>\r\n    Class.extend(\'Person\', {\r\n        __static: {\r\n            // Static methods\r\n            testStatic: function() {\r\n                return true;\r\n            },\r\n            staticVar: true,\r\n            count: 100\r\n        },\r\n        \'static getCount\': function() {\r\n            return this.count;\r\n        },\r\n        \'static getVar\': function() {\r\n            return this.staticVar;\r\n        }\r\n        ...\r\n    });\r\n    alert(Person.testStatic());\r\n    alert(Person.staticVar);\r\n    alert(Person.count);\r\n    alert(Person.getCount());\r\n    alert(Person.getVar());\r\n</pre>\r\n\r\n<h3>Declare into context</h3>\r\n\r\n<pre>\r\n    // Web Page\r\n    (function(context) {\r\n        ...\r\n    })(window);\r\n    Class.extend(\'Person\', ...\r\n    var p = new Person(...\r\n</pre>\r\n<pre>\r\n    var contextName = {};\r\n    (function(context) {\r\n        ...\r\n    })(contextName);\r\n    contextName.Class.extend(\'Person\', ...\r\n    var p = new contextName.Person(...\r\n</pre>\r\n\r\n<h3>Access static methods and variables from instance</h3>\r\n\r\n<pre>\r\n    Class.extend(\'Person\', {\r\n        __static: {\r\n            count: 100\r\n        },\r\n        __construct: function() {\r\n            this.__static.count++;\r\n        }\r\n    });\r\n</pre>\r\n\r\n<h3>Constructor</h3>\r\n\r\n - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*\r\n - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*\r\n<pre>\r\n    Class.extend(\'Person\', {\r\n        __construct: function(var1, var2, varN) {\r\n            ...\r\n        }\r\n    });\r\n    var p1 = new Person(22, 13, 16);\r\n    var p2 = Person.newInstance(22, 13, 16);\r\n    var p3 = Class.newInstanceOf(\'Person\', 22, 13, 16);\r\n    // p1 == p2 == p3\r\n</pre>\r\n\r\n<h3>Call parent methods</h3>\r\n\r\n<pre>\r\n    Person.extend(\'Ninja\', {\r\n        __static: {\r\n            testStatic: function() {\r\n                this.super(); // Call parent \'testStatic\'\r\n            }\r\n        },\r\n        __constructor: function() {\r\n            this.__super(true); // Call parent constructor\r\n            ...\r\n        },\r\n        dance: function() {\r\n            this.__super(4); // Call parent method\r\n            ...\r\n        }\r\n    });\r\n</pre>\r\n\r\n<h3>Call parent static</h3>\r\n\r\n<pre>\r\n    Person.extend(\'Ninja\', {\r\n        __static: {\r\n            testStatic: function() {\r\n                this.super(); // Call parent \'testStatic\'\r\n            }\r\n        },\r\n        dance: function() {\r\n            this.__parent.testStatic();\r\n            ...\r\n        }\r\n    });\r\n</pre>\r\n\r\n<h3>Check if has value or method</h3>\r\n\r\n - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*\r\n - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*\r\n<pre>\r\n    Person.extend(\'Ninja\', {\r\n        methodName: function() {\r\n            ...\r\n        },\r\n        varName: 123\r\n    });\r\n    var p = new Person();\r\n    if (p.hasMethod(\'methodName\')) alert(\'Yes\');\r\n    if (p.hasVar(\'varName\')) alert(\'Yes\');\r\n</pre>\r\n\r\n<h3>Get Class name</h3>\r\n\r\n - *<code>string</code> classInstance.<code>getClassName</code>()*\r\n - *<code>string</code> Class.<code>getClassName</code>()*\r\n<pre>\r\n    Person.extend(\'Ninja\', {\r\n        ...\r\n    });\r\n    var p = new Person();\r\n    alert(p.getClassName()); // -> Alert \'Person\'\r\n    var n = new Ninja();\r\n    alert(n.getClassName()); // -> Alert \'Ninja\'\r\n</pre>\r\n<pre>\r\n    var Other = Person.extend({\r\n        ...\r\n    });\r\n    var o = new Other();\r\n    alert(o.getClassName()); // -> Alert \'Person_extended_0\'\r\n    var Foo = Person.extend({\r\n        ...\r\n    });\r\n    var f = new Foo();\r\n    alert(f.getClassName()); // -> Alert \'Person_extended_1\'\r\n</pre>\r\n<pre>\r\n    var Bar = Ninja.extend(\'Fighter\', {\r\n        ...\r\n    });\r\n    var b = new Bar();\r\n    alert(b.getClassName()); // -> Alert \'Fighter\'\r\n</pre>\r\n\r\n<h3>Hash Code</h3>\r\n\r\n - *<code>string</code> classInstance.<code>hashCode</code>()*\r\n<pre>\r\n    var p1 = new Person(false);\r\n    console.log(p1.hashCode()); // -> Get instence Hash Code\r\n</pre>\r\n\r\n<h3>equals</h3>\r\n\r\n - *<code>boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*\r\n\r\nCheck\'s instances Hash Codes and Class Names.\r\n<pre>\r\n    var p1 = new Person(false);\r\n    var p2 = Person.newInstance(false);\r\n    console.log(p1.equals(p2)); // -> true\r\n</pre>\r\n\r\n<h3>To string</h3>\r\n\r\n - *<code>string</code> classInstance.<code>toString</code>()*\r\n<pre>\r\n    var p1 = new Person(false);\r\n    console.log(p1.toString()); // -> String representation\r\n</pre>\r\n\r\n<h3>Callbacks</h3>\r\n\r\n<pre>\r\n    Class.extend(\'Ninja\', {\r\n        __onExtend: function() {\r\n            alert(\'Extending Ninja class!\');\r\n        }\r\n    });\r\n    Ninja.extend(\'Fighter\', {\r\n        ...\r\n    });\r\n    var f = new Fighter(); // -> Alert \'Extending Ninja class!\'\r\n</pre>\r\n\r\n<h3>Check if Class exists</h3>\r\n\r\n - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*\r\n<pre>\r\n    Class.extend(\'Ninja\', {\r\n        ...\r\n    });\r\n    Class.classExists(\'Ninja\') && !Class.classExists(\'Dog\'); // -> TRUE\r\n</pre>\r\n\r\n<h3>Prefix extended class</h3>\r\n\r\n<pre>\r\n    // Creates a \'FightFighter\' class, not a \'Fighter\' class.\r\n    Class.extend(\'Fighter\', {\r\n        __prefix: \'Fight\',\r\n        ...\r\n    });\r\n    // Creates a \'FightSamuray\' class, not a \'Samuray\' class.\r\n    FightFighter.extend(\'Samuray\' {\r\n        ...\r\n    });\r\n    // Creates a \'Ninja\' class, not a \'FightNinja\' class.\r\n    FightFighter.extend(\'Ninja\' {\r\n        __prefix: null,\r\n        ...\r\n    });\r\n    // Override \'FightSamuray\' class.\r\n    Class.extend(\'FightSamuray\' {\r\n        ...\r\n    });\r\n</pre>\r\n\r\n<h3>Get Class from Class Name</h3>\r\n\r\n - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*\r\n<pre>\r\n    Class.extend(\'Person\', {\r\n        ...\r\n    });\r\n    var p = Class.getClass(\'Person\');\r\n    // p === Person\r\n</pre>\r\n\r\n<h3>Constants</h3>\r\n\r\n<pre>\r\n    Class.extend(\'Person\', {\r\n        __const : {\r\n            BROTHER : \'Mateo\',\r\n            FLIA : \'Cuomo\'\r\n        },\r\n        \'const SISTER\' : \'Luciana\'\r\n    });\r\n    var f = new Person;\r\n    f.BROTHER = \'Eduardo\';\r\n    f.SISTER = \'Vanesa\';\r\n    f.BROTHER; // ->  \'Mateo\'\r\n    f.SISTER; // -> \'Luciana\'\r\n</pre>\r\n\r\n<h3>Protected methods and variables</h3>\r\n\r\n<pre>\r\n    Class.extend(\'Foo\', {\r\n        __protected : {\r\n            privV : 123,\r\n            privF : function () {\r\n                return this.privV + this.priv3;\r\n            }\r\n        },\r\n        \'protected priv3\' : \'Protected Value\',\r\n        setX : function (x) {\r\n            this.privV = x;\r\n        },\r\n        test : function () { return this.privF(); }\r\n    });\r\n    var f = new Foo;\r\n    f.setX(456);\r\n    f.test(); // -> \'Protected Value456\'\r\n    f.privF(); // -> Error\r\n    f.privV; // -> undefined\r\n    f.priv3; // -> undefined\r\n</pre>\r\n\r\n<h3>Properties</h3>\r\n\r\n - *<code>object</code> <code>__properties</code>*\r\n - *<code>object</code> <code>property</code>*\r\n - *<code>object</code> <code>prop</code>*\r\n\r\nLink: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty\r\n<pre>\r\n    Class.extend(\'Fighter\', {\r\n        __property : {\r\n            Val : {\r\n                get : function () { return this.val; },\r\n                set : function (value) { this.val = value; }\r\n            }\r\n        },\r\n        \'prop foo\' : {\r\n            get : function () { return this.val * 3; }\r\n        },\r\n        \'property bar\' : {\r\n            value : 123,\r\n            enumerable : false,\r\n            writable : true\r\n        },\r\n        \'protected val\' : null\r\n    });\r\n\r\n    var f = new Fighter();\r\n    f.Val = 21;\r\n    f.Val; // -> 21\r\n    f.foo = 123;\r\n    f.foo; // -> 63\r\n    f.bar; // -> 63\r\n</pre>\r\n\r\n<h3>Fluent Interface</h3>\r\n\r\n - *<code>boolean</code> <code>__fluent</code>*\r\n\r\nIf <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.\r\n<pre>\r\n    Class.extend(\'Foo\', {\r\n        __fluent : true, // Enable Fluent Interface\r\n        __static : {\r\n            x : \'\',\r\n            add : function (x) { this.x += x; }, // Fluent Interface\r\n            bar : function () { return this.x; }\r\n        },\r\n        \'protected x\' : \'\',\r\n        add : function (x) { this.x += x; }, // Fluent Interface\r\n        bar : function () { return this.x; }\r\n    });\r\n    var f = new Foo();\r\n    f.add(10).add(13).add(\'LM\');\r\n    Foo.add(88).add(86).add(\'VE\');\r\n    console.log(\r\n        f.bar(), // -> 1013LM\r\n        Foo.bar() // ->8886VE\r\n    );\r\n</pre>\r\n\r\n<h3>Class ID</h3>\r\n\r\n - *<code>string</code> classInstance.<code>__instanceId</code>()*\r\n\r\nGet Instance ID.\r\n<pre>\r\n    Class.extend(\'Foo\', {\r\n        ...\r\n    });\r\n\r\n    console.log(\r\n        Foo.__classId\r\n    );\r\n</pre>\r\n\r\n<h3>Instance ID</h3>\r\n\r\n - *<code>string</code> classInstance.<code>__instanceId</code>()*\r\n\r\nGet Instance ID.\r\n<pre>\r\n    Class.extend(\'Foo\', {\r\n        ...\r\n    });\r\n\r\n    var f1 = new Foo();\r\n    var f2 = new Foo();\r\n\r\n    console.log(\r\n        f1.__instanceId,\r\n        f2.__instanceId\r\n    );\r\n</pre>\r\n\r\n<h3>Instances Count</h3>\r\n\r\n - *<code>string</code> ClassName.<code>__instanceCount</code>()*\r\n\r\nGet created objects count.\r\n<pre>\r\n    Class.extend(\'Foo\', {\r\n        ...\r\n    });\r\n\r\n    console.log(Foo.__instanceCount); // -> 0\r\n    Foo.__instanceCount = 111;\r\n    console.log(Foo.__instanceCount); // -> 0\r\n\r\n    var f1 = new Foo();\r\n    var f2 = new Foo();\r\n    console.log(Foo.__instanceCount); // -> 2\r\n</pre>\r\n\r\n<h3>package</h3>\r\n\r\n - *<code>object</code> classInstance.<code>__package</code>*\r\n\r\n<pre>\r\n    var foo = { };\r\n\r\n    Class.extend(\'Cls\', {\r\n        __package : foo,\r\n        ...\r\n    });\r\n\r\n    var c = new foo.Cls();\r\n</pre>\r\n\r\n<pre>\r\n    var com = {\r\n        eduardocuomo = {\r\n            examples = { }\r\n        }\r\n    };\r\n\r\n    Class.extend(\'Test\', {\r\n        __package : com.eduardocuomo.examples,\r\n        ...\r\n    });\r\n\r\n    var t = new com.eduardocuomo.examples.Test();\r\n</pre>\r\n\r\n<h3>Packager</h3>\r\n\r\n - *Class.<code>package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*\r\n\r\n<pre>\r\n    // package\r\n    var com = {\r\n        eduardocuomo : {\r\n            demo : { }\r\n        }\r\n    };\r\n\r\n    Class.package(com.eduardocuomo.demo, function () {\r\n\r\n        Class.extend(\'Foo\');\r\n\r\n    });\r\n\r\n    com.eduardocuomo.demo.Foo.package(function () {\r\n\r\n        Class(\'Bar\');\r\n\r\n    });\r\n\r\n    Class.package(com.eduardocuomo.demo, function ($) {\r\n\r\n        var f = new $.Foo(),\r\n            b = new this.Bar();\r\n\r\n    });\r\n</pre>\r\n\r\n<h3>Exception</h3>\r\n\r\n- *Class.<code>Exception</code>(<code>message</code>, <code>innerException</code>)*\r\n\r\n<pre>\r\n    Class.Exception.extend(\'FooException\');\r\n\r\n    // Anonymous Exception\r\n    var BarException = FooException.extend();\r\n\r\n    // New Exception\r\n    Class.Exception.extend(\'TestException\', {\r\n        \'protected _data\' : undefined,\r\n        \'property data\' : { get : function () { return this._data; } },\r\n        __constructor : function (message, data, innerException) {\r\n            this.__super(message, innerException);\r\n            this._data = data;\r\n        }\r\n    });\r\n\r\n    // Result\r\n    var result = true;\r\n\r\n    // Test\r\n\r\n    try {\r\n        try {\r\n            throw new FooException();\r\n        } catch (e1) {\r\n            e1.data = \'NO SET\';\r\n            e1.message = \'NO SET\';\r\n\r\n            // Should all be true\r\n            result = result && (e1 instanceof Class.Exception) && (e1 instanceof FooException) &&\r\n                (e1.message === undefined);\r\n\r\n            throw new BarException(\'Bar Message\', e1);\r\n        }\r\n    } catch (e2) {\r\n        // Should all be true\r\n        result = result && (e2 instanceof Class.Exception) && (e2 instanceof FooException) && (e2 instanceof BarException) &&\r\n            !!e2.innerException && (e2.innerException instanceof FooException) && !(e2.innerException instanceof BarException) &&\r\n            (e2.message === \'Bar Message\') && !e2.hasVar(\'data\');\r\n    }\r\n\r\n    try {\r\n        throw new TestException(\'Test Message\', { v1 : true, v2 : \'Test\' });\r\n    } catch (e3) {\r\n        // Should all be true\r\n        result = result && (e3 instanceof Class.Exception) && !(e3 instanceof FooException) && !(e3 instanceof BarException) &&\r\n            e3.data && (e3.message === \'Test Message\') && (e3.data.v1 === true) && (e3.data.v2 === \'Test\');\r\n    }\r\n\r\n    // Should all be true\r\n    result\r\n</pre>\r\n\r\n<h3>Use Class as Function</h3>\r\n\r\n - *<code>object</code> classInstance.<code>__function</code>*\r\n\r\n<pre>\r\n    Class(\'Test\', {\r\n        __function : function (v) {\r\n            return \'[[\' + v + \'|\' + v + \']]\';\r\n        }\r\n    });\r\n\r\n    // Should all be true\r\n    Test(123) === \'[[123|123]]\'\r\n</pre>',
+137 silly publish   readmeFilename: 'README.md',
+137 silly publish   bugs: { url: 'https://github.com/reduardo7/sjsClass/issues' },
+137 silly publish   _id: 'sjsclass@1.0.0',
+137 silly publish   dist: { shasum: '86ad178d00866edd1e9d1456bf4193980583b8ee' },
+137 silly publish   _from: '.' }
+138 verbose url raw sjsclass
+139 verbose url resolving [ 'https://registry.npmjs.org/', './sjsclass' ]
+140 verbose url resolved https://registry.npmjs.org/sjsclass
+141 info trying registry request attempt 1 at 23:09:38
+142 http PUT https://registry.npmjs.org/sjsclass
+143 http 409 https://registry.npmjs.org/sjsclass
+144 verbose url raw sjsclass
+145 verbose url resolving [ 'https://registry.npmjs.org/', './sjsclass' ]
+146 verbose url resolved https://registry.npmjs.org/sjsclass
+147 info trying registry request attempt 1 at 23:09:40
+148 http GET https://registry.npmjs.org/sjsclass
+149 http 200 https://registry.npmjs.org/sjsclass
+150 error publish fail Cannot publish over existing version.
+150 error publish fail Update the 'version' field in package.json and try again.
+150 error publish fail
+150 error publish fail If the previous version was published in error, see:
+150 error publish fail     npm help unpublish
+150 error publish fail
+150 error publish fail To automatically increment version numbers, see:
+150 error publish fail     npm help version
+151 error System Windows_NT 6.1.7601
+152 error command "c:\\Program Files\\nodejs\\node.exe" "c:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+153 error cwd d:\Proyectos\sjsClass\sjsClass
+154 error node -v v0.10.25
+155 error npm -v 1.3.24
+156 error code EPUBLISHCONFLICT
+157 verbose exit [ 1, true ]
