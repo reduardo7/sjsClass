@@ -13,8 +13,8 @@
 	},
 	"license": "MIT",
 	"keywords": [
-		"class", "instance", "inheritance",
-		"framework", "java", "c#", "lib",
+		"class", "inheritance", "Class", "Constructor", "prototype", "class inheritance", "instance", "sjs-class", "sjsclass",
+		"simple", "framework", "java", "c#", "lib",
 		"constants", "extend", "protected", "private", "public", "static", "fluent", "interface", "property", "super",
 		"web", "simple", "app", "api", "exception", "throw", "throws"
 	],
