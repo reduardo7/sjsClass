@@ -1,7 +1,7 @@
 {
 	"name": "sjsclass",
 	"description": "Simple JavaScript Class",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"homepage": "https://github.com/reduardo7/sjsClass",
 	"author": {
 		"name": "Eduardo Daniel Cuomo",
@@ -13,8 +13,8 @@
 	},
 	"license": "MIT",
 	"keywords": [
-		"class", "instance", "inheritance",
-		"framework", "java", "c#", "lib",
+		"class", "inheritance", "Class", "Constructor", "prototype", "class inheritance", "instance", "sjs-class", "sjsclass",
+		"simple", "framework", "java", "c#", "lib",
 		"constants", "extend", "protected", "private", "public", "static", "fluent", "interface", "property", "super",
 		"web", "simple", "app", "api", "exception", "throw", "throws"
 	],
