@@ -19,22 +19,22 @@ var com = {
 	eduardocuomo : { }
 };
 
-Class.extend('T1', {
+Class.extend('TestPackage1', {
 	__package : com
 });
 
-com.T1.extend('T2');
+com.TestPackage1.extend('TestPackage2');
 
-com.T2.extend('T3', {
+com.TestPackage2.extend('TestPackage3', {
 	__package : com.eduardocuomo
 });
 
-var t = new com.T1(),
-	t2 = new com.T2(),
-	t3 = new com.eduardocuomo.T3();
+var testPackage1 = new com.TestPackage1(),
+	testPackage2 = new com.TestPackage2(),
+	testPackage3 = new com.eduardocuomo.TestPackage3();
 
 // Should all be true
-(this.T1 === undefined) && (this.T2 === undefined) && (this.T3 === undefined) &&
-	(com.eduardocuomo.T1 === undefined) && (com.eduardocuomo.T2 === undefined) && (com.T3 === undefined) &&
-	(t instanceof Class) && (t2 instanceof com.T1) &&
-	(t3 instanceof com.T2) && (t3 instanceof com.eduardocuomo.T3);
+(this.TestPackage1 === undefined) && (this.TestPackage2 === undefined) && (this.TestPackage3 === undefined) &&
+	(com.eduardocuomo.TestPackage1 === undefined) && (com.eduardocuomo.TestPackage2 === undefined) && (com.TestPackage3 === undefined) &&
+	(testPackage1 instanceof Class) && (testPackage2 instanceof com.TestPackage1) &&
+	(testPackage3 instanceof com.TestPackage2) && (TestPackage3 instanceof com.eduardocuomo.TestPackage3);

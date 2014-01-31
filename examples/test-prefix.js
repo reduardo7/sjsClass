@@ -14,21 +14,21 @@
 
 'use strict';
 
-Class.extend('Test', {
+Class.extend('TestPrefix', {
 	__prefix: 'Tst'
 });
 
-TstTest.extend('T2');
+TestPrefix.extend('TestPrefixT2');
 
-TstT2.extend('T3', {
+TestPrefixT2.extend('TestPrefixT3', {
 	__prefix: null
 });
 
-var t = new TstTest(),
-	t2 = new TstT2(),
-	t3 = new T3();
+var testPrefix = new TestPrefix(),
+	testPrefixT2 = new TestPrefixT2(),
+	testPrefixT3 = new TestPrefixT3();
 
 // Should all be true
-(this.Test === undefined) && (this.T2 === undefined) && (this.TstT3 === undefined) &&
-	(t instanceof Class) && (t2 instanceof TstTest) &&
-	(t3 instanceof TstT2) && (t3 instanceof TstTest);
+(this.TestPrefix === undefined) && (this.TestPrefixT2 === undefined) && (this.TstT3 === undefined) &&
+	(testPrefix instanceof Class) && (testPrefixT2 instanceof TestPrefix) &&
+	(testPrefixT3 instanceof TestPrefixT2) && (testPrefixT3 instanceof TestPrefix);

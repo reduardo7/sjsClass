@@ -173,8 +173,8 @@ Using <code>Class</code> function:
 
 <h3>Check if has value or method</h3>
 
- - *<code>boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
- - *<code>boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
+ - *<code>Boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
+ - *<code>Boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
 ```js
     Person.extend('Ninja', {
         methodName: function() {
@@ -189,8 +189,8 @@ Using <code>Class</code> function:
 
 <h3>Get Class name</h3>
 
- - *<code>string</code> classInstance.<code>getClassName</code>()*
- - *<code>string</code> Class.<code>getClassName</code>()*
+ - *<code>String</code> classInstance.<code>getClassName</code>()*
+ - *<code>String</code> Class.<code>getClassName</code>()*
 ```js
     Person.extend('Ninja', {
         ...
@@ -222,7 +222,7 @@ Using <code>Class</code> function:
 
 <h3>Hash Code</h3>
 
- - *<code>string</code> classInstance.<code>hashCode</code>()*
+ - *<code>String</code> classInstance.<code>hashCode</code>()*
 ```js
     var p1 = new Person(false);
     console.log(p1.hashCode()); // -> Get instence Hash Code
@@ -230,7 +230,7 @@ Using <code>Class</code> function:
 
 <h3>equals</h3>
 
- - *<code>boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
+ - *<code>Boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
 
 Check's instances Hash Codes and Class Names.
 ```js
@@ -241,7 +241,7 @@ Check's instances Hash Codes and Class Names.
 
 <h3>To string</h3>
 
- - *<code>string</code> classInstance.<code>toString</code>()*
+ - *<code>String</code> classInstance.<code>toString</code>()*
 ```js
     var p1 = new Person(false);
     console.log(p1.toString()); // -> String representation
@@ -263,7 +263,7 @@ Check's instances Hash Codes and Class Names.
 
 <h3>Check if Class exists</h3>
 
- - *<code>boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
+ - *<code>Boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
 ```js
     Class.extend('Ninja', {
         ...
@@ -348,9 +348,9 @@ Check's instances Hash Codes and Class Names.
 
 <h3>Properties</h3>
 
- - *<code>object</code> <code>__properties</code>*
- - *<code>object</code> <code>property</code>*
- - *<code>object</code> <code>prop</code>*
+ - *<code>Object</code> <code>__properties</code>*
+ - *<code>Object</code> <code>property</code>*
+ - *<code>Object</code> <code>prop</code>*
 
 Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
 ```js
@@ -382,7 +382,7 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
 
 <h3>Fluent Interface</h3>
 
- - *<code>boolean</code> <code>__fluent</code>*
+ - *<code>Boolean</code> <code>__fluent</code>*
 
 If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <code>undefined</code>, <code>this</code> instance will return.
 ```js
@@ -408,7 +408,7 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
 
 <h3>Class ID</h3>
 
- - *<code>string</code> classInstance.<code>__instanceId</code>()*
+ - *<code>String</code> classInstance.<code>__instanceId</code>()*
 
 Get Instance ID.
 ```js
@@ -423,7 +423,7 @@ Get Instance ID.
 
 <h3>Instance ID</h3>
 
- - *<code>string</code> classInstance.<code>__instanceId</code>()*
+ - *<code>String</code> classInstance.<code>__instanceId</code>()*
 
 Get Instance ID.
 ```js
@@ -442,7 +442,7 @@ Get Instance ID.
 
 <h3>Instances Count</h3>
 
- - *<code>string</code> ClassName.<code>__instanceCount</code>()*
+ - *<code>String</code> ClassName.<code>__instanceCount</code>()*
 
 Get created objects count.
 ```js
@@ -461,7 +461,7 @@ Get created objects count.
 
 <h3>package</h3>
 
- - *<code>object</code> classInstance.<code>__package</code>*
+ - *<code>Object</code> classInstance.<code>__package</code>*
 
 ```js
     var foo = { };
@@ -580,7 +580,7 @@ Get created objects count.
 
 <h3>Use Class as Function</h3>
 
- - *<code>object</code> classInstance.<code>__function</code>*
+ - *<code>Object</code> classInstance.<code>__function</code>*
 
 ```js
     Class('Test', {
@@ -591,4 +591,20 @@ Get created objects count.
 
     // Should all be true
     Test(123) === '[[123|123]]'
+```
+
+<h3>Prevent Override</h3>
+
+ - *<code>Boolean</code> classInstance.<code>__preventOverride</code>*
+
+```js
+    Class('Test');
+
+    // Override Test Class
+    Class('Test', {
+        __preventOverride : true
+    });
+
+    // Error, can't override!
+    Class('Test', { ... });
 ```
