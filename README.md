@@ -608,3 +608,24 @@ Get created objects count.
     // Error, can't override!
     Class('Test', { ... });
 ```
+
+<h3>Dynamic Property</h3>
+
+ - *<code>classInstance</code> classInstance.<code>defineProperty</code>(<code>String PropertyName</code>, <code>object PropertyDefinition</code>)*
+
+About JavaScript Property: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+
+```js
+    Class.extend('DynProp', {
+        __constructor: function (pname, pvalue) {
+            this.defineProperty(pname, {
+                value: pvalue
+            });
+        }
+    });
+
+    var dyn = new DynProp('testProp', 'testValue');
+
+    // Should all be true
+    (dyn.testProp === 'testValue')
+```

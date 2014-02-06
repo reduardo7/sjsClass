@@ -1,7 +1,12 @@
+1.2.0 / 2014-02-06
+==================
+
+  * Define instance properties (defineProperty method).
+
 1.1.0 / 2014-01-30
 ==================
 
-  * Code with "JSLint".
+  * JSLint Code.
   * Added "__preventOverride" property, to prevent override an extended Class.
   * Added test to check recursive methods.
   * Added HISTORY.md
