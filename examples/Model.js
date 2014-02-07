@@ -72,14 +72,16 @@ Class.extend('Model', {
   __constructor: function (values) {
     var col;
     for (col in this.__static.columns) {
-      if (values) {
-        // Initial value
-        this._values = values[col];
+      if (this.__static.columns.hasOwnProperty(col)) {
+        if (values) {
+          // Initial value
+          this._values = values[col];
+        }
+        this.defineProperty(col, {
+          get: function () { return this._values[col]; },
+          set: function (value) { this._values[col] = value; }
+        });
       }
-      this.defineProperty(col, {
-        get: function () { return this._values[col]; },
-        set: function (value) { this._values[col] = value; }
-      });
     }
   },
 
@@ -99,6 +101,22 @@ Class.extend('Model', {
     this.defineProperty('table', {
       get: function () { return table; }
     });
+  },
+
+  equals: function(o) {
+    if (o instanceof this.constructor) {
+      var i;
+      for (i in this._values) {
+        if (this._values.hasOwnProperty(i) && (!o.hasOwnProperty(i) || (this._values[i] !== o[i]))) {
+            // Not equals
+            return false;
+          }
+      }
+      // All equal!
+      return true;
+    }
+    // Not equals
+    return false;
   },
 
   save: function () {
