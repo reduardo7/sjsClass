@@ -61,7 +61,7 @@
     __package: context,
     __fluent: true,
 
-    query: null,
+    'protected query': null,
 
     __function: function (q) {
       // Static call
@@ -76,6 +76,7 @@
         if (this.query.SELECT instanceof Array) {
           var s = this.query.SELECT;
           this.query.SELECT = {};
+
           for (i in s) {
             if (s.hasOwnProperty(i)) {
               this.SELECT(i, s[i]);
@@ -124,10 +125,12 @@
       if (!this.query.SELECT) {
         this.query.SELECT = {};
       }
+
       if (fld === undefined) {
         fld = alias_q;
         alias_q = Object.keys(this.query.SELECT).length + 1;
       }
+
       if (alias_q === 'DISTINCT') {
         this.query.SELECT.DISTINCT = true;
       } else {
@@ -181,6 +184,7 @@
       } else {
         this.query.GROUP = [];
       }
+
       if (x instanceof Array) {
         var j;
         for (j in x) {
@@ -233,6 +237,7 @@
       } else {
         this.query.ORDER = {};
       }
+
       this.query.ORDER[fld] = o || 'ASC';
     },
 
@@ -248,6 +253,7 @@
       if (isNaN(l) || ((o !== undefined) && isNaN(o))) {
         throw 'Invalid limit!';
       }
+
       this.query.LIMIT = { LIMIT: parseInt(l), OFFSET: parseInt(o) || 0 };
     },
 
@@ -480,12 +486,15 @@
         for (i in this.query.SELECT) {
           if (this.query.SELECT.hasOwnProperty(i) && (i.toUpperCase() !== 'DISTINCT')) {
             v = this.query.SELECT[i];
+
             if (f) {
               sql += ',';
             } else {
               f = true;
             }
+
             sql += format ? '\n\t' : ' ';
+
             if (i === parseInt(i).toString()) {
               // Numeric index
               sql += v;
@@ -505,6 +514,7 @@
               if (this.query.FROM.hasOwnProperty(alias)) {
                 frmDef = this.query.FROM[alias];
                 sql += format ? '\n\t' : ' ';
+
                 if (f) {
                   if (typeof frmDef === 'string') {
                     // NATURAL JOIN
@@ -518,18 +528,22 @@
                       if (frmDef[0] instanceof JSQL) {
                         frmDef[0] = '(' + frmDef[0] + ')';
                       }
+
                       if (!(frmDef[1][0] instanceof Array)) {
                         frmDef[1] = [ frmDef[1] ];
                       }
+
                       sql += 'INNER JOIN ' + frmDef[0] + ' AS ' + alias + ' ON ' + wts(frmDef[1], 1);
                     } else if (frmDef.length === 2) {
                       // X JOIN
                       if (!(frmDef[2][0] instanceof Array)) {
                         frmDef[2] = [ frmDef[2] ];
                       }
+
                       if (frmDef[1] instanceof JSQL) {
                         frmDef[1] = '(' + frmDef[1] + ')';
                       }
+
                       sql += frmDef[0] + ' JOIN ' + frmDef[1] + ' AS ' + alias + ' ON ' + wts(frmDef[2], 1);
                     } else {
                       // Invalid FROM definition
@@ -541,6 +555,7 @@
                   if (frmDef instanceof JSQL) {
                     frmDef = '(' + frmDef + ')';
                   }
+
                   sql += frmDef + ' AS ' + alias;
                   f = true;
                 }
@@ -556,6 +571,7 @@
         if (this.query.GROUP) {
           sql += format ? '\nGROUP BY' : ' GROUP BY';
           var f = false, grpBy;
+
           for (grpBy in this.query.GROUP) {
             if (this.query.GROUP.hasOwnProperty(grpBy)) {
               if (f) {
@@ -563,6 +579,7 @@
               } else {
                 f = true;
               }
+
               sql += (format ? '\n\t' : ' ') + this.query.GROUP[grpBy];
             }
           }
@@ -575,6 +592,7 @@
         if (this.query.ORDER) {
           sql += format ? '\nORDER BY' : ' ORDER BY';
           var f = false, ordBy;
+
           for (ordBy in this.query.ORDER) {
             if (this.query.ORDER.hasOwnProperty(ordBy)) {
               if (f) {
@@ -582,6 +600,7 @@
               } else {
                 f = true;
               }
+
               sql += (format ? '\n\t' : ' ') + ordBy + ' ' + this.query.ORDER[ordBy].toUpperCase();
             }
           }
@@ -618,6 +637,7 @@
           if ((this.query.COLUMNS instanceof Array) && (this.query.COLUMNS.length > 0)) {
             // Columns
             sql += ' (';
+
             for (c in this.query.COLUMNS) {
               if (this.query.COLUMNS.hasOwnProperty(c)) {
                 if (f) {
@@ -625,9 +645,11 @@
                 } else {
                   f = true;
                 }
+
                 sql += this.query.COLUMNS[c];
               }
             }
+
             sql += ')';
           } else if (this.query.COLUMN) {
             // Column
@@ -640,6 +662,7 @@
             // Values
             f = false;
             sql += format ? '\nVALUES\n\t(' : ' VALUES (';
+
             if (this.query.VALUES[0] instanceof Array) {
               // First item is an Array -> Multi-insert
               for (c in this.query.VALUES) {
@@ -663,15 +686,18 @@
               // Single-insert
               sql += this.query.VALUES.join(', ');
             }
+
             sql += ')';
           } else if (this.query.VALUE) {
             // VALUE
             sql += format ? '\nVALUES' : ' VALUES';
+
             if (this.query.VALUE instanceof Array) {
               sql += (format ? '\n\t(' : ' (') + this.query.VALUE.join(format ? '),\n\t(' : '), (');
             } else {
               sql += ' (' + this.query.VALUE;
             }
+
             sql += ')';
           }
         } else if (this.query.REPLACE) {
@@ -698,6 +724,7 @@
            ****************/
           // http://www.sqlite.org/lang_delete.html
           sql = 'DELETE FROM ' + this.query.DELETE;
+
           if (this.query.WHERE) {
             sql += (format ? '\nWHERE\n\t' : ' WHERE ') + wts(this.query.WHERE);
           }
@@ -709,16 +736,21 @@
            **********************/
           // http://www.sqlite.org/lang_createtable.html
           sql = 'CREATE';
+
           if (this.query.TEMP || this.query.TEMPORARY) {
             sql += ' TEMPORARY';
           }
+
           sql += ' TABLE';
+
           if (this.query.CHECK) {
             sql += ' IF NOT EXISTS';
           }
+
           sql += ' ' + this.query.CREATE + ' (';
           _modTable.call(this);
           sql += format ? '\n)' : ' )';
+
           if (this.query.ROWID === false) { // Not use ROWID, use defined "PRIMARY KEY" column.
             sql += ' WITHOUT ROWID';
           }
@@ -730,6 +762,7 @@
            *********************/
           // http://www.sqlite.org/lang_altertable.html
           sql = 'ALTER TABLE ' + this.query.ALTER;
+
           if (this.query.ADD) { // Column Name. Use 'COLUMN' for definition
             var c = this.query.COLUMN;
             this.query.COLUMN = {};
@@ -737,6 +770,7 @@
             sql += ' ADD COLUMN';
             _modTable.call(this);
           }
+
           if (this.query.RENAME) { // New table name
             sql += ' RENAME TO ' + this.query.RENAME;
           }
@@ -748,9 +782,11 @@
            ********************/
           // http://www.sqlite.org/lang_droptable.html
           sql = 'DROP TABLE';
+
           if (this.query.CHECK) {
             sql += ' IF EXISTS';
           }
+
           sql += ' ' + this.query.DROP;
         } else if (this.query.TRUNCATE) {
           /************************
@@ -770,8 +806,6 @@
   });
 
 })(window);
-
-
 
 // SELECT Syntax
 // JSQL({
@@ -816,53 +850,53 @@
 // });
 
 // SELECT Example
-var q = JSQL({
-  SELECT: {
-    DISTINCT: true,
-    foo: 'T1.fld1',
-    bar: 'COUNT(T2.fld2)'
-  },
-  FROM: {
-    T1: 'table1',
-    T2: ['table2', ['T1.id', 'T2.xid']],
-    T3: ['table3', [['T2.id', 'T3.xid']]]
-  },
-  WHERE: [
-    'asd = dsa',
-    ['aa', 'bb'],
-    ['cc', '<>', 'ee'],
-    {OR: [
-      ['oa1', 'oa2'],
-      ['oa3', '<>', 'oa4'],
-      {NOT: {IN: JSQL({
-        SELECT: '*',
-        FROM: 'JoinTable',
-        WHERE: {OR: [
-          'WhereX = WhereY',
-          ['aaaa', 'vvvvv']
-          ]}
-      })}},
-      {AND: [
-          'aaaaa',
-          'bbbbbbb',
-          {IN: [1, 2, 3, 4]}
-        ]}
-      ]},
-      {NOT: [
-        'asdsadasdasdasd = 1',
-        ['asdasd', '22222']
-        ]}
-  ],
-  GROUP: ['a1', 'a2'],
-  ORDER: {
-    'a1': 'asc',
-    'b2': 'desc'
-  },
-  LIMIT: 50
-});
-q.SELECT('xx1')
-  .SELECT('aa1', 'xx2');
-q.toString(true)
+// var q = JSQL({
+//   SELECT: {
+//     DISTINCT: true,
+//     foo: 'T1.fld1',
+//     bar: 'COUNT(T2.fld2)'
+//   },
+//   FROM: {
+//     T1: 'table1',
+//     T2: ['table2', ['T1.id', 'T2.xid']],
+//     T3: ['table3', [['T2.id', 'T3.xid']]]
+//   },
+//   WHERE: [
+//     'asd = dsa',
+//     ['aa', 'bb'],
+//     ['cc', '<>', 'ee'],
+//     {OR: [
+//       ['oa1', 'oa2'],
+//       ['oa3', '<>', 'oa4'],
+//       {NOT: {IN: JSQL({
+//         SELECT: '*',
+//         FROM: 'JoinTable',
+//         WHERE: {OR: [
+//           'WhereX = WhereY',
+//           ['aaaa', 'vvvvv']
+//           ]}
+//       })}},
+//       {AND: [
+//           'aaaaa',
+//           'bbbbbbb',
+//           {IN: [1, 2, 3, 4]}
+//         ]}
+//       ]},
+//       {NOT: [
+//         'asdsadasdasdasd = 1',
+//         ['asdasd', '22222']
+//         ]}
+//   ],
+//   GROUP: ['a1', 'a2'],
+//   ORDER: {
+//     'a1': 'asc',
+//     'b2': 'desc'
+//   },
+//   LIMIT: 50
+// });
+// q.SELECT('xx1')
+//   .SELECT('aa1', 'xx2');
+// q.toString(true)
 
 
 
