@@ -8,8 +8,6 @@
  *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
- *
- * Thanks : http://ejohn.org/blog/simple-javascript-inheritance/
  */
 require('../lib/sjsclass.js').registerGlobal();
 
