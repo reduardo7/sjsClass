@@ -4,6 +4,8 @@
  *
  * By: Edueado Daniel Cuomo.
  *
+ * Example: SQLite Adapter for HTML5.
+ *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
@@ -91,37 +93,34 @@
       // CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, edad TEXT)
       this._db.transaction(function (db) {
         // Build
-        var x, c, d, t,
+        var c, d, t,
           sql = 'CREATE TABLE IF NOT EXISTS ' + table + ' (',
           f = true;
 
         for (c in definition) {
-          if (f) {
-            f = false;
-          } else {
-            sql += ',';
-          }
-          sql += ' ' + c;
+          if (definition.hasOwnProperty(c)) {
+            if (f) {
+              f = false;
+            } else {
+              sql += ',';
+            }
+            sql += ' ' + c;
 
-          d = definition[c];
-          if (typeof d === 'string') {
-            t = d.toUpperCase();
-            d = { };
-          } else if (d) {
-            t = (d.type || '').toUpperCase();
-          } else {
-            d = { };
-          }
+            d = definition[c];
+            if (typeof d === 'string') {
+              t = d.toUpperCase();
+              d = { };
+            } else if (d) {
+              t = (d.type || '').toUpperCase();
+            } else {
+              d = { };
+            }
 
-          if (t === 'KEY') {
-            sql += ' INTEGER PRIMARY KEY AUTOINCREMENT';
-          } else {
-            // type
-            switch (t) {
-              default:
-              case 'TEXT':
-                sql += ' TEXT';
-                break;
+            if (t === 'KEY') {
+              sql += ' INTEGER PRIMARY KEY AUTOINCREMENT';
+            } else {
+              // type
+              switch (t) {
               case 'INTEGER':
               case 'INT':
                 sql += ' INTEGER';
@@ -135,16 +134,24 @@
               case 'LONGTEXT':
                 sql += ' BLOB';
                 break;
+              //case 'TEXT':
+              default:
+                sql += ' TEXT';
+                break;
+              }
+              // primary
+              if (d.primary) {
+                sql += ' PRIMARY KEY';
+              }
+              // autoincrement
+              if (d.autoincrement) {
+                sql += ' AUTOINCREMENT';
+              }
+              // isNull
+              if (d.isNull) {
+                sql += ' NULL';
+              }
             }
-            // primary
-            if (d.primary)
-              sql += ' PRIMARY KEY';
-            // autoincrement
-            if (d.autoincrement)
-              sql += ' AUTOINCREMENT';
-            // isNull
-            if (d.isNull)
-              sql += ' NULL';
           }
         }
 
@@ -185,7 +192,7 @@
      *            0: Results.
      *            1: Transaction.
      *        Example:
-     *            function(results, tx) {
+     *            function (results, tx) {
      *                var len = results.rows.length, i;
      *                for (i = 0; i < len; i++) {
      *                    alert(results.rows.item(i).text);
@@ -203,7 +210,7 @@
       var t = this;
 
       this._db.transaction(function (db) {
-        db.executeSql(sql, params, function(tx, results) {
+        db.executeSql(sql, params, function (tx, results) {
           fnResult.call(t, results, tx);
         });
       });
@@ -223,13 +230,16 @@
      *            0: Row data.
      *            1: Index.
      *            2: Rows count.
+     *            3: DB Transaction.
      *        Example:
-     *            function(row, index, count) {
+     *            function (row, index, count) {
      *                alert('Row:' + index + ' of ' + count + '. Name: ' + row.name);
      *            }
      * @param {Function} fnEmpty Callback if query has not results.
+     *        Params:
+     *            0: DB Transaction.
      *        Example:
-     *            function() {
+     *            function () {
      *                alert('No data!');
      *            }
      */
@@ -245,16 +255,16 @@
       var t = this;
 
       this._db.transaction(function (db) {
-        db.executeSql(sql, params, function(tx, results) {
+        db.executeSql(sql, params, function (tx, results) {
           var len = results.rows.length, i;
 
           if (len > 0) {
             for (i = 0; i < len; i++) {
-              fnResult.call(t, results.rows.item(i), i, len);
+              fnResult.call(t, results.rows.item(i), i, len, tx);
             }
           } else {
             if (fnEmpty) {
-              fnEmpty.apply(t);
+              fnEmpty.call(t, tx);
             }
           }
         });
@@ -273,7 +283,7 @@
      *            0: Results.
      *            1: Transaction.
      *        Example:
-     *            function(results, tx) {
+     *            function (results, tx) {
      *                alert('Finish!');
      *            }
      */
@@ -293,7 +303,7 @@
      *            0: Results.
      *            1: Transaction.
      *        Example:
-     *            function(results, tx) {
+     *            function (results, tx) {
      *                alert('Finish!');
      *            }
      */
@@ -321,6 +331,7 @@
      * @param {Function} fnResult Function to execute.
      *        Params:
      *            0: TRUE if TABLE exists.
+     *            1: DB Transaction.
      *        Example:
      *            function (exists) { alert(exists ? 'EXISTS!' : 'NOT EXISTS!'); }
      */
@@ -330,14 +341,14 @@
         db.executeSql(
           "SELECT name FROM sqlite_master WHERE type='table' AND name=?;",
           [ tableName ],
-          function(tx, results) {
-            fnResult.call(t, results.rows.length > 0);
+          function (tx, results) {
+            fnResult.call(t, results.rows.length > 0, tx);
           }
         );
       });
     }
   });
-})(window);
+}(window));
 
 // var db = new SQLiteBrowser();
 

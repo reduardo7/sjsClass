@@ -4,6 +4,8 @@
  *
  * By: Edueado Daniel Cuomo.
  *
+ * Example: Simple Database Model mapping using SQLite for HTML5.
+ *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
@@ -42,7 +44,7 @@ Class.extend('Model', {
     },
 
     delete: function (keyValue, fnEnd) {
-      this.deleteBy(this.keyField, value, fnEnd);
+      this.deleteBy(this.keyField, keyValue, fnEnd);
     },
 
     findWhere: function (where, values, fnResult, fnEmpty) {
@@ -70,8 +72,8 @@ Class.extend('Model', {
         WHERE: [[ this.keyField, '?' ]],
         LIMIT: 1
       }), keyValue, function (row, index, count) {
-        if (fnResult) {
-          fnResult.call($this, new $this.newInstance(row), index, count);
+        if (fnFound) {
+          fnFound.call($this, new $this.newInstance(row), index, count);
         }
       }, fnNotFound);
     }
@@ -95,7 +97,7 @@ Class.extend('Model', {
       }
     },
 
-    _getDataForQuery:function (withKey) {
+    _getDataForQuery: function (withKey) {
       var k, o = {};
       for (k in this._values) {
         if (this._values.hasOwnProperty(k) && (!withKey || (k !== this.__super.keyField))) {
@@ -167,15 +169,15 @@ Class.extend('Model', {
     }
   },
 
-  equals: function(o) {
+  equals: function (o) {
     if (o instanceof this.constructor) {
       var i;
 
       for (i in this._values) {
         if (this._values.hasOwnProperty(i) && (!o.hasOwnProperty(i) || (this._values[i] !== o[i]))) {
-            // Not equals
-            return false;
-          }
+          // Not equals
+          return false;
+        }
       }
 
       // All equal!

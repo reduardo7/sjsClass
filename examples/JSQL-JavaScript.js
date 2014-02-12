@@ -4,6 +4,8 @@
  *
  * By: Edueado Daniel Cuomo.
  *
+ * Example: SQLite Query Builder WITHOUT sjsClass.
+ *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */

@@ -4,6 +4,8 @@
  *
  * By: Edueado Daniel Cuomo.
  *
+ * Example: SQLite Query Builder.
+ *
  * Project: https://github.com/reduardo7/sjsClass
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
@@ -203,7 +205,7 @@
           }
         }
       } else {
-        x = x + '';
+        x += '';
         if (this.query.GROUP.indexOf(x) === -1) {
           this.query.GROUP.push(x);
         }
@@ -261,10 +263,13 @@
      **************************/
     LIMIT: function (l, o) {
       if (isNaN(l) || ((o !== undefined) && isNaN(o))) {
-        throw 'Invalid limit!';
+        throw new JSQL.Exception('Invalid limit!');
       }
 
-      this.query.LIMIT = { LIMIT: parseInt(l), OFFSET: parseInt(o) || 0 };
+      this.query.LIMIT = {
+        LIMIT: parseInt(l, 10),
+        OFFSET: o ? parseInt(o, 10) : 0
+      };
     },
 
     /***********************
@@ -291,136 +296,148 @@
 
         if (typeof w === 'string') {
           return w;
-        } else {
-          if (!u) {
-            u = 'AND';
+        }
+
+        if (!u) {
+          u = 'AND';
+        }
+
+        var tb = new Array(tabCount + 1 ).join('\t'),
+          f = false,
+          whr,
+          whrK;
+
+        function whr_X(op, whr) {
+          sql += '(' + (format ? ('\n' + tb + '\t') : ' ') + wts(whr, tabCount, op) + (format ? ('\n' + tb) : ' ') + ')';
+        }
+
+        function whr_AND(whr) {
+          whr_X('AND', whr);
+        }
+
+        function whr_OR(whr) {
+          whr_X('OR', whr);
+        }
+
+        function whr_IN(whr) {
+          sql += 'IN (';
+          if (whr instanceof Array) {
+            sql += whr.join(', ');
+          } else {
+            sql += whr;
           }
+          sql += ')';
+        }
 
-          var tb = new Array(tabCount + 1 ).join('\t'),
-            f = false, whr, whrK, sql = '';
-
-          function whr_X(op, whr) {
-            sql += '(' + (format ? ('\n' + tb + '\t') : ' ') + wts(whr, tabCount, op) + (format ? ('\n' + tb) : ' ') + ')';
+        function whr_NOT(whr) {
+          sql += 'NOT ' + ((whr.IN || whr.BETWEEN) ? '' : ('(' + (format ? ('\n' + tb + '\t') : ' ')));
+          sql += wts(whr, tabCount);
+          if (!whr.IN && !whr.BETWEEN) {
+            sql += (format ? ('\n' + tb) : ' ') + ')';
           }
+        }
 
-          function whr_AND(whr) {
-            whr_X('AND', whr);
-          }
+        function whr_BETWEEN(whr) {
+          sql += 'BETWEEN ' + whr[0] + ' AND ' + whr[1];
+        }
 
-          function whr_OR(whr) {
-            whr_X('OR', whr);
-          }
+        for (whrK in w) {
+          if (w.hasOwnProperty(whrK)) {
+            whr = w[whrK];
 
-          function whr_IN(whr) {
-            sql += 'IN (';
-            if (whr instanceof Array) {
-              sql += whr.join(', ');
+            if (f) {
+              sql += (format ? ('\n' + tb) : ' ') + u + ' ';
             } else {
+              f = true;
+            }
+
+            if (!whr) {
+              throw new JSQL.Exception('Invalid WHERE!');
+            }
+
+            if (typeof whr === 'string') {
+              sql += whr;
+            } else if (whrK === 'AND') {
+              whr_AND(whr);
+            } else if (whr.AND) {
+              whr_AND(whr.AND);
+            } else if (whrK === 'OR') {
+              whr_OR(whr);
+            } else if (whr.OR) {
+              whr_OR(whr.OR);
+            } else if (whrK === 'IN') {
+              whr_IN(whr);
+            } else if (whr.IN) {
+              whr_IN(whr.IN);
+            } else if (whrK === 'NOT') {
+              whr_NOT(whr);
+            } else if (whr.NOT) {
+              whr_NOT(whr.NOT);
+            } else if ((whrK === 'BETWEEN') && (whr instanceof Array) && (whr.length === 2)) {
+              whr_BETWEEN(whr);
+            } else if ((whr.BETWEEN instanceof Array) && (whr.BETWEEN.length === 2)) {
+              whr_BETWEEN(whr.BETWEEN);
+            } else if (whr instanceof Array) {
+              // Array
+              switch (whr.length) {
+              case 3:
+                sql += whr[0] + ' ' + whr[1] + ' ' + whr[2];
+                break;
+              case 2:
+                sql += whr[0] + ' = ' + whr[1];
+                break;
+              default:
+                throw new JSQL.Exception('Invalid WHERE Array size!');
+              }
+            } else if (whr) {
               sql += whr;
             }
-            sql += ')';
           }
-
-          function whr_NOT(whr) {
-            sql += 'NOT ' + ((whr.IN || whr.BETWEEN) ? '' : ('(' + (format ? ('\n' + tb + '\t') : ' ')));
-            sql += wts(whr, tabCount);
-            if (!whr.IN && !whr.BETWEEN) {
-              sql += (format ? ('\n' + tb) : ' ') + ')';
-            }
-          }
-
-          function whr_BETWEEN(whr) {
-            sql += 'BETWEEN ' + whr[0] + ' AND ' + whr[1];
-          }
-
-          for (whrK in w) {
-            if (w.hasOwnProperty(whrK)) {
-              whr = w[whrK];
-
-              if (f) {
-                sql += (format ? ('\n' + tb) : ' ') + u + ' ';
-              } else {
-                f = true;
-              }
-
-              if (!whr) {
-                throw 'Invalid WHERE!';
-              }
-
-              if (typeof whr === 'string') {
-                sql += whr;
-              } else if (whrK === 'AND') {
-                whr_AND(whr);
-              } else if (whr.AND) {
-                whr_AND(whr.AND);
-              } else if (whrK === 'OR') {
-                whr_OR(whr);
-              } else if (whr.OR) {
-                whr_OR(whr.OR);
-              } else if (whrK === 'IN') {
-                whr_IN(whr);
-              } else if (whr.IN) {
-                whr_IN(whr.IN);
-              } else if (whrK === 'NOT') {
-                whr_NOT(whr);
-              } else if (whr.NOT) {
-                whr_NOT(whr.NOT);
-              } else if ((whrK === 'BETWEEN') && (whr instanceof Array) && (whr.length === 2)) {
-                whr_BETWEEN(whr);
-              } else if ((whr.BETWEEN instanceof Array) && (whr.BETWEEN.length === 2)) {
-                whr_BETWEEN(whr.BETWEEN);
-              } else if (whr instanceof Array) {
-                // Array
-                switch (whr.length) {
-                  case 3:
-                    sql += whr[0] + ' ' + whr[1] + ' ' + whr[2];
-                    break;
-                  case 2:
-                    sql += whr[0] + ' = ' + whr[1];
-                    break;
-                  default:
-                    throw 'Invalid WHERE Array size!';
-                    break;
-                }
-              } else if (whr) {
-                sql += whr;
-              }
-            }
-          }
-
-          return sql;
         }
+
+        return sql;
       }
 
       function _update(action) {
-          var f = false, s;
-          sql = action;
+        var f = false, s;
+        sql = action;
 
-          switch (this.query.OR) {
-            case 'ROLLBACK': sql += ' OR ROLLBACK'; break;
-            case 'ABORT': sql += ' OR ABORT'; break;
-            case 'REPLACE': sql += ' OR REPLACE'; break;
-            case 'FAIL': sql += ' OR FAIL'; break;
-            case 'IGNORE': sql += ' OR IGNORE'; break;
-            default: throw 'Invalid "' + action + ' OR" definition!';
-          }
+        switch (this.query.OR) {
+        case 'ROLLBACK':
+          sql += ' OR ROLLBACK';
+          break;
+        case 'ABORT':
+          sql += ' OR ABORT';
+          break;
+        case 'REPLACE':
+          sql += ' OR REPLACE';
+          break;
+        case 'FAIL':
+          sql += ' OR FAIL';
+          break;
+        case 'IGNORE':
+          sql += ' OR IGNORE';
+          break;
+        default:
+          throw new JSQL.Exception('Invalid "' + action + ' OR" definition!');
+        }
 
-          sql += ' ' + this.query[action] + (format ? '\nSET' : ' SET');
+        sql += ' ' + this.query[action] + (format ? '\nSET' : ' SET');
 
-          for (s in this.query.SET) {
-            if (this.query.SET.hasOwnProperty(s)) {
-              if (f) {
-                sql += ',';
-              } else {
-                f = true;
-              }
-              sql += (format ? '\n\t' : ' ') + s + ' = ' + this.query.SET[s];
+        for (s in this.query.SET) {
+          if (this.query.SET.hasOwnProperty(s)) {
+            if (f) {
+              sql += ',';
+            } else {
+              f = true;
             }
+            sql += (format ? '\n\t' : ' ') + s + ' = ' + this.query.SET[s];
           }
+        }
 
-          if (this.query.WHERE) {
-            sql += (format ? '\nWHERE\n\t' : ' WHERE ') + wts(this.query.WHERE);
-          }
+        if (this.query.WHERE) {
+          sql += (format ? '\nWHERE\n\t' : ' WHERE ') + wts(this.query.WHERE);
+        }
       }
 
       function _modTable() {
@@ -455,25 +472,25 @@
               }
             }
             if (cd.notnull || cd.NOTNULL) {
-                sql += ' NOT NULL';
+              sql += ' NOT NULL';
             }
             if ((cd.null === false) || (cd.NULL === false)) {
                 sql += ' NOT NULL';
             }
             if (cd.check || cd.CHECK) { // String
-                sql += ' CHECK (' + (cd.check || cd.CHECK) + ')';
+              sql += ' CHECK (' + (cd.check || cd.CHECK) + ')';
             } else if (cd.enum || cd.ENUM) { // String|Array
-                x = cd.enum || cd.ENUM;
-                if (x instanceof Array) {
-                  x = x.join(', ');
-                }
-                sql += ' CHECK (' + x + ')';
+              x = cd.enum || cd.ENUM;
+              if (x instanceof Array) {
+                x = x.join(', ');
+              }
+              sql += ' CHECK (' + x + ')';
             }
             if (cd.default || cd.DEFAULT) {
-                sql += ' DEFAULT ' + (cd.default || cd.DEFAULT);
+              sql += ' DEFAULT ' + (cd.default || cd.DEFAULT);
             }
             if (cd.collate || cd.COLLATE || cd.collation || cd.COLLATION) {
-                sql += ' COLLATE ' + (cd.collate || cd.COLLATE || cd.collation || cd.COLLATION);
+              sql += ' COLLATE ' + (cd.collate || cd.COLLATE || cd.collation || cd.COLLATION);
             }
           }
         }
@@ -505,7 +522,7 @@
 
             sql += format ? '\n\t' : ' ';
 
-            if (i === parseInt(i).toString()) {
+            if (i === parseInt(i, 10).toString()) {
               // Numeric index
               sql += v;
             } else {
@@ -560,7 +577,7 @@
                       sql += frmDef[0] + ' JOIN ' + frmDef[1] + ' AS ' + alias + ' ON ' + wts(frmDef[2], 1);
                     } else {
                       // Invalid FROM definition
-                      throw 'Invalid FROM definition!';
+                      throw new JSQL.Exception('Invalid FROM definition!');
                     }
                   }
                 } else {
@@ -583,7 +600,8 @@
 
         if (this.query.GROUP) {
           sql += format ? '\nGROUP BY' : ' GROUP BY';
-          var f = false, grpBy;
+          var grpBy;
+          f = false;
 
           for (grpBy in this.query.GROUP) {
             if (this.query.GROUP.hasOwnProperty(grpBy)) {
@@ -638,12 +656,23 @@
           sql = 'INSERT';
 
           switch (this.query.OR) {
-            case 'REPLACE': sql += ' OR REPLACE'; break;
-            case 'ROLLBACK': sql += ' OR ROLLBACK'; break;
-            case 'ABORT': sql += ' OR ABORT'; break;
-            case 'FAIL': sql += ' OR FAIL'; break;
-            case 'IGNORE': sql += ' OR IGNORE'; break;
-            default: throw 'Invalid "INSERT OR" definition!';
+          case 'REPLACE':
+            sql += ' OR REPLACE';
+            break;
+          case 'ROLLBACK':
+            sql += ' OR ROLLBACK';
+            break;
+          case 'ABORT':
+            sql += ' OR ABORT';
+            break;
+          case 'FAIL':
+            sql += ' OR FAIL';
+            break;
+          case 'IGNORE':
+            sql += ' OR IGNORE';
+            break;
+          default:
+            throw new JSQL.Exception('Invalid "INSERT OR" definition!');
           }
 
           sql += ' INTO' + this.query.INSERT;
@@ -778,9 +807,9 @@
           sql = 'ALTER TABLE ' + this.query.ALTER;
 
           if (this.query.ADD) { // Column Name. Use 'COLUMN' for definition
-            var c = this.query.COLUMN;
+            var z = this.query.COLUMN;
             this.query.COLUMN = {};
-            this.query.COLUMN[this.query.ADD] = c;
+            this.query.COLUMN[this.query.ADD] = z;
             sql += ' ADD COLUMN';
             _modTable.call(this);
           }
@@ -811,7 +840,7 @@
           sql = 'TRUNCATE TABLE ' + this.query.TRUNCATE;
         } else {
           // Operation not defined
-          throw 'Operation not defined!';
+          throw new JSQL.Exception('Operation not defined!');
         }
       }
 
@@ -819,7 +848,18 @@
     }
   });
 
-})(window);
+  /**************************************
+   **************************************
+   ***                                ***
+   ***    JavaScript SQL Exception    ***
+   ***                                ***
+   **************************************
+   **************************************/
+  Class.Exception.extend('Exception', {
+    __package: JSQL
+  });
+
+}(window));
 
 // SELECT Syntax
 // JSQL({
