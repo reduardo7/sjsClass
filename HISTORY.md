@@ -1,3 +1,9 @@
+1.2.3 / 2014-02-12
+==================
+
+  * Fixed protected call.
+  * Updated "test-protected.js" test.
+
 1.2.2 / 2014-02-12
 ==================
 
