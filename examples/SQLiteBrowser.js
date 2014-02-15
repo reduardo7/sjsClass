@@ -157,28 +157,41 @@
               if (d.isNull) {
                 sql += ' NULL';
               }
+              // Foreign
+              if (d.foreign) {
+                if (typeof d.foreign === 'string') {
+                  f = d.foreign.split('.');
+                  d = {
+                    table: f[0],
+                    key: f[1]
+                  };
+                } else {
+                  d = d.foreign;
+                }
+                sql += ' REFERENCES ' + d.table + '(' + d.key + ')';
+              }
             }
           }
         }
 
-        // Foreign
-        for (c in definition) {
-          if (definition.hasOwnProperty(c)) {
-            d = definition[c];
-            if (d && (typeof d !== 'string') && d.foreign) {
-              if (typeof d.foreign === 'string') {
-                f = d.foreign.split('.');
-                d = {
-                  table: f[0],
-                  key: f[1]
-                };
-              } else {
-                d = d.foreign;
-              }
-              sql += ', FOREIGN KEY(' + c + ') REFERENCES ' + d.table + '(' + d.key + ')';
-            }
-          }
-        }
+        // Foreign (other method)
+        // for (c in definition) {
+        //   if (definition.hasOwnProperty(c)) {
+        //     d = definition[c];
+        //     if (d && (typeof d !== 'string') && d.foreign) {
+        //       if (typeof d.foreign === 'string') {
+        //         f = d.foreign.split('.');
+        //         d = {
+        //           table: f[0],
+        //           key: f[1]
+        //         };
+        //       } else {
+        //         d = d.foreign;
+        //       }
+        //       sql += ', FOREIGN KEY(' + c + ') REFERENCES ' + d.table + '(' + d.key + ')';
+        //     }
+        //   }
+        // }
 
         sql += ' )';
 

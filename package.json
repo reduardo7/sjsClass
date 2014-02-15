@@ -1,8 +1,12 @@
 {
   "name": "sjsclass",
-  "description": "Simple JavaScript Class",
-  "version": "1.2.32",
+  "description": "sjsClass - Simple JavaScript Class - Inheritance",
+  "version": "1.2.331",
   "homepage": "https://github.com/reduardo7/sjsClass",
+  "bugs": {
+    "url": "https://github.com/reduardo7/sjsClass/issues",
+    "email": "reduardo7@gmail.com"
+  },
   "author": {
     "name": "Eduardo Daniel Cuomo",
     "url": "http://www.eduardocuomo.com.ar/"
@@ -18,5 +22,13 @@
     "constants", "extend", "protected", "private", "public", "static", "fluent", "interface", "property", "super",
     "web", "simple", "app", "api", "exception", "throw", "throws", "prevent", "override", "properties", "defineProperty"
   ],
-  "main": "./lib/sjsclass"
+  "main": "./lib/sjsclass",
+  "directories": {
+    "lib": "./lib",
+    "example": "./examples"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/reduardo7/sjsClass.git"
+  }
 }
