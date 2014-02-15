@@ -138,7 +138,7 @@
                 break;
               //case 'TEXT':
               default:
-                sql += ' TEXT';
+                sql += d.foreign ? ' INTEGER' : ' TEXT';
                 break;
               }
               // primary

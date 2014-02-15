@@ -1,3 +1,8 @@
+1.2.32 / 2014-02-15
+====================
+
+  * Example SQLiteBrowser.js: Dafault Type for FOREIGN KEY implemented.
+
 1.2.31 / 2014-02-15
 ====================
 
