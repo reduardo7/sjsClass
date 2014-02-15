@@ -80,11 +80,13 @@
      * @param {String} table Table name.
      * @param {Object} definition Table definition.
      *        {
-     *              id : { type: 'INTEGER', primary : true, autoincrement: true } // Equals to -> id : { type: 'KEY' } || id : 'key'
+     *              id : { type: 'INTEGER', primary : true, autoincrement: true, unique: true } // Equals to -> id : { type: 'KEY' } || id : 'key'
      *            , name : { type: 'TEXT' }
      *            , price : { type: 'REAL' | 'DECIMAL' | 'FLOAT' }
      *            , age : { type: 'INTEGER' | 'INT' }
      *            , description : { type: 'BLOB' | 'LONGTEXT', isNull : true }
+     *            , ref1_id : { type: 'INTEGER', foreign: { table: 'tableX', key: 'id' } }
+     *            , ref2_id : { type: 'INTEGER', foreign: 'tableX.id' }
      *        }
      * @param {Boolean} dropTable (Default: FALSE) Drop table if exists?
      */
@@ -147,10 +149,33 @@
               if (d.autoincrement) {
                 sql += ' AUTOINCREMENT';
               }
+              // unique
+              if (d.unique) {
+                sql += ' UNIQUE';
+              }
               // isNull
               if (d.isNull) {
                 sql += ' NULL';
               }
+            }
+          }
+        }
+
+        // Foreign
+        for (c in definition) {
+          if (definition.hasOwnProperty(c)) {
+            d = definition[c];
+            if (d && (typeof d !== 'string') && d.foreign) {
+              if (typeof d.foreign === 'string') {
+                f = d.foreign.split('.');
+                d = {
+                  table: f[0],
+                  key: f[1]
+                };
+              } else {
+                d = d.foreign;
+              }
+              sql += ', FOREIGN KEY(' + c + ') REFERENCES ' + d.table + '(' + d.key + ')';
             }
           }
         }
