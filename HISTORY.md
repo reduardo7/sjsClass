@@ -1,4 +1,4 @@
-1.2.3.1 / 2014-02-15
+1.2.31 / 2014-02-15
 ====================
 
   * Example SQLiteBrowser.js: FOREIGN KEY implemented.
