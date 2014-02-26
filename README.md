@@ -1,7 +1,7 @@
 sjsClass
 ========
 
-Simple JavaScript Class. Create your advance JavaScript Class!
+Simple JavaScript Class. Create your advanced JavaScript Class!
 
 Node.js Implementation
 ----------------------
