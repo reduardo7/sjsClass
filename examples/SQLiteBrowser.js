@@ -88,120 +88,140 @@
      *            , ref1_id : { type: 'INTEGER', foreign: { table: 'tableX', key: 'id' } }
      *            , ref2_id : { type: 'INTEGER', foreign: 'tableX.id' }
      *        }
-     * @param {Boolean} dropTable (Default: FALSE) Drop table if exists?
+     *        Operations:
+     *          {Boolean} __dropTable (Default: FALSE) Drop table if exists?
+     * @param {Array[Object]} initData (Default: NONE) Rows to add if table not exists.
      */
-    createTable : function (table, definition, dropTable) {
+    createTable : function (table, definition, initData) {
       // CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER, price INT)
       // CREATE TABLE IF NOT EXISTS clientes (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, edad TEXT)
+      var $this = this;
       this._db.transaction(function (db) {
         // Build
         var c, d, t,
           sql = 'CREATE TABLE IF NOT EXISTS ' + table + ' (',
           f = true;
 
-        for (c in definition) {
-          if (definition.hasOwnProperty(c)) {
-            if (f) {
-              f = false;
-            } else {
-              sql += ',';
-            }
-            sql += ' ' + c;
-
-            d = definition[c];
-            if (typeof d === 'string') {
-              t = d.toUpperCase();
-              d = { };
-            } else if (d) {
-              t = (d.type || '').toUpperCase();
-            } else {
-              d = { };
-            }
-
-            if (t === 'KEY') {
-              sql += ' INTEGER PRIMARY KEY AUTOINCREMENT';
-            } else {
-              // type
-              switch (t) {
-              case 'INTEGER':
-              case 'INT':
-                sql += ' INTEGER';
-                break;
-              case 'REAL':
-              case 'DECIMAL':
-              case 'FLOAT':
-                sql += ' REAL';
-                break;
-              case 'BLOB':
-              case 'LONGTEXT':
-                sql += ' BLOB';
-                break;
-              //case 'TEXT':
-              default:
-                sql += d.foreign ? ' INTEGER' : ' TEXT';
-                break;
-              }
-              // primary
-              if (d.primary) {
-                sql += ' PRIMARY KEY';
-              }
-              // autoincrement
-              if (d.autoincrement) {
-                sql += ' AUTOINCREMENT';
-              }
-              // unique
-              if (d.unique) {
-                sql += ' UNIQUE';
-              }
-              // isNull
-              if (d.isNull) {
-                sql += ' NULL';
-              }
-              // Foreign
-              if (d.foreign) {
-                if (typeof d.foreign === 'string') {
-                  f = d.foreign.split('.');
-                  d = {
-                    table: f[0],
-                    key: f[1]
-                  };
+        $this.tableExists(table, function (te) {
+          for (c in definition) {
+            if (definition.hasOwnProperty(c)) {
+              if (c != '__dropTable') {
+                if (f) {
+                  f = false;
                 } else {
-                  d = d.foreign;
+                  sql += ',';
                 }
-                sql += ' REFERENCES ' + d.table + '(' + d.key + ')';
+                sql += ' ' + c;
+
+                d = definition[c];
+                if (typeof d === 'string') {
+                  t = d.toUpperCase();
+                  d = { };
+                } else if (d) {
+                  t = (d.type || '').toUpperCase();
+                } else {
+                  d = { };
+                }
+
+                if (t === 'KEY') {
+                  sql += ' INTEGER PRIMARY KEY AUTOINCREMENT';
+                } else {
+                  // type
+                  switch (t) {
+                  case 'INTEGER':
+                  case 'INT':
+                    sql += ' INTEGER';
+                    break;
+                  case 'REAL':
+                  case 'DECIMAL':
+                  case 'FLOAT':
+                    sql += ' REAL';
+                    break;
+                  case 'BLOB':
+                  case 'LONGTEXT':
+                    sql += ' BLOB';
+                    break;
+                  case 'TEXT':
+                  case 'DATE':
+                  case 'DATETIME':
+                  default:
+                    sql += d.foreign ? ' INTEGER' : ' TEXT';
+                    break;
+                  }
+                  // primary
+                  if (d.primary) {
+                    sql += ' PRIMARY KEY';
+                  }
+                  // autoincrement
+                  if (d.autoincrement) {
+                    sql += ' AUTOINCREMENT';
+                  }
+                  // unique
+                  if (d.unique) {
+                    sql += ' UNIQUE';
+                  }
+                  // isNull
+                  if (d.isNull) {
+                    sql += ' NULL';
+                  }
+                  // Foreign
+                  if (d.foreign) {
+                    if (typeof d.foreign === 'string') {
+                      f = d.foreign.split('.');
+                      d = {
+                        table: f[0],
+                        key: f[1] || 'id'
+                      };
+                    } else {
+                      d = d.foreign;
+                      if (!d.key) {
+                        d.key = 'id';
+                      }
+                    }
+                    sql += ' REFERENCES ' + d.table + '(' + d.key + ')';
+                  }
+                }
               }
             }
           }
-        }
 
-        // Foreign (other method)
-        // for (c in definition) {
-        //   if (definition.hasOwnProperty(c)) {
-        //     d = definition[c];
-        //     if (d && (typeof d !== 'string') && d.foreign) {
-        //       if (typeof d.foreign === 'string') {
-        //         f = d.foreign.split('.');
-        //         d = {
-        //           table: f[0],
-        //           key: f[1]
-        //         };
-        //       } else {
-        //         d = d.foreign;
-        //       }
-        //       sql += ', FOREIGN KEY(' + c + ') REFERENCES ' + d.table + '(' + d.key + ')';
-        //     }
-        //   }
-        // }
+          // Foreign (other method)
+          // for (c in definition) {
+          //   if (definition.hasOwnProperty(c)) {
+          //     d = definition[c];
+          //     if (d && (typeof d !== 'string') && d.foreign) {
+          //       if (typeof d.foreign === 'string') {
+          //         f = d.foreign.split('.');
+          //         d = {
+          //           table: f[0],
+          //           key: f[1]
+          //         };
+          //       } else {
+          //         d = d.foreign;
+          //       }
+          //       sql += ', FOREIGN KEY(' + c + ') REFERENCES ' + d.table + '(' + d.key + ')';
+          //     }
+          //   }
+          // }
 
-        sql += ' )';
+          sql += ' )';
 
-        // Drop table
-        if (dropTable) {
-          db.executeSql('DROP TABLE IF EXISTS ' + table);
-        }
+          // Create table
+          function _ct() {
+            $this.execute(sql, [], function () {
+              if (!te && initData) {
+                $this.insert(table, initData);
+              }
+            });
+          }
 
-        // Create table
-        db.executeSql(sql);
+          // Drop table
+          if (definition.__dropTable) {
+            $this.execute('DROP TABLE IF EXISTS ' + table, [], _ct);
+          } else {
+            _ct.call($this);
+          }
+        });
       });
     },
 
