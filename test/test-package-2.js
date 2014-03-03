@@ -10,64 +10,60 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
-
-// package
-var com = {
-	eduardocuomo : {
-		examples : { },
-		demo : { }
-	}
-};
-
-
-// Class 1
-(function () {
-
-	Class.extend('T1', {
-		__package : this
-	});
-
-}).apply(com.eduardocuomo.examples);
-
-// Class 2
-(function () {
-
-	this.T1.extend('T2');
-
-}).apply(com.eduardocuomo.examples);
-
-// Class 3
-(function () {
-
-	Class.extend('T3', {
-		__package : this
-	});
-
-}).apply(com.eduardocuomo.demo);
-
-
-// Work
-
-var check = true;
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class */
 
 (function () {
+	'use strict';
 
-	var t = new this.T1(),
-		t2 = new this.T2();
+	// package
+	var com = {
+		eduardocuomo : {
+			examples : { },
+			demo : { }
+		}
+	};
 
-	check = check && (t2 instanceof this.T1)
-		&& (this.T3 === undefined);
 
-}).apply(com.eduardocuomo.examples);
+	// Class 1
+	(function () {
 
-(function () {
+		Class.extend('T1', {
+			__package : this
+		});
 
-	var t3 = new this.T3();
+	}).apply(com.eduardocuomo.examples);
 
-	check = check && (this.T1 === undefined) && (this.T2 === undefined);
+	// Class 2
+	(function () {
 
-}).apply(com.eduardocuomo.demo);
+		this.T1.extend('T2');
 
-// Should be true
-check
+	}).apply(com.eduardocuomo.examples);
+
+	// Class 3
+	(function () {
+
+		Class.extend('T3', {
+			__package : this
+		});
+
+	}).apply(com.eduardocuomo.demo);
+
+
+	// Work
+
+	(function () {
+
+		var t2 = new this.T2();
+
+		console.log('Should be true:', (t2 instanceof this.T1), (this.T3 === undefined));
+
+	}).apply(com.eduardocuomo.examples);
+
+	(function () {
+
+		console.log('Should be true:', (this.T1 === undefined), (this.T2 === undefined));
+
+	}).apply(com.eduardocuomo.demo);
+}());

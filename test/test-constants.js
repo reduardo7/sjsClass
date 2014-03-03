@@ -10,23 +10,27 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestConstants */
 
-Class.extend('Test', {
-	__const : {
-		cx : 111
-	},
-	'const c' : 123,
-	foo : function (v) {
-		this.c = v;
-		return this.c;
-	}
-});
+(function () {
+	'use strict';
 
-var t = new Test();
-t.c = 6776;
-t.cx = 55555;
+	Class.extend('TestConstants', {
+		__const : {
+			cx : 111
+		},
+		'const c' : 123,
+		foo : function (v) {
+			// this.c = v; --> Invalid!
+			return this.c;
+		}
+	});
 
-// Should all be true
-(t.c === 123) && (t.foo(534) === 123) && (Test.c === 123) &&
-	(t.cx === 111) && (Test.cx === 111);
+	var t = new TestConstants();
+	// t.c = 6776; --> Invalid!
+	// t.cx = 55555; --> Invalid!
+
+	console.log('Should be true:', (t.c === 123), (t.foo(534) === 123), (TestConstants.c === 123),
+		(t.cx === 111), (TestConstants.cx === 111));
+}());

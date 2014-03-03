@@ -10,25 +10,29 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestFluentFoo */
 
-Class.extend('Foo', {
-	__fluent : true, // Enable Fluent Interface
-	__static : {
-		x : '',
+(function () {
+	'use strict';
+
+	Class.extend('TestFluentFoo', {
+		__fluent : true, // Enable Fluent Interface
+		__static : {
+			x : '',
+			add : function (x) { this.x += x; }, // Not returns a value, use Fluent Interface
+			bar : function () { return this.x; } // Returns a value, not Fluent Interface
+		},
+		'protected x' : '',
 		add : function (x) { this.x += x; }, // Not returns a value, use Fluent Interface
 		bar : function () { return this.x; } // Returns a value, not Fluent Interface
-	},
-	'protected x' : '',
-	add : function (x) { this.x += x; }, // Not returns a value, use Fluent Interface
-	bar : function () { return this.x; } // Returns a value, not Fluent Interface
-});
+	});
 
-var f = new Foo();
+	var f = new TestFluentFoo();
 
-f.add('1').add('2').add('LM');
-Foo.add('3').add('4').add('VE');
+	f.add('1').add('2').add('LM');
+	TestFluentFoo.add('3').add('4').add('VE');
 
-// Should all be true
-(f.bar() === '12LM') && (Foo.bar() === '34VE') &&
-	(f.x === undefined) && (Foo.x === Foo.bar());
+	console.log('Should all be true:', (f.bar() === '12LM'), (TestFluentFoo.bar() === '34VE'),
+		(f.x === undefined), (TestFluentFoo.x === TestFluentFoo.bar()));
+}());

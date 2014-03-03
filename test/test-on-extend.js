@@ -10,17 +10,21 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestOnExtend */
 
-var testVar = 1;
+(function () {
+	'use strict';
 
-Class.extend('Test', {
-	__onExtend: function() {
-		testVar++;
-	}
-});
+	var testVar = 1;
 
-Test.extend('TestExtend');
+	Class.extend('TestOnExtend', {
+		__onExtend: function() {
+			testVar++;
+		}
+	});
 
-// Should all be true
-testVar === 2;
+	TestOnExtend.extend('TestExtend');
+
+	console.log('Should all be true:', testVar === 2);
+}());

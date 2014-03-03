@@ -10,23 +10,31 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TstTestPrefix, TstTestPrefixT2, TestPrefixT3 */
 
-Class.extend('TestPrefix', {
-	__prefix: 'Tst'
-});
+var $this = this;
 
-TestPrefix.extend('TestPrefixT2');
+(function () {
+	'use strict';
 
-TestPrefixT2.extend('TestPrefixT3', {
-	__prefix: null
-});
+	Class.extend('TestPrefix', {
+		__prefix: 'Tst'
+	});
 
-var testPrefix = new TestPrefix(),
-	testPrefixT2 = new TestPrefixT2(),
-	testPrefixT3 = new TestPrefixT3();
+	TstTestPrefix.extend('TestPrefixT2');
 
-// Should all be true
-(this.TestPrefix === undefined) && (this.TestPrefixT2 === undefined) && (this.TstT3 === undefined) &&
-	(testPrefix instanceof Class) && (testPrefixT2 instanceof TestPrefix) &&
-	(testPrefixT3 instanceof TestPrefixT2) && (testPrefixT3 instanceof TestPrefix);
+	TstTestPrefixT2.extend('TestPrefixT3', {
+		__prefix: null
+	});
+
+	var testPrefix = new TstTestPrefix(),
+		testPrefixT2 = new TstTestPrefixT2(),
+		testPrefixT3 = new TestPrefixT3();
+
+	console.log('Should all be true:',
+		($this.TestPrefix === undefined), ($this.TestPrefixT2 === undefined), ($this.TstTestPrefixT3 === undefined),
+		(testPrefix instanceof Class), (testPrefixT2 instanceof TstTestPrefix), !(testPrefixT2 instanceof TestPrefixT3),
+		(testPrefixT3 instanceof TstTestPrefixT2), (testPrefixT3 instanceof TstTestPrefix), (testPrefixT3 instanceof TestPrefixT3)
+	);
+}());

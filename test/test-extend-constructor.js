@@ -10,32 +10,36 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestExtendConstructorTest, TestExtendConstructorFoo, TestExtendConstructorBar */
 
-Class.extend('Test', {
-	'protected _pv' : 'Initial Value',
-	'property prop1' : {
-		get : function () { return this._pv; }
-	},
-	__constructor : function (a) {
-		this._pv = a;
-	}
-});
+(function () {
+	'use strict';
 
-Test.extend('Foo', {
-	__constructor : function (a) {
-		this.__super('[' + a + ']');
-	},
-	x : function () {
-		return this._pv;
-	}
-});
+	Class.extend('TestExtendConstructorTest', {
+		'protected _pv' : 'Initial Value',
+		'property prop1' : {
+			get : function () { return this._pv; }
+		},
+		__constructor : function (a) {
+			this._pv = a;
+		}
+	});
 
-Test.extend('Bar');
+	TestExtendConstructorTest.extend('TestExtendConstructorFoo', {
+		__constructor : function (a) {
+			this.__super('[' + a + ']');
+		},
+		x : function () {
+			return this._pv;
+		}
+	});
 
-var t = new Test(111),
-	f = new Foo(222),
-	b = new Bar(333);
+	TestExtendConstructorTest.extend('TestExtendConstructorBar');
 
-// Should all be true
-(t.prop1 === 111) && (f.prop1 === '[222]') && (b.prop1 === 333)
+	var t = new TestExtendConstructorTest(111),
+		f = new TestExtendConstructorFoo(222),
+		b = new TestExtendConstructorBar(333);
+
+	console.log('Should all be true:', (t.prop1 === 111), (f.prop1 === '[222]'), (b.prop1 === 333));
+}());

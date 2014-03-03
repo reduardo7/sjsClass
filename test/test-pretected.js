@@ -10,44 +10,49 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestProtected */
 
-Class.extend('TestProtected', {
-  __protected: {
-    p2: 222,
-    pf: function () {
-      return this.p1;
-    },
-    pp: false
-  },
+(function () {
+	'use strict';
 
-  'protected p1': 1,
+	Class.extend('TestProtected', {
+		__protected: {
+			p2: 222,
+			pf: function () {
+				return this.p1;
+			},
+			pp: false
+		},
 
-  __constructor: function (v) {
-    this.pp = v;
-    this.pf();
-    this.bar();
-    this.pp += v;
-  },
+		'protected p1': 1,
 
-  foo: function (v) {
-    this.p1 = v;
-  },
+		__constructor: function (v) {
+			this.pp = v;
+			this.pf();
+			this.bar();
+			this.pp += v;
+		},
 
-  bar: function () {
-    return this.pf() + this.p2;
-  },
+		foo: function (v) {
+			this.p1 = v;
+		},
 
-  constructorVar: function () {
-    return this.pp;
-  }
-});
+		bar: function () {
+			return this.pf() + this.p2;
+		},
 
-var testProtected = new TestProtected(444);
-testProtected.foo(111);
+		constructorVar: function () {
+			return this.pp;
+		}
+	});
 
-// Should all be true
-(testProtected.p1 === undefined) && (testProtected.p2 === undefined) &&
-  (TestProtected.p1 === undefined) && (TestProtected.p2 === undefined) &&
-  (testProtected.pf === undefined) && (testProtected.bar() === 333) &&
-  (testProtected.pp === undefined) && (testProtected.constructorVar() === 888);
+	var testProtected = new TestProtected(444);
+	testProtected.foo(111);
+
+	console.log('Should all be true:', (testProtected.p1 === undefined), (testProtected.p2 === undefined),
+		(TestProtected.p1 === undefined), (TestProtected.p2 === undefined),
+		(testProtected.pf === undefined), (testProtected.bar() === 333),
+		(testProtected.pp === undefined), (testProtected.constructorVar() === 888)
+	);
+}());

@@ -10,29 +10,37 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestPackage3 */
 
-// package
-var com = {
-	eduardocuomo : { }
-};
+var $this = this;
 
-Class.extend('TestPackage1', {
-	__package : com
-});
+(function () {
+	'use strict';
 
-com.TestPackage1.extend('TestPackage2');
+	// package
+	var com = {
+		eduardocuomo : { }
+	};
 
-com.TestPackage2.extend('TestPackage3', {
-	__package : com.eduardocuomo
-});
+	Class.extend('TestPackage1', {
+		__package : com
+	});
 
-var testPackage1 = new com.TestPackage1(),
-	testPackage2 = new com.TestPackage2(),
-	testPackage3 = new com.eduardocuomo.TestPackage3();
+	com.TestPackage1.extend('TestPackage2');
 
-// Should all be true
-(this.TestPackage1 === undefined) && (this.TestPackage2 === undefined) && (this.TestPackage3 === undefined) &&
-	(com.eduardocuomo.TestPackage1 === undefined) && (com.eduardocuomo.TestPackage2 === undefined) && (com.TestPackage3 === undefined) &&
-	(testPackage1 instanceof Class) && (testPackage2 instanceof com.TestPackage1) &&
-	(testPackage3 instanceof com.TestPackage2) && (TestPackage3 instanceof com.eduardocuomo.TestPackage3);
+	com.TestPackage2.extend('TestPackage3', {
+		__package : com.eduardocuomo
+	});
+
+	var testPackage1 = new com.TestPackage1(),
+		testPackage2 = new com.TestPackage2(),
+		testPackage3 = new com.eduardocuomo.TestPackage3();
+
+	console.log('Should all be true:',
+		($this.TestPackage1 === undefined), ($this.TestPackage2 === undefined), ($this.TestPackage3 === undefined),
+		(com.eduardocuomo.TestPackage1 === undefined), (com.eduardocuomo.TestPackage2 === undefined), (com.TestPackage3 === undefined),
+		(testPackage1 instanceof Class), (testPackage2 instanceof com.TestPackage1),
+		(testPackage3 instanceof com.TestPackage2), (testPackage3 instanceof com.eduardocuomo.TestPackage3)
+	);
+}());

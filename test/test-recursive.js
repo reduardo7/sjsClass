@@ -10,22 +10,26 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
-'use strict';
+/*jslint browser: true, regexp: true, white: true, evil: true */
+/*global Class, TestRecursive */
 
-Class.extend('TestRecursive', {
-	__static : {
-		bar : function (v) {
-			v += '|';
-			return (v.length < 10) ? this.bar(v) : v;
+(function () {
+	'use strict';
+
+	Class.extend('TestRecursive', {
+		__static : {
+			bar : function (v) {
+				v += '|';
+				return (v.length < 10) ? this.bar(v) : v;
+			}
+		},
+		foo : function (v) {
+			v += '-';
+			return (v.length < 10) ? this.foo(v) : v;
 		}
-	},
-	foo : function (v) {
-		v += '-';
-		return (v.length < 10) ? this.foo(v) : v;
-	}
-});
+	});
 
-var testRecursive = new TestRecursive();
+	var testRecursive = new TestRecursive();
 
-// Should all be true
-(TestRecursive.bar('s') === 's|||||||||') && (testRecursive.foo('m') === 'm---------')
+	console.log('Should all be true:', (TestRecursive.bar('s') === 's|||||||||'), (testRecursive.foo('m') === 'm---------'));
+}());
