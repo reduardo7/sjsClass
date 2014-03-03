@@ -10,6 +10,8 @@
  * Doc: https://github.com/reduardo7/sjsClass/blob/master/README.md
  */
 
+/*jslint browser: true, regexp: true, white: true, evil: true */
+
 // http://www.sqlite.org/lang.html
 (function (context) {
 	function _(x) {
@@ -98,105 +100,104 @@
 
 					if (typeof w === 'string') {
 						return w;
-					} else {
-						if (!u) {
-							u = 'AND';
-						}
-
-						var tb = new Array(tabCount + 1 ).join('\t'),
-							f = false, whr, whrK, sql = '';
-
-						function whr_X(op, whr) {
-							sql += '(' + (format ? ('\n' + tb + '\t') : ' ') + wts(whr, tabCount, op) + (format ? ('\n' + tb) : ' ') + ')';
-						}
-
-						function whr_AND(whr) {
-							whr_X('AND', whr);
-						}
-
-						function whr_OR(whr) {
-							whr_X('OR', whr);
-						}
-
-						function whr_IN(whr) {
-							sql += 'IN (';
-							if (whr instanceof Array) {
-								sql += whr.join(', ');
-							} else {
-								sql += whr;
-							}
-							sql += ')';
-						}
-
-						function whr_NOT(whr) {
-							sql += 'NOT ' + ((whr.IN || whr.BETWEEN) ? '' : ('(' + (format ? ('\n' + tb + '\t') : ' ')));
-							sql += wts(whr, tabCount);
-							if (!whr.IN && !whr.BETWEEN) {
-								sql += (format ? ('\n' + tb) : ' ') + ')';
-							}
-						}
-
-						function whr_BETWEEN(whr) {
-							sql += 'BETWEEN ' + whr[0] + ' AND ' + whr[1];
-						}
-
-						for (whrK in w) {
-							if (w.hasOwnProperty(whrK)) {
-								whr = w[whrK];
-
-								if (f) {
-									sql += (format ? ('\n' + tb) : ' ') + u + ' ';
-								} else {
-									f = true;
-								}
-
-								if (!whr) {
-									throw 'Invalid WHERE!';
-								}
-
-								if (typeof whr === 'string') {
-									sql += whr;
-								} else if (whrK === 'AND') {
-									whr_AND(whr);
-								} else if (whr.AND) {
-									whr_AND(whr.AND);
-								} else if (whrK === 'OR') {
-									whr_OR(whr);
-								} else if (whr.OR) {
-									whr_OR(whr.OR);
-								} else if (whrK === 'IN') {
-									whr_IN(whr);
-								} else if (whr.IN) {
-									whr_IN(whr.IN);
-								} else if (whrK === 'NOT') {
-									whr_NOT(whr);
-								} else if (whr.NOT) {
-									whr_NOT(whr.NOT);
-								} else if ((whrK === 'BETWEEN') && (whr instanceof Array) && (whr.length === 2)) {
-									whr_BETWEEN(whr);
-								} else if ((whr.BETWEEN instanceof Array) && (whr.BETWEEN.length === 2)) {
-									whr_BETWEEN(whr.BETWEEN);
-								} else if (whr instanceof Array) {
-									// Array
-									switch (whr.length) {
-										case 3:
-											sql += whr[0] + ' ' + whr[1] + ' ' + whr[2];
-											break;
-										case 2:
-											sql += whr[0] + ' = ' + whr[1];
-											break;
-										default:
-											throw 'Invalid WHERE Array size!';
-											break;
-									}
-								} else if (whr) {
-									sql += whr;
-								}
-							}
-						}
-
-						return sql;
 					}
+
+					if (!u) {
+						u = 'AND';
+					}
+
+					var tb = new [].constructor(tabCount + 1 ).join('\t'),
+						f = false, whr, whrK, wsql = '';
+
+					function whr_X(op, whr) {
+						wsql += '(' + (format ? ('\n' + tb + '\t') : ' ') + wts(whr, tabCount, op) + (format ? ('\n' + tb) : ' ') + ')';
+					}
+
+					function whr_AND(whr) {
+						whr_X('AND', whr);
+					}
+
+					function whr_OR(whr) {
+						whr_X('OR', whr);
+					}
+
+					function whr_IN(whr) {
+						wsql += 'IN (';
+						if (whr instanceof Array) {
+							wsql += whr.join(', ');
+						} else {
+							wsql += whr;
+						}
+						wsql += ')';
+					}
+
+					function whr_NOT(whr) {
+						wsql += 'NOT ' + ((whr.IN || whr.BETWEEN) ? '' : ('(' + (format ? ('\n' + tb + '\t') : ' ')));
+						wsql += wts(whr, tabCount);
+						if (!whr.IN && !whr.BETWEEN) {
+							wsql += (format ? ('\n' + tb) : ' ') + ')';
+						}
+					}
+
+					function whr_BETWEEN(whr) {
+						wsql += 'BETWEEN ' + whr[0] + ' AND ' + whr[1];
+					}
+
+					for (whrK in w) {
+						if (w.hasOwnProperty(whrK)) {
+							whr = w[whrK];
+
+							if (f) {
+								wsql += (format ? ('\n' + tb) : ' ') + u + ' ';
+							} else {
+								f = true;
+							}
+
+							if (!whr) {
+								throw 'Invalid WHERE!';
+							}
+
+							if (typeof whr === 'string') {
+								wsql += whr;
+							} else if (whrK === 'AND') {
+								whr_AND(whr);
+							} else if (whr.AND) {
+								whr_AND(whr.AND);
+							} else if (whrK === 'OR') {
+								whr_OR(whr);
+							} else if (whr.OR) {
+								whr_OR(whr.OR);
+							} else if (whrK === 'IN') {
+								whr_IN(whr);
+							} else if (whr.IN) {
+								whr_IN(whr.IN);
+							} else if (whrK === 'NOT') {
+								whr_NOT(whr);
+							} else if (whr.NOT) {
+								whr_NOT(whr.NOT);
+							} else if ((whrK === 'BETWEEN') && (whr instanceof Array) && (whr.length === 2)) {
+								whr_BETWEEN(whr);
+							} else if ((whr.BETWEEN instanceof Array) && (whr.BETWEEN.length === 2)) {
+								whr_BETWEEN(whr.BETWEEN);
+							} else if (whr instanceof Array) {
+								// Array
+								switch (whr.length) {
+									case 3:
+										wsql += whr[0] + ' ' + whr[1] + ' ' + whr[2];
+										break;
+									case 2:
+										wsql += whr[0] + ' = ' + whr[1];
+										break;
+									default:
+										throw 'Invalid WHERE Array size!';
+								}
+							} else if (whr) {
+								wsql += whr;
+							}
+						}
+					}
+
+					return wsql;
 				}
 
 				function _update(action) {
@@ -309,7 +310,7 @@
 								f = true;
 							}
 							sql += format ? '\n\t' : ' ';
-							if (i === parseInt(i).toString()) {
+							if (i === parseInt(i, 10).toString()) {
 								// Numeric index
 								sql += v;
 							} else {
@@ -758,7 +759,7 @@
 				if (isNaN(l) || ((o !== undefined) && isNaN(o))) {
 					throw 'Invalid limit!';
 				}
-				this.query.LIMIT = { LIMIT: parseInt(l), OFFSET: parseInt(o) || 0 };
+				this.query.LIMIT = { LIMIT: parseInt(l, 10), OFFSET: parseInt(o, 10) || 0 };
 				return this;
 			};
 			if (this.query.LIMIT !== undefined) {
@@ -779,7 +780,7 @@
 
 	// Public
 	context.JSQL = JSQL;
-})(window);
+}(window));
 
 
 

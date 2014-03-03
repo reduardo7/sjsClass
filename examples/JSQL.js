@@ -656,7 +656,7 @@
 					 *              *
 					 ****************/
 					// http://www.sqlite.org/lang_insert.html
-					var c, v, f = false;
+					var c, w, u = false;
 					sql = 'INSERT';
 
 					switch (this.query.OR) {
@@ -687,10 +687,10 @@
 
 						for (c in this.query.COLUMNS) {
 							if (this.query.COLUMNS.hasOwnProperty(c)) {
-								if (f) {
+								if (u) {
 									sql += ', ';
 								} else {
-									f = true;
+									u = true;
 								}
 
 								sql += this.query.COLUMNS[c];
@@ -707,25 +707,25 @@
 						sql += (format ? ' VALUES (\n\t' : ' VALUES ( ') + this.query.VALUES + (format ? '\n\t)' : ' )');
 					} else if ((this.query.VALUES instanceof Array) && (this.query.VALUES.length > 0)) {
 						// Values
-						f = false;
+						u = false;
 						sql += format ? '\nVALUES\n\t(' : ' VALUES (';
 
 						if (this.query.VALUES[0] instanceof Array) {
 							// First item is an Array -> Multi-insert
 							for (c in this.query.VALUES) {
 								if (this.query.VALUES.hasOwnProperty(c)) {
-									v = this.query.VALUES[c];
+									w = this.query.VALUES[c];
 
-									if (f) {
+									if (u) {
 										sql += format ? '),\n\t(' : '), (';
 									} else {
-										f = true;
+										u = true;
 									}
 
-									if (v instanceof Array) {
-										sql += v.join(', ');
+									if (w instanceof Array) {
+										sql += w.join(', ');
 									} else {
-										sql += v;
+										sql += w;
 									}
 								}
 							}
