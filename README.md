@@ -3,6 +3,11 @@ sjsClass
 
 Simple JavaScript Class. Create your advanced JavaScript Class!
 
+Experiment with Chrome
+----------------------
+
+http://stackoverflow.com/questions/13792553/write-javascript-in-chrome-developer-tools
+
 Node.js Implementation
 ----------------------
 
