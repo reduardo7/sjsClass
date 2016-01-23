@@ -23,6 +23,9 @@
 		"web", "simple", "app", "api", "exception", "throw", "throws", "prevent", "override", "properties", "defineProperty"
 	],
 	"main": "./lib/sjsclass",
+	"scripts": {
+		"push": "git push && npm publish",
+	},
 	"directories": {
 		"lib": "./lib",
 		"example": "./examples"
