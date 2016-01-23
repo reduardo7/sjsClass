@@ -1,7 +1,7 @@
 {
 	"name": "sjsclass",
 	"description": "sjsClass - Simple JavaScript Class - Inheritance",
-	"version": "1.2.36",
+	"version": "1.2.37",
 	"homepage": "https://github.com/reduardo7/sjsClass",
 	"bugs": {
 		"url": "https://github.com/reduardo7/sjsClass/issues",
@@ -23,9 +23,6 @@
 		"web", "simple", "app", "api", "exception", "throw", "throws", "prevent", "override", "properties", "defineProperty"
 	],
 	"main": "./lib/sjsclass",
-	"scripts": {
-		"push": "git push && npm publish",
-	},
 	"directories": {
 		"lib": "./lib",
 		"example": "./examples"
