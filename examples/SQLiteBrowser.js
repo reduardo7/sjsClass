@@ -18,35 +18,41 @@
 (function (context) {
 	function select_replace(action, table, data, fnEnd) {
 		this._db.transaction(function (db) {
-			// Prepare
-			var sql = 'INSERT ' + action + ' ' + table + '(',
-				d = [],
-				v = '',
-				c = '',
-				$this = this,
-				i;
+			var $this = this,
+				i, j, sql, d, v, c,
+				datas = (data instanceof [].constructor) ? data : [data];
 
-			// Build
-			for (i in data) {
-				if (data.hasOwnProperty(i)) {
-					if (c) {
-						c += ',';
-						v += ',';
+			for (j = 0; j < datas.length; j++) {
+				// Prepare
+				data = datas[j];
+				sql = action + ' INTO ' + table + '(';
+				d = [];
+				v = '';
+				c = '';
+
+				// Build
+				for (i in data) {
+					if (data.hasOwnProperty(i)) {
+						if (c) {
+							c += ',';
+							v += ',';
+						}
+						c += i;
+						v += '?';
+						d.push(data[i]);
 					}
-					c += i;
-					v += '?';
-					d.push(data[i]);
 				}
+
+				sql += c + ') VALUES (' + v + ')';
+
+				// Execute
+				console.log('sql',sql);
+				db.executeSql(sql, d, function (tx, results) {
+					if (fnEnd) {
+						fnEnd.call($this, results, tx);
+					}
+				});
 			}
-
-			sql += c + ') VALUES (' + v + ')';
-
-			// Execute
-			db.executeSql(sql, d, function (tx, results) {
-				if (fnEnd) {
-					fnEnd.call($this, results, tx);
-				}
-			});
 		});
 	}
 
@@ -131,6 +137,8 @@
 								} else {
 									// type
 									switch (t) {
+									case 'BOOL':
+									case 'BOOLEAN':
 									case 'INTEGER':
 									case 'INT':
 										sql += ' INTEGER';
@@ -272,7 +280,8 @@
 
 			this._db.transaction(function (db) {
 				db.executeSql(sql, params, function (tx, results) {
-					fnResult.call(t, results, tx);
+					if (typeof fnResult === 'function')
+						fnResult.call(t, results, tx);
 				});
 			});
 		},
@@ -323,6 +332,114 @@
 						for (i = 0; i < len; i++) {
 							fnResult.call(t, results.rows.item(i), i, len, tx);
 						}
+					} else {
+						if (fnEmpty) {
+							fnEmpty.call(t, tx);
+						}
+					}
+				});
+			});
+		},
+
+		/**
+		 * Select Query.
+		 *
+		 * @param {String} sql Script SQL to execute.
+		 *        SELECT * FROM usuarios WHERE username = ? AND password = ?
+		 * @param {Array|Function} params
+		 *        {Array}: Parameters.
+		 *            [ 'user', '123456' ]
+		 *        {Function}: Use as "fnResult" parameter, and "fnResult" parameter is used as "fnEmpty" parameter.
+		 * @param {Function} fnResult Callback for each result.
+		 *        Params:
+		 *            0: Row data.
+		 *            1: DB Transaction.
+		 *        Example:
+		 *            function (row) {
+		 *                alert('Name: ' + row.name);
+		 *            }
+		 * @param {Function} fnEmpty Callback if query has not results.
+		 *        Params:
+		 *            0: DB Transaction.
+		 *        Example:
+		 *            function () {
+		 *                alert('No data!');
+		 *            }
+		 */
+		selectFirst : function (sql, params, fnResult, fnEmpty) {
+			if (typeof params === 'function') {
+				fnEmpty = fnResult;
+				fnResult = params;
+				params = [];
+			} else if (!params) {
+				params = [];
+			}
+
+			var t = this;
+
+			this._db.transaction(function (db) {
+				db.executeSql(sql, params, function (tx, results) {
+					var len = results.rows.length;
+					if (len > 0) {
+						fnResult.call(t, results.rows.item(0), tx);
+					} else {
+						if (fnEmpty) {
+							fnEmpty.call(t, tx);
+						}
+					}
+				});
+			});
+		},
+
+		/**
+		 * Select Query.
+		 *
+		 * @param {String} sql Script SQL to execute.
+		 *        SELECT * FROM usuarios WHERE username = ? AND password = ?
+		 * @param {Array|Function} params
+		 *        {Array}: Parameters.
+		 *            [ 'user', '123456' ]
+		 *        {Function}: Use as "fnResult" parameter, and "fnResult" parameter is used as "fnEmpty" parameter.
+		 * @param {Function} fnResult Callback for each result.
+		 *        Params:
+		 *            0: Rows data.
+		 *            1: Rows count.
+		 *            2: DB Transaction.
+		 *        Example:
+		 *            function (rows, count) {
+		 *                for (var index = 0; index < count; index++) {
+		 *                    row = rows[index];
+		 *                    alert('Row:' + index + ' of ' + count + '. Name: ' + row.name);
+		 *                }
+		 *            }
+		 * @param {Function} fnEmpty Callback if query has not results.
+		 *        Params:
+		 *            0: DB Transaction.
+		 *        Example:
+		 *            function () {
+		 *                alert('No data!');
+		 *            }
+		 */
+		selectAll : function (sql, params, fnResult, fnEmpty) {
+			if (typeof params === 'function') {
+				fnEmpty = fnResult;
+				fnResult = params;
+				params = [];
+			} else if (!params) {
+				params = [];
+			}
+
+			var t = this;
+
+			this._db.transaction(function (db) {
+				db.executeSql(sql, params, function (tx, results) {
+					var len = results.rows.length, i;
+					if (len > 0) {
+						var rows = [];
+						for (i = 0; i < len; i++) {
+							rows.push(results.rows.item(i));
+						}
+						fnResult.call(t, rows, len, tx);
 					} else {
 						if (fnEmpty) {
 							fnEmpty.call(t, tx);
