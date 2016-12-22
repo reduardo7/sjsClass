@@ -1,7 +1,7 @@
 sjsClass
 ========
 
-Simple JavaScript Class. Create your advanced JavaScript Class!
+**Simple JavaScript Class**. Define your **advanced** *JavaScript Class* in a **simple** way!
 
 Experiment with Chrome
 ----------------------
