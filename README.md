@@ -11,31 +11,78 @@ http://stackoverflow.com/questions/13792553/write-javascript-in-chrome-developer
 Node.js Implementation
 ----------------------
 
-<h3>Include</h3>
+### Installation
 
-<h4>Normal include</h4>
+This module is installed via npm:
+
+```
+npm install --save sjsclass
+```
+
+### Include
+
+#### Normal include
 
 ```js
 var Class = require('sjsclass');
 ```
 
-<h4>Global include</h4>
+#### Global include
 
 ```js
 require('sjsclass').registerGlobal();
 ```
 
-<h4>Node.js Examples</h4>
+### Node.js usage examples
 
-<pre>examples/nodejs-test-*.js</pre>
+**Define class**
+```javascript
+const Class = require('sjsclass');
 
- - https://github.com/reduardo7/sjsClass/blob/master/examples/nodejs-test-global.js
- - https://github.com/reduardo7/sjsClass/blob/master/examples/nodejs-test-normal.js
+module.exports = Class({
+  'protected protectedMethod': function () {
+    // ...
+  },
+  'property prop1': {
+    get: function () {
+      return this.protectedMethod();
+    }
+  },
+  publicMethod1: function () {
+    // ...
+  }
+});
+```
+
+**Using class**
+```javascript
+const myClass = require('./myClasss.js');
+
+var obj1 = new myClass();
+obj1.publicMethod1();
+console.log(obj1.prop1);
+
+obj1.prop1 = 'invalid call'; // Invalid call, "obj1" does not have this setter
+obj1.protectedMethod(); // Invalid call, "obj1" does not have this method (there is not a public method)
+
+
+const otherClass = myClass.extend('otherClass', {
+  publicMethod2: function () {
+    // ...
+  }
+});
+
+var obj2 = new otherClass();
+obj1.publicMethod1();
+obj2.publicMethod2();
+
+obj1.publicMethod2(); // Invalid call, "obj1" does not have this method. There is not a method from 'otherClass'
+```
 
 Features
 --------
 
-<h3>Extend class</h3>
+### Extend class
 
 Using <code>extend</code> method:
 
@@ -65,7 +112,7 @@ Using <code>Class</code> function:
     });
 ```
 
-<h3>Static methods and variables</h3>
+### Static methods and variables
 
 ```js
     Class.extend('Person', {
@@ -92,7 +139,7 @@ Using <code>Class</code> function:
     alert(Person.getVar());
 ```
 
-<h3>Declare into context</h3>
+### Declare into context
 
 ```js
     // Web Page
@@ -111,7 +158,7 @@ Using <code>Class</code> function:
     var p = new contextName.Person(...
 ```
 
-<h3>Access static methods and variables from instance</h3>
+### Access static methods and variables from instance
 
 ```js
     Class.extend('Person', {
@@ -124,7 +171,7 @@ Using <code>Class</code> function:
     });
 ```
 
-<h3>Constructor</h3>
+### Constructor
 
  - *<code>Class</code> Class.<code>newInstance</code>([<code>object ConstructorParams</code>])*
  - *<code>Class</code> Class.<code>newInstanceOf</code>(<code>string ClassName</code>, [<code>object ConstructorParams</code>])*
@@ -140,7 +187,7 @@ Using <code>Class</code> function:
     // p1 == p2 == p3
 ```
 
-<h3>Call parent methods</h3>
+### Call parent methods
 
 ```js
     Person.extend('Ninja', {
@@ -160,7 +207,7 @@ Using <code>Class</code> function:
     });
 ```
 
-<h3>Call parent static</h3>
+### Call parent static
 
 ```js
     Person.extend('Ninja', {
@@ -176,7 +223,7 @@ Using <code>Class</code> function:
     });
 ```
 
-<h3>Check if has value or method</h3>
+### Check if has value or method
 
  - *<code>Boolean</code> classInstance.<code>hasMethod</code>(<code>string MethodName</code>)*
  - *<code>Boolean</code> classInstance.<code>hasVar</code>(<code>string VarName</code>)*
@@ -192,7 +239,7 @@ Using <code>Class</code> function:
     if (p.hasVar('varName')) alert('Yes');
 ```
 
-<h3>Get Class name</h3>
+### Get Class name
 
  - *<code>String</code> classInstance.<code>getClassName</code>()*
  - *<code>String</code> Class.<code>getClassName</code>()*
@@ -225,7 +272,7 @@ Using <code>Class</code> function:
     alert(b.getClassName()); // -> Alert 'Fighter'
 ```
 
-<h3>Hash Code</h3>
+### Hash Code
 
  - *<code>String</code> classInstance.<code>hashCode</code>()*
 ```js
@@ -233,7 +280,7 @@ Using <code>Class</code> function:
     console.log(p1.hashCode()); // -> Get instence Hash Code
 ```
 
-<h3>equals</h3>
+### equals
 
  - *<code>Boolean</code> classInstance.<code>equals</code>(<code>Class ClassInstance</code>)*
 
@@ -244,7 +291,7 @@ Check's instances Hash Codes and Class Names.
     console.log(p1.equals(p2)); // -> true
 ```
 
-<h3>To string</h3>
+### To string
 
  - *<code>String</code> classInstance.<code>toString</code>()*
 ```js
@@ -252,7 +299,7 @@ Check's instances Hash Codes and Class Names.
     console.log(p1.toString()); // -> String representation
 ```
 
-<h3>Callbacks</h3>
+### Callbacks
 
 ```js
     Class.extend('Ninja', {
@@ -266,7 +313,7 @@ Check's instances Hash Codes and Class Names.
     var f = new Fighter(); // -> Alert 'Extending Ninja class!'
 ```
 
-<h3>Check if Class exists</h3>
+### Check if Class exists
 
  - *<code>Boolean</code> Class.<code>classExists</code>(<code>string ClassName</code>)*
 ```js
@@ -276,7 +323,7 @@ Check's instances Hash Codes and Class Names.
     Class.classExists('Ninja') && !Class.classExists('Dog'); // -> TRUE
 ```
 
-<h3>Prefix extended class</h3>
+### Prefix extended class
 
 ```js
     // Creates a 'FightFighter' class, not a 'Fighter' class.
@@ -299,7 +346,7 @@ Check's instances Hash Codes and Class Names.
     });
 ```
 
-<h3>Get Class from Class Name</h3>
+### Get Class from Class Name
 
  - *<code>Class</code> Class.<code>getClass</code>(<code>string ClassName</code>);*
 ```js
@@ -310,7 +357,7 @@ Check's instances Hash Codes and Class Names.
     // p === Person
 ```
 
-<h3>Constants</h3>
+### Constants
 
 ```js
     Class.extend('Person', {
@@ -327,7 +374,7 @@ Check's instances Hash Codes and Class Names.
     f.SISTER; // -> 'Luciana'
 ```
 
-<h3>Protected methods and variables</h3>
+### Protected methods and variables
 
 ```js
     Class.extend('Foo', {
@@ -351,7 +398,7 @@ Check's instances Hash Codes and Class Names.
     f.priv3; // -> undefined
 ```
 
-<h3>Properties</h3>
+### Properties
 
  - *<code>Object</code> <code>__properties</code>*
  - *<code>Object</code> <code>property</code>*
@@ -385,7 +432,7 @@ Link: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_O
     f.bar; // -> 63
 ```
 
-<h3>Fluent Interface</h3>
+### Fluent Interface
 
  - *<code>Boolean</code> <code>__fluent</code>*
 
@@ -411,7 +458,7 @@ If <code>__fluent</code> is <code>TRUE</code>, then the methods that return <cod
     );
 ```
 
-<h3>Class ID</h3>
+### Class ID
 
  - *<code>String</code> classInstance.<code>__instanceId</code>()*
 
@@ -426,7 +473,7 @@ Get Instance ID.
     );
 ```
 
-<h3>Instance ID</h3>
+### Instance ID
 
  - *<code>String</code> classInstance.<code>__instanceId</code>()*
 
@@ -445,7 +492,7 @@ Get Instance ID.
     );
 ```
 
-<h3>Instances Count</h3>
+### Instances Count
 
  - *<code>String</code> ClassName.<code>__instanceCount</code>()*
 
@@ -464,7 +511,7 @@ Get created objects count.
     console.log(Foo.__instanceCount); // -> 2
 ```
 
-<h3>package</h3>
+### package
 
  - *<code>Object</code> classInstance.<code>__package</code>*
 
@@ -494,7 +541,7 @@ Get created objects count.
     var t = new com.eduardocuomo.examples.Test();
 ```
 
-<h3>Packager</h3>
+### Packager
 
  - *Class.<code>package</code>(<code>packageObject</code>, <code>packagerFunction(packageObject)</code>)*
 
@@ -526,7 +573,7 @@ Get created objects count.
     });
 ```
 
-<h3>Exception</h3>
+### Exception
 
 - *Class.<code>Exception</code>(<code>message</code>, <code>innerException</code>)*
 
@@ -583,7 +630,7 @@ Get created objects count.
     result
 ```
 
-<h3>Use Class as Function</h3>
+### Use Class as Function
 
  - *<code>Object</code> classInstance.<code>__function</code>*
 
@@ -598,7 +645,7 @@ Get created objects count.
     Test(123) === '[[123|123]]'
 ```
 
-<h3>Prevent Override</h3>
+### Prevent Override
 
  - *<code>Boolean</code> classInstance.<code>__preventOverride</code>*
 
@@ -614,7 +661,7 @@ Get created objects count.
     Class('Test', { ... });
 ```
 
-<h3>Dynamic Property</h3>
+### Dynamic Property
 
  - *<code>classInstance</code> classInstance.<code>defineProperty</code>(<code>String PropertyName</code>, <code>object PropertyDefinition</code>)*
 
